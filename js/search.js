@@ -1051,7 +1051,7 @@ function getLocationSearchResults() {
               //order: "date",
               order: "viewCount",
               type: "video",
-              part: "snippet",
+              part: "snippet, liveStreamingDetails",
               //part: "id,snippet,liveStreamingDetails",
               maxResults: "50",
               eventType: "live",
