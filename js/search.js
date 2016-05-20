@@ -612,6 +612,13 @@ function processYouTubeRequest(request) {
     if ('error' in response || !response) {
       console.log('error retrieving data');
       console.log('Yo Yo' +response.error.message);
+      console.log('Yo Yo' +response.error.code);
+      if(!response.error.errors){
+        var errArray = response.error.errors;
+        for(var j=0; j<errArray.length; j++){
+          console.log("errArray"+j+" is "+errArray[j].message);
+        }
+      }
       showConnectivityError();
     } else if (!response.result || !response.result.items) {
       updateSearchResultCount(0);
