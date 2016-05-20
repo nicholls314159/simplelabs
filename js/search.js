@@ -604,7 +604,9 @@ function processYouTubeRequest(request) {
   request.execute(function(response) {
     var resultsArr = [];
     var videoIDString = '';
-
+    if(!response){
+      console.log("response is null!!")
+    }
     //if the result object from the response is null, show error; if its empty, remove old results and display
     //message on how to broaden search to get more results.
     if ('error' in response || !response) {
