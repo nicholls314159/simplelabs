@@ -48,7 +48,7 @@ var queryFromClickSearchNotURL = false;
 /** INITIAL_ZOOM_LEVEL is the zoom level that is set as default when our map is created
  *  @const {string}
  */
-var INITIAL_ZOOM_LEVEL = 5;
+var INITIAL_ZOOM_LEVEL = 3;
 var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var API_ACCESS_KEY = 'AIzaSyDDfLx0QQzLeDWaIIAJKAsp-6cSUe6vvhk';
 
@@ -176,20 +176,22 @@ function searchYouTube() {
   } else {
     //if inputObject has multiple channels then do a search on each one
     //and aggregate the results
+/*
     if (inputObject.hasChannelList) {
       //split list by channel
       var channelArray = inputObject.inputChannelList.split(",")
       for (var i = 0; i < channelArray.length; i++) {
         inputObject.currentChannel = channelArray[i].trim();
-
+        
         //for searches on just live videos only
         if (inputObject.inputLiveOnly) {
-          //console.log("Searching:  No Location, Specific Channel(s), Live Only")
+          console.log("YYYY Searching:  No Location, Specific Channel(s), Live Only")
           getPublishBeforeAndAfterTime();
           try {
             var request = gapi.client.youtube.search.list({
               q: inputObject.inputQuery,
-              order: "date",
+              //order: "date",
+              order: "viewCount",
               type: 'video',
               part: 'snippet',
               maxResults: '50',
@@ -231,14 +233,16 @@ function searchYouTube() {
         processYouTubeRequest(request);
       }
     } else {
+*/    
       //for searches on just live videos only
       if (inputObject.inputLiveOnly) {
-        //console.log("Searching:  No Location, No Specific Channel, Live Only")
+        console.log("YYYY Searching:  No Location, No Specific Channel, Live Only")
         getPublishBeforeAndAfterTime();
         try {
           var request = gapi.client.youtube.search.list({
             q: inputObject.inputQuery,
-            order: "date",
+            //order: "date",
+            order: "viewCount",
             type: 'video',
             part: 'snippet',
             maxResults: '50',
@@ -277,7 +281,7 @@ function searchYouTube() {
       }
       //Call processYouTubeRequest to process the request object
       processYouTubeRequest(request);
-    }
+    //}
   }
 }
 
@@ -498,15 +502,6 @@ function completeInputObject() {
 
 function generateInitialURLwithQueryParameters(){
   var initialURLParameterString =  "?q=&la=39.18360819999999&lo=-96.57166940000002&lr=500km&tw=any&cl=&sl=manhattan,%20ks&eo=false&loo=true&cco=false&zl=5&pbt=2016-05-20T02:49:50Z";
-  //"?q=" + inputObject.inputQuery + "&la=" + inputObject.inputLat +
-  //"&lo=" + inputObject.inputLong + "&lr=" + inputObject.inputLocationRadius +
-  //"&tw=" + inputObject.inputTimeWindow +
-  //"&cl=" + inputObject.inputChannelList +
-  //"&sl=" + inputObject.inputSearchLocation + "&eo=" + inputObject.inputEmbedsOnly +
-  //"&loo=" + inputObject.inputLiveOnly
-  //"&cco=" + inputObject.inputCreativeCommonsOnly +
-  //"&zl=" + inputObject.inputZoomLevel + "&pbt=" + publishBeforeTime;
-      
     //Retrieve the domain from the existing URL, to construct the new URL
   console.log('initialURLParameterString is '+ initialURLParameterString);
  
@@ -958,6 +953,7 @@ function getLocationSearchResults() {
       inputObject.inputLong = results[0].geometry.location.lng();
        
       //If the end user submitted a channel list then make search calls for each channel in the list
+/*
       if (inputObject.hasChannelList) {
         //split list by channel
         var channelArray = inputObject.inputChannelList.split(",");
@@ -1020,14 +1016,16 @@ function getLocationSearchResults() {
         }
       //if the search is geo-based and only for a single channel
       } else {
+  */    
         if (inputObject.inputLiveOnly) {
-          //console.log("Searching:  Have Location, No Specific Channel, Live Only")
+          console.log("XXXX Searching:  Have Location, No Specific Channel, Live Only")
           printInputObject();
           getPublishBeforeAndAfterTime();
           try {
             var request = gapi.client.youtube.search.list({
               q: inputObject.inputQuery,
-              order: "date",
+              //order: "date",
+              order: "viewCount",
               type: "video",
               part: "id,snippet",
               maxResults: "50",
@@ -1045,12 +1043,13 @@ function getLocationSearchResults() {
             showConnectivityError();
           }
         } else {
-          console.log("Searching:  Have Location, No Specific Channel, Live and VOD")
+          console.log("XXX Searching:  Have Location, No Specific Channel, Live and VOD")
           getPublishBeforeAndAfterTime();
           try {
             var request = gapi.client.youtube.search.list({
               q: inputObject.inputQuery,
-              order: "date",
+              //order: "date",
+              order: "viewCount",
               type: "video",
               part: "id,snippet",
               location: inputObject.inputLat + "," + inputObject.inputLong,
@@ -1068,7 +1067,7 @@ function getLocationSearchResults() {
           }
         }
         processYouTubeRequest(request);
-      }
+      //}
     } else {
       showConnectivityError();
     }
