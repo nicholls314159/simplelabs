@@ -48,7 +48,7 @@ var queryFromClickSearchNotURL = false;
 /** INITIAL_ZOOM_LEVEL is the zoom level that is set as default when our map is created
  *  @const {string}
  */
-var INITIAL_ZOOM_LEVEL = 11;
+var INITIAL_ZOOM_LEVEL = 5;
 var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var API_ACCESS_KEY = 'AIzaSyDDfLx0QQzLeDWaIIAJKAsp-6cSUe6vvhk';
 
@@ -965,8 +965,9 @@ function getLocationSearchResults() {
         for (var i = 0; i < channelArray.length; i++) {
           inputObject.currentChannel = channelArray[i].trim();
 
+          console.log("ZZZZ inputObject.inputLiveOnly "+inputObject.inputLiveOnly)
           if (inputObject.inputLiveOnly) {
-            //console.log("Searching:  Have Location, Specific Channel(s), Live Only")
+            console.log("ZZZZ Searching:  Have Location, Specific Channel(s), Live Only")
             getPublishBeforeAndAfterTime();
             try {
               var request = gapi.client.youtube.search.list({
@@ -990,7 +991,7 @@ function getLocationSearchResults() {
               showConnectivityError();
             }
           } else {
-            //console.log("Searching:  Have Location, Specific Channel(s), Live and VOD")
+            console.log("Searching:  Have Location, Specific Channel(s), Live and VOD")
             getPublishBeforeAndAfterTime()
             try {
               var request = gapi.client.youtube.search.list({
