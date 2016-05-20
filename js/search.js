@@ -648,7 +648,8 @@ function processYouTubeRequest(request) {
         videoResult.defaultLanguage = entryArr[i].snippet.defaultLanguage
         console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
 
-        videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.concurrentViewers;
+        //videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.concurrentViewers;
+        videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.actualStartTime
         videoResult.geoLiveURL = "https://www.youtube.com/watch?v=" + videoResult.videoId;
         
         console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
@@ -1054,18 +1055,19 @@ function getLocationSearchResults() {
               //order: "date",
               order: "viewCount",
               type: "video",
-              part: "id,snippet",
+              part: "id,snippet,liveStreamingDetails",
+              //part: "id,snippet",//works
               //part: "liveStreamingDetails",  //not working
               //part: "snippet, liveStreamingDetails", //not working
               //part: "id,snippet,liveStreamingDetails", //not working
               maxResults: "50",
               eventType: "live",
-              videoLiscense: inputObject.videoLiscense,
-              videoEmbeddable: inputObject.videoEmbeddable,
+              //videoLiscense: inputObject.videoLiscense,
+              //videoEmbeddable: inputObject.videoEmbeddable,
               location: inputObject.inputLat + "," + inputObject.inputLong,
               locationRadius: inputObject.inputLocationRadius,
-              publishedAfter: publishAfterTime,
-              publishedBefore: publishBeforeTime,
+              //publishedAfter: publishAfterTime,
+              //publishedBefore: publishBeforeTime,
               key: API_ACCESS_KEY
             });
           } catch (err) {
