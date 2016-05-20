@@ -611,14 +611,14 @@ function processYouTubeRequest(request) {
     //message on how to broaden search to get more results.
     if ('error' in response || !response) {
       console.log('error retrieving data');
-      console.log(response.error.message);
+      console.log('Yo Yo' +response.error.message);
       showConnectivityError();
     } else if (!response.result || !response.result.items) {
       updateSearchResultCount(0);
       resetResultsSection();
       $("div").remove(".tableOfVideoContentResults");
     } else {
-      console.log("got search response");
+      console.log("No Yo Yo:  got search response");
       var entryArr = response.result.items;
       for (var i = 0; i < entryArr.length; i++) {
         var videoResult = new Object();
