@@ -242,7 +242,7 @@ function searchYouTube() {
           var request = gapi.client.youtube.search.list({
             q: inputObject.inputQuery,
             //order: "date",
-            order: "viewCount","liveStreamingDetails"
+            order: "viewCount",
             type: 'video',
             part: "id,snippet,liveStreamingDetails",
             maxResults: '50',
