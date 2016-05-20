@@ -497,7 +497,7 @@ function completeInputObject() {
 
 
 function generateInitialURLwithQueryParameters(){
-  var initialURLParameterString =  "?q=&la=39.18360819999999&lo=-96.57166940000002&lr=1000km&loo=true"
+  var initialURLParameterString =  "?q=&la=39.18360819999999&lo=-96.57166940000002&lr=500km&tw=any&cl=&sl=manhattan,%20ks&eo=false&loo=true&cco=false&zl=5&pbt=2016-05-20T02:49:50Z";
   //"?q=" + inputObject.inputQuery + "&la=" + inputObject.inputLat +
   //"&lo=" + inputObject.inputLong + "&lr=" + inputObject.inputLocationRadius +
   //"&tw=" + inputObject.inputTimeWindow +
