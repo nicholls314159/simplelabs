@@ -600,6 +600,7 @@ function updateSearchResultCount(count) {
  *  @param request {object} - this is the request object returned from the YouTube search API
  */
 function processYouTubeRequest(request) {
+  console.log("start processYouTubeRequest()")
   request.execute(function(response) {
     var resultsArr = [];
     var videoIDString = '';
@@ -607,15 +608,18 @@ function processYouTubeRequest(request) {
     //if the result object from the response is null, show error; if its empty, remove old results and display
     //message on how to broaden search to get more results.
     if ('error' in response || !response) {
+      console.log('error retrieving data');
       showConnectivityError();
     } else if (!response.result || !response.result.items) {
       updateSearchResultCount(0);
       resetResultsSection();
       $("div").remove(".tableOfVideoContentResults");
     } else {
+      console.log("got search response");
       var entryArr = response.result.items;
       for (var i = 0; i < entryArr.length; i++) {
         var videoResult = new Object();
+        console.log("videoResult.title is "+videoResult.title);
         videoResult.title = entryArr[i].snippet.title;
 
         //Pull the lattitude and longitude data per search result
@@ -639,10 +643,11 @@ function processYouTubeRequest(request) {
         
         //new to video results
         videoResult.defaultLanguage = entryArr[i].snippet.defaultLanguage
+        console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
+
         videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.concurrentViewers;
         videoResult.geoLiveURL = "https://www.youtube.com/watch?v=" + videoResult.videoId;
         
-        console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
         console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
         
         
@@ -761,6 +766,7 @@ function processYouTubeRequest(request) {
           //console.log("error: creating short url");
         }
     });
+    console.log('end processYouTubeRequest()')
   });
 }
 
@@ -1048,16 +1054,17 @@ function getLocationSearchResults() {
               part: "id,snippet,liveStreamingDetails",
               maxResults: "50",
               eventType: "live",
-              videoLiscense: inputObject.videoLiscense,
-              videoEmbeddable: inputObject.videoEmbeddable,
+//              videoLiscense: inputObject.videoLiscense,
+//              videoEmbeddable: inputObject.videoEmbeddable,
               location: inputObject.inputLat + "," + inputObject.inputLong,
               locationRadius: inputObject.inputLocationRadius,
-              publishedAfter: publishAfterTime,
-              publishedBefore: publishBeforeTime,
+//              publishedAfter: publishAfterTime,
+//              publishedBefore: publishBeforeTime,
               key: API_ACCESS_KEY
             });
           } catch (err) {
             //cannot search via the YouTube API
+            console.log("XXX Error in connectivity");
             showConnectivityError();
           }
         } else {
@@ -1081,12 +1088,14 @@ function getLocationSearchResults() {
             });
           } catch (err) {
             //cannot search via the YouTube API
+            console.log("XXX Error in connectivity2");
             showConnectivityError();
           }
         }
         processYouTubeRequest(request);
       //}
     } else {
+      console.log("XXX Error in connectivity3");
       showConnectivityError();
     }
     console.log('getLocationSearchResults() end');
