@@ -1051,20 +1051,21 @@ function getLocationSearchResults() {
               //order: "date",
               order: "viewCount",
               type: "video",
-              part: "id,snippet,liveStreamingDetails",
+              part: "snippet",
+              //part: "id,snippet,liveStreamingDetails",
               maxResults: "50",
               eventType: "live",
-//              videoLiscense: inputObject.videoLiscense,
-//              videoEmbeddable: inputObject.videoEmbeddable,
+              videoLiscense: inputObject.videoLiscense,
+              videoEmbeddable: inputObject.videoEmbeddable,
               location: inputObject.inputLat + "," + inputObject.inputLong,
               locationRadius: inputObject.inputLocationRadius,
-//              publishedAfter: publishAfterTime,
-//              publishedBefore: publishBeforeTime,
+              publishedAfter: publishAfterTime,
+              publishedBefore: publishBeforeTime,
               key: API_ACCESS_KEY
             });
           } catch (err) {
             //cannot search via the YouTube API
-            console.log("XXX Error in connectivity");
+            console.log("XXX123 Error in connectivity");
             showConnectivityError();
           }
         } else {
