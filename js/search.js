@@ -108,7 +108,7 @@ function handleMapsLoad() {
  * This function generates the FB and Twitter buttons and embeds them in the HTML
  */
 function loadSocialLinks(){
-  console.log("loadSocialLinks() ...start");
+  //console.log("loadSocialLinks() ...start");
   //remove any old results
   $('#socialCell').empty();
   
@@ -966,8 +966,10 @@ function getLocationSearchResults() {
           inputObject.currentChannel = channelArray[i].trim();
 
           console.log("ZZZZ inputObject.inputLiveOnly "+inputObject.inputLiveOnly)
+          alert("ZZZZ inputObject.inputLiveOnly "+inputObject.inputLiveOnly)
           if (inputObject.inputLiveOnly) {
             console.log("ZZZZ Searching:  Have Location, Specific Channel(s), Live Only")
+            alert("ZZZZ inputObject.inputLiveOnly "+inputObject.inputLiveOnly)
             getPublishBeforeAndAfterTime();
             try {
               var request = gapi.client.youtube.search.list({
@@ -1079,15 +1081,6 @@ function getLocationSearchResults() {
  */
 function filterIrrelevantResults() {
   finalResults2 = $.grep(finalResults, function(item) {
-    
-    console.log("item.title is "+ item.title);
-    console.log("Car Regex found:  "+CAR_REGEX.test(item.title));
-    console.log("MLS# found:  "+MLS_NUMB_REGEX.test(item.title));
-    console.log("Home for Sale found:  "+HOME_FOR_SALE_REGEX.test(item.title));
-    console.log("Real Estate found:  "+REAL_ESTATE_REGEX.test(item.title));
-    console.log("Realty found:  "+REALTY_REGEX.test(item.title));
-    
-    
     return !(CAR_REGEX.test(item.title) || REAL_ESTATE_REGEX.test(item.title) || MLS_NUMB_REGEX.test(item.title) || HOME_FOR_SALE_REGEX.test(item.title) || REALTY_REGEX.test(item.title));
   });
 }
