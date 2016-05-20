@@ -1054,9 +1054,10 @@ function getLocationSearchResults() {
               //order: "date",
               order: "viewCount",
               type: "video",
-              part: "liveStreamingDetails",
-              //part: "snippet, liveStreamingDetails",
-              //part: "id,snippet,liveStreamingDetails",
+              part: "id,snippet",
+              //part: "liveStreamingDetails",  //not working
+              //part: "snippet, liveStreamingDetails", //not working
+              //part: "id,snippet,liveStreamingDetails", //not working
               maxResults: "50",
               eventType: "live",
               videoLiscense: inputObject.videoLiscense,
