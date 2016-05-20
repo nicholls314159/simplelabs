@@ -242,9 +242,9 @@ function searchYouTube() {
           var request = gapi.client.youtube.search.list({
             q: inputObject.inputQuery,
             //order: "date",
-            order: "viewCount",
+            order: "viewCount","liveStreamingDetails"
             type: 'video',
-            part: 'snippet',
+            part: "id,snippet,liveStreamingDetails",
             maxResults: '50',
             eventType: 'live',
             videoLiscense: inputObject.videoLiscense,
@@ -266,7 +266,7 @@ function searchYouTube() {
             q: inputObject.inputQuery,
             order: "date",
             type: 'video',
-            part: 'snippet',
+            part: "id,snippet,liveStreamingDetails",
             maxResults: '50',
             videoLiscense: inputObject.videoLiscense,
             videoEmbeddable: inputObject.videoEmbeddable,
@@ -630,12 +630,23 @@ function processYouTubeRequest(request) {
         videoIDString = videoIDString + videoResult.videoId + ",";
 
         videoResult.url = "https://www.youtube.com/watch?v=" + videoResult.videoId;
+        
+        
         videoResult.videoID = videoResult.videoId;
         videoResult.channelID = entryArr[i].snippet.channelId;
         videoResult.channel = entryArr[i].snippet.channelTitle;
         videoResult.liveBroadcastContent = entryArr[i].snippet.liveBroadcastContent;
-        videoResult.thumbNailURL = entryArr[i].snippet.thumbnails.default.url;
         
+        //new to video results
+        videoResult.defaultLanguage = entryArr[i].snippet.defaultLanguage
+        videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.concurrentViewers;
+        videoResult.geoLiveURL = "https://www.youtube.com/watch?v=" + videoResult.videoId;
+        
+        console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
+        console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
+        
+        
+        videoResult.thumbNailURL = entryArr[i].snippet.thumbnails.default.url;
         
         videoResult.description = entryArr[i].snippet.description;
 
@@ -735,10 +746,9 @@ function processYouTubeRequest(request) {
 
     //reset startURL with the latest
     startURL = window.location.href;
-    console.log('22 startURL is'+startURL)
     var requestShortener = gapi.client.urlshortener.url.insert({
       'resource': {
-      'longUrl': startURL
+          'longUrl': startURL
       }
     });
     requestShortener.execute(function(response2) 
@@ -746,9 +756,9 @@ function processYouTubeRequest(request) {
        if(response2.id != null)
        {
           shortURL = response2.id;
-          console.log('22 shortURL is'+shortURL);
+          //console.log('22 shortURL is'+shortURL);
         }else{
-           console.log("error: creating short url");
+          //console.log("error: creating short url");
         }
     });
   });
@@ -801,11 +811,19 @@ function generateResultList() {
     var uploadDate = "Uploaded on: " + finalResults2[i].displayTimeStamp + "<br>";
     var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + channelID + "' target='_blank'>" + channel + "</a></attr><br>";
     var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + finalResults2[i].thumbNailURL + "' target='_blank'>reverse image search</a></attr><br>";
+    var concurrentUsers = "Concurrent Users: " + finalResults2[i].concurrentUsers + "<br>";
+    var defaultLang = "Default Language is : " + finalResults2[i].defaultLanguage + "<br>";
+            //console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
+        //console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
+
+
 
     metaDataCell.append(videoString);
     metaDataCell.append(uploadDate);
     metaDataCell.append(channelString);
     metaDataCell.append(reverseImageString);
+    metaDataCell.append(concurrentUsers);
+    metaDataCell.append(defaultLang);
     //Put all the sections of the row together
     resultRow.append(imageCell);
     resultRow.append(metaDataCell);
@@ -1027,7 +1045,7 @@ function getLocationSearchResults() {
               //order: "date",
               order: "viewCount",
               type: "video",
-              part: "id,snippet",
+              part: "id,snippet,liveStreamingDetails",
               maxResults: "50",
               eventType: "live",
               videoLiscense: inputObject.videoLiscense,
@@ -1051,7 +1069,7 @@ function getLocationSearchResults() {
               //order: "date",
               order: "viewCount",
               type: "video",
-              part: "id,snippet",
+              part: "id,snippet,liveStreamingDetails",
               location: inputObject.inputLat + "," + inputObject.inputLong,
               locationRadius: inputObject.inputLocationRadius,
               maxResults: "50",
