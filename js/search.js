@@ -91,6 +91,11 @@ function handleMapsLoad() {
   loadParamsFromURL();
 }
 
+function loadMapWithDefaultResult(){
+  
+  
+}
+
 
 /**
  * This function generates the FB and Twitter buttons and embeds them in the HTML
@@ -480,6 +485,43 @@ function completeInputObject() {
   if (inputObject.inputEmbedsOnly) {
     inputObject.videoEmbeddable = 'true';
   }
+}
+
+function generateInitialURLwithQueryParameters(){
+  var initialURLParameterString =  "?q=&la=39.18360819999999&lo=-96.57166940000002&lr=500km&loo=true"
+  //"?q=" + inputObject.inputQuery + "&la=" + inputObject.inputLat +
+  //"&lo=" + inputObject.inputLong + "&lr=" + inputObject.inputLocationRadius +
+  //"&tw=" + inputObject.inputTimeWindow +
+  //"&cl=" + inputObject.inputChannelList +
+  //"&sl=" + inputObject.inputSearchLocation + "&eo=" + inputObject.inputEmbedsOnly +
+  //"&loo=" + inputObject.inputLiveOnly
+  //"&cco=" + inputObject.inputCreativeCommonsOnly +
+  //"&zl=" + inputObject.inputZoomLevel + "&pbt=" + publishBeforeTime;
+      
+    //Retrieve the domain from the existing URL, to construct the new URL
+  console.log('initialURLParameterString is '+ initialURLParameterString);
+ 
+  var currentURL = String(window.location);
+
+  var newURLArray = [];
+  var newURL = '';
+
+  if (currentURL) {
+    //split current URL by "?" delimiter.  The first element will be the domain.
+    newURLArray = currentURL.split('?');
+
+    //if currentURL does not contain a '?', then it is already just the domain and newURLArray will be undefined
+    if (!newURLArray) {
+      //concatenate the domain and the parameter string
+      newURL = currentURL + initialURLParameterString;
+    } else {
+      //concatenate the first element of newURLArray (which is the domain) and the parameter string
+      newURL = newURLArray[0] + initialURLParameterString;
+    }
+  }
+  console.log('newURL is '+newURL)
+  return newURL;
+
 }
 
 /**  This function generates a URL, with all the search parameters, which is then
