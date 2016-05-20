@@ -88,12 +88,16 @@ function handleClientLoad() {
 function handleMapsLoad() {
   geocoder = new google.maps.Geocoder();
   $('#search-button').attr('disabled', false);
+  
+  startURL = window.location.href;
+  
+  //If the URL does not contain search parameters to parse skip to end of function
+  if (!startURL.includes('?q=')) {
+    //if no default params in the URL then set those and reload page.
+     window.location = generateInitialURLwithQueryParameters();
+  }
   loadParamsFromURL();
-}
 
-function loadMapWithDefaultResult(){
-  
-  
 }
 
 
@@ -351,7 +355,7 @@ function loadParamsFromURL() {
         searchYouTube();
       }
     }
-  }
+  }  
 }
 
 
@@ -485,10 +489,12 @@ function completeInputObject() {
   if (inputObject.inputEmbedsOnly) {
     inputObject.videoEmbeddable = 'true';
   }
+
 }
 
+
 function generateInitialURLwithQueryParameters(){
-  var initialURLParameterString =  "?q=&la=39.18360819999999&lo=-96.57166940000002&lr=500km&loo=true"
+  var initialURLParameterString =  "?q=&la=39.18360819999999&lo=-96.57166940000002&lr=1000km&loo=true"
   //"?q=" + inputObject.inputQuery + "&la=" + inputObject.inputLat +
   //"&lo=" + inputObject.inputLong + "&lr=" + inputObject.inputLocationRadius +
   //"&tw=" + inputObject.inputTimeWindow +
