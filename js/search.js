@@ -609,6 +609,7 @@ function processYouTubeRequest(request) {
     //message on how to broaden search to get more results.
     if ('error' in response || !response) {
       console.log('error retrieving data');
+      console.log(response.error.message);
       showConnectivityError();
     } else if (!response.result || !response.result.items) {
       updateSearchResultCount(0);
