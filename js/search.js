@@ -90,12 +90,15 @@ function handleMapsLoad() {
   $('#search-button').attr('disabled', false);
   
   startURL = window.location.href;
+  console.log("TTT1")
   
   //If the URL does not contain search parameters to parse skip to end of function
   if (!startURL.includes('?q=')) {
     //if no default params in the URL then set those and reload page.
+    console.log("TTT2 generateInitialURLwithQueryParameters +generateInitialURLwithQueryParameters())
      window.location = generateInitialURLwithQueryParameters();
   }
+  console.log("TTT3")
   loadParamsFromURL();
 
 }
