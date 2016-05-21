@@ -656,7 +656,7 @@ function processYouTubeRequest(request) {
         console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
 
         //videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.concurrentViewers;
-        videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.actualStartTime
+        //videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.actualStartTime
         videoResult.geoLiveURL = "https://www.youtube.com/watch?v=" + videoResult.videoId;
         
         console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
@@ -828,7 +828,7 @@ function generateResultList() {
     var uploadDate = "Uploaded on: " + finalResults2[i].displayTimeStamp + "<br>";
     var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + channelID + "' target='_blank'>" + channel + "</a></attr><br>";
     var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + finalResults2[i].thumbNailURL + "' target='_blank'>reverse image search</a></attr><br>";
-    var concurrentUsers = "Concurrent Users: " + finalResults2[i].concurrentUsers + "<br>";
+    //var concurrentUsers = "Concurrent Users: " + finalResults2[i].concurrentUsers + "<br>";
     var defaultLang = "Default Language is : " + finalResults2[i].defaultLanguage + "<br>";
             //console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
         //console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
@@ -839,7 +839,7 @@ function generateResultList() {
     metaDataCell.append(uploadDate);
     metaDataCell.append(channelString);
     metaDataCell.append(reverseImageString);
-    metaDataCell.append(concurrentUsers);
+    //metaDataCell.append(concurrentUsers);
     metaDataCell.append(defaultLang);
     //Put all the sections of the row together
     resultRow.append(imageCell);
@@ -1064,11 +1064,8 @@ function getLocationSearchResults() {
               type: "video",
               id: "iXxcjCNkHCU",
               eventType: "live",
-              part: "id,snippet,liveStreamingDetails",
-              //part: "id,snippet",//works
-              //part: "liveStreamingDetails",  //not working
-              //part: "snippet, liveStreamingDetails", //not working
               //part: "id,snippet,liveStreamingDetails", //not working
+              part: "id,snippet",//works
               maxResults: "50",
               
               //videoLiscense: inputObject.videoLiscense,
