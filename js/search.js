@@ -1062,13 +1062,15 @@ function getLocationSearchResults() {
               //order: "date",
               order: "viewCount",
               type: "video",
+              id: "iXxcjCNkHCU",
+              eventType: "live",
               part: "id,snippet,liveStreamingDetails",
               //part: "id,snippet",//works
               //part: "liveStreamingDetails",  //not working
               //part: "snippet, liveStreamingDetails", //not working
               //part: "id,snippet,liveStreamingDetails", //not working
               maxResults: "50",
-              eventType: "live",
+              
               //videoLiscense: inputObject.videoLiscense,
               //videoEmbeddable: inputObject.videoEmbeddable,
               location: inputObject.inputLat + "," + inputObject.inputLong,
