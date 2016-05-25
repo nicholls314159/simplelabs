@@ -705,7 +705,7 @@ function processYouTubeRequest(request) {
 
              videoResult.displayTimeStamp = monthString + " " + day + ", " + year + " - " + time + " UTC";
              videoResult.publishTimeStamp = entryArr[i].snippet.publishedAt;
-        }
+        });
 
         //videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.concurrentViewers;
         //videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.actualStartTime
