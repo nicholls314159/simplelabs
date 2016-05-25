@@ -634,14 +634,14 @@ function processYouTubeRequest(request) {
 ///// TEST /////  
       //var resultArrayLength =  entryArr.length
       //var loopCounter = 0;
-      var isFinishedWithLookup = false;
+      //var isFinishedWithLookup = false;
       //console.log("resultArrayLength is "+ resultArrayLength)
       entryArr.forEach(function(listItem, index){
           var videoResult = new Object();
           videoResult.title = listItem.snippet.title;
           videoResult.videoID = listItem.id.videoId;
           console.log("44444 about to create request.  videoResult.videoID is "+videoResult.videoID)
-          while(!isFinishedWithLookup){
+          //while(!isFinishedWithLookup){
             try {
               var requestLiveStream = gapi.client.youtube.search.list({
                 id: videoResult.videoID,
@@ -671,11 +671,14 @@ function processYouTubeRequest(request) {
                     videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
                 }
               }
+              resultsArr.push(videoResult);
+              doOtherStuff();
             }); 
-            console.log('4444 isFinishedWithLookup '+isFinishedWithLookup)
+            console.log('4444 end ')
           } //end while 
-          isFinishedWithLookup = false;
-          resultsArr.push(videoResult);
+          //isFinishedWithLookup = false;
+          
+          
       });
 //// END TEST ////     
       console.log('4444 end of test')
@@ -771,6 +774,7 @@ function processYouTubeRequest(request) {
       //and longitude values for each search result
 
       //remove trailing comma from the string of video ids
+/********** testo
           var videoIDStringFinal = videoIDString.substring(0, videoIDString.length - 1);
 
       //generate request object for video search
@@ -861,6 +865,103 @@ function processYouTubeRequest(request) {
       });
    // });
   //}
+**********  TESTO
+*/  
+}
+
+function doSomething(){
+        //remove trailing comma from the string of video ids
+          var videoIDStringFinal = videoIDString.substring(0, videoIDString.length - 1);
+
+      //generate request object for video search
+          var videoIDRequest = gapi.client.youtube.videos.list({
+            id: videoIDStringFinal,
+            part: 'id,snippet,recordingDetails',
+            key: API_ACCESS_KEY
+          });
+
+      //execute request and process the response object to pull in latitude and longitude
+          videoIDRequest.execute(function(response) {
+            if ('error' in response || !response) {
+              showConnectivityError();
+            } else {
+             //iterate through the response items and execute a callback function for each
+              $.each(response.items, function() {
+               var videoRequestVideoId = this.id;
+
+                //ensure recordingDetails and recordingDetails.location are not null or blank
+                if (this.recordingDetails && this.recordingDetails.location) {
+                  //for every search result in resultArr, pull in the latitude and longitude from the response
+                  for (var i = 0; i < resultsArr.length; i++) {
+                    if (resultsArr[i].videoId === videoRequestVideoId) {
+                      resultsArr[i].lat = this.recordingDetails.location.latitude;
+                      resultsArr[i].long = this.recordingDetails.location.longitude;
+                     break;
+                   }
+                 }
+               }
+             });
+            }
+
+            //remove duplicates from global results list
+            for (var i = 0; i < resultsArr.length; i++) {
+              var addResult = true;
+              for (var j = 0; j < finalResults.length; j++) {
+               if (resultsArr[i].url === finalResults[j].url) {
+                 //it is a duplicate, do not add to final results and break inner loop
+                 addResult = false;
+                 break;
+               }
+              }
+              if (addResult) {
+                finalResults.push(resultsArr[i]);
+             }
+            }
+
+            if (finalResults.length === 0) {
+             //No Search Results to Display
+             //remove results section as there is nothing to display
+             resetResultsSection();
+             $("div").remove(".tableOfVideoContentResults");
+            } else {
+              //show results section
+              showResultsSection();
+
+              //remove any old results
+             $("div").remove(".tableOfVideoContentResults");
+
+             //generate result list and map of videos
+             generateResultList();
+              initializeMap(inputObject.inputLat, inputObject.inputLong);
+            }
+         });
+        }
+        //Update the URL bar with the search parameters from the search
+        window.history.pushState("updatingURLwithParams", "YT Geo Search Tool", generateURLwithQueryParameters());
+
+
+        //reset startURL with the latest
+       startURL = window.location.href;
+        var requestShortener = gapi.client.urlshortener.url.insert({
+          'resource': {
+              'longUrl': startURL
+         }
+       });
+        requestShortener.execute(function(response2) 
+        {
+           if(response2.id != null)
+           {
+             shortURL = response2.id;
+             //console.log('22 shortURL is'+shortURL);
+           }else{
+             //console.log("error: creating short url");
+            }
+       });
+       console.log('end processYouTubeRequest()')
+      });
+   // });
+  //}
+
 }
 
 
