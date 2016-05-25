@@ -647,8 +647,8 @@ function processYouTubeRequest(request) {
               var requestLiveStream = gapi.client.youtube.search.list({
                 id: videoResult.videoID,
                 type: 'video',
-                part: "liveStreamingDetails",
-                maxResults: '1',
+                part: "snippet,liveStreamingDetails",
+                maxResults: '10',
                 key: API_ACCESS_KEY
               });
             } catch (err) {
