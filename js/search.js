@@ -244,7 +244,7 @@ function searchYouTube() {
             //order: "date",
             order: "viewCount",
             type: 'video',
-            part: "id,snippet,liveStreamingDetails",
+            part: "id,snippet",
             maxResults: '50',
             eventType: 'live',
             videoLiscense: inputObject.videoLiscense,
@@ -266,7 +266,7 @@ function searchYouTube() {
             q: inputObject.inputQuery,
             order: "date",
             type: 'video',
-            part: "id,snippet,liveStreamingDetails",
+            part: "id,snippet",
             maxResults: '50',
             videoLiscense: inputObject.videoLiscense,
             videoEmbeddable: inputObject.videoEmbeddable,
@@ -655,8 +655,61 @@ function processYouTubeRequest(request) {
         videoResult.defaultLanguage = entryArr[i].snippet.defaultLanguage
         console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
 
+//////////////////////////// NOW FOR EACH RESULT, retrieve liveStreamingDetails
+        try {
+          var requestLiveStream = gapi.client.youtube.search.list({
+            id: videoResult.videoID,
+            type: 'video',
+            part: "liveStreamingDetails",
+            maxResults: '1',
+            key: API_ACCESS_KEY
+          });
+        } catch (err) {
+          //cannot search via the YouTube API, update end-user with error message
+          showConnectivityError();
+        }
+        requestLiveStream.execute(function(response) {
+            if ('error' in response || !response) {
+              console.log('error retrieving data');
+            }else{
+              var liveStreamEntryArr = response.result.items;
+              for (var i = 0; i < liveStreamEntryArr.length; i++) {
+                 videoResult.concurrentUsers = liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers
+                  console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
+                 videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
+              }
+            }
+            
+            ///insert remain videoResult code here
+            videoResult.geoLiveURL = "https://www.youtube.com/watch?v=" + videoResult.videoId;
+            console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
+        
+        
+             videoResult.thumbNailURL = entryArr[i].snippet.thumbnails.default.url;
+        
+             videoResult.description = entryArr[i].snippet.description;
+
+             var year = entryArr[i].snippet.publishedAt.substr(0, 4);
+             var monthNumeric = entryArr[i].snippet.publishedAt.substr(5, 2);
+             var monthInt = 0;
+
+             if (monthNumeric.indexOf("0") === 0) {
+                monthInt = monthNumeric.substr(1, 1);
+             } else {
+                monthInt = monthNumeric;
+             }
+             var day = entryArr[i].snippet.publishedAt.substr(8, 2);
+             var time = entryArr[i].snippet.publishedAt.substr(11, 8);
+
+             var monthString = MONTH_NAMES[monthInt - 1];
+
+             videoResult.displayTimeStamp = monthString + " " + day + ", " + year + " - " + time + " UTC";
+             videoResult.publishTimeStamp = entryArr[i].snippet.publishedAt;
+        }
+
         //videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.concurrentViewers;
         //videoResult.concurrentUsers = entryArr[i].liveStreamingDetails.actualStartTime
+/*
         videoResult.geoLiveURL = "https://www.youtube.com/watch?v=" + videoResult.videoId;
         
         console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
@@ -684,6 +737,7 @@ function processYouTubeRequest(request) {
         videoResult.publishTimeStamp = entryArr[i].snippet.publishedAt;
 
         //add result to results
+*/
         resultsArr.push(videoResult);
       }
 
@@ -1090,7 +1144,7 @@ function getLocationSearchResults() {
               //order: "date",
               order: "viewCount",
               type: "video",
-              part: "id,snippet,liveStreamingDetails",
+              part: "id,snippet",
               location: inputObject.inputLat + "," + inputObject.inputLong,
               locationRadius: inputObject.inputLocationRadius,
               maxResults: "50",
