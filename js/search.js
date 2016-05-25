@@ -656,17 +656,24 @@ function processYouTubeRequest(request) {
             console.log('44444 request created')
             requestLiveStream.execute(function(responseLiveStream) {
               if ('error' in responseLiveStream || !responseLiveStream) {
-                isFinishedWithLookup = true;
                 console.log('44444 error retrieving data for responseLiveStream');
               }else{
                 console.log('4444 got liveStreamDetails')
-                isFinishedWithLookup = true;
                 var liveStreamEntryArr = response.result.items;
                 console.log('4444 got liveStreamEntryArr.length is '+liveStreamEntryArr.length)
                 for (var i = 0; i < liveStreamEntryArr.length; i++) {
-                    videoResult.concurrentUsers = liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers
-                    console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers + " for i="+i);
-                    videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
+                    if (liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers == undefined){
+                      videoResult.concurrentUsers = 'undefined'
+                      console.log("huzzah!!! videoResult.concurrentUsers is undefined");
+                    }else{ 
+                      videoResult.concurrentUsers = liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers
+                      console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers + " for i="+i);
+                    }
+                    if (liveStreamEntryArr[i].liveStreamingDetails.actualStartTime == undefined){
+                      videoResult.liveStreamStartTime = 'undefined'
+                    }else{ 
+                      videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
+                    }
                 }
               }
               console.log("4444 about to doSomething")
