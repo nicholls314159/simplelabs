@@ -656,7 +656,7 @@ function processYouTubeRequest(request) {
               showConnectivityError();
             }          
             console.log('44444 request created')
-            requestLiveStream.execute(function(responseLiveStream, doSomething) {
+            requestLiveStream.execute(function(responseLiveStream) {
               if ('error' in responseLiveStream || !responseLiveStream) {
                 isFinishedWithLookup = true;
                 console.log('44444 error retrieving data for responseLiveStream');
@@ -672,19 +672,19 @@ function processYouTubeRequest(request) {
                 }
               }
               console.log("4444 about to doSomething")
-              resultsArr = doSomething(resultsArr,videoResult)
+              //resultsArr = doSomething(resultsArr,videoResult)
               console.log("4444 did doSomething")
               //doCallback()
               //resultsArr.push(videoResult);
               console.log("4444 pushing videoResult")
               return true;
-            }); 
+            }, doSomething); 
             //console.log('4444 end liveStreamDetails retrieve ')
           //} //end while 
           //isFinishedWithLookup = false;
           //doCallBack(doneies, doOtherStuff())
           console.log("about to do other stuff")
-          doOtherStuff(videoIDString,resultsArr);
+          //doOtherStuff(videoIDString,resultsArr);
           console.log("done with doOtherStuff")
           
       },doOtherStuff);
@@ -878,12 +878,11 @@ function processYouTubeRequest(request) {
 */  
 }
 
-function doSomething(resultsArr,videoResult){
+function doSomething(){
   resultsArr.push(videoResult);
-  return resultsArr
 }
 
-function doOtherStuff(videoIDString,resultsArr){
+function doOtherStuff(){
         //remove trailing comma from the string of video ids
           var videoIDStringFinal = videoIDString.substring(0, videoIDString.length - 1);
 
