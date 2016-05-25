@@ -660,7 +660,7 @@ function processYouTubeRequest(request) {
         console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
 
 //////////////////////////// NOW FOR EACH RESULT, retrieve liveStreamingDetails
-        console.log("about to create request.  videoResult.videoID is "+videoResult.videoID)
+/*        console.log("about to create request.  videoResult.videoID is "+videoResult.videoID)
         try {
           var requestLiveStream = gapi.client.youtube.search.list({
             id: videoResult.videoID,
@@ -688,8 +688,8 @@ function processYouTubeRequest(request) {
             ///insert remain videoResult code here
             videoResult.geoLiveURL = "https://www.youtube.com/watch?v=" + videoResult.videoId;
             console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
-        
-        
+*/        
+             videoResult.geoLiveURL = "https://www.youtube.com/watch?v=" + videoResult.videoId;
              videoResult.thumbNailURL = entryArr[i].snippet.thumbnails.default.url;
         
              videoResult.description = entryArr[i].snippet.description;
@@ -713,7 +713,7 @@ function processYouTubeRequest(request) {
         //});
 
            resultsArr.push(videoResult);
-     // }
+      }
 
       //Now we will use the string of video IDs from the search to do another API call to pull latitude
       //and longitude values for each search result
@@ -807,8 +807,8 @@ function processYouTubeRequest(request) {
        });
        console.log('end processYouTubeRequest()')
       });
-    });
-  }
+   // });
+  //}
 }
 
 
