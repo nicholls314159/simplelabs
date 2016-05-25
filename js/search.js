@@ -656,6 +656,7 @@ function processYouTubeRequest(request) {
         console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
 
 //////////////////////////// NOW FOR EACH RESULT, retrieve liveStreamingDetails
+        console.log("about to create request.  videoResult.videoID is "+videoResult.videoID)
         try {
           var requestLiveStream = gapi.client.youtube.search.list({
             id: videoResult.videoID,
@@ -668,14 +669,14 @@ function processYouTubeRequest(request) {
           //cannot search via the YouTube API, update end-user with error message
           showConnectivityError();
         }
-        requestLiveStream.execute(function(response) {
-            if ('error' in response || !response) {
-              console.log('error retrieving data');
+        requestLiveStream.execute(function(responseLiveStream) {
+            if ('error' in responseLiveStream || !responseLiveStream) {
+              console.log('error retrieving data for responseLiveStream');
             }else{
               var liveStreamEntryArr = response.result.items;
               for (var i = 0; i < liveStreamEntryArr.length; i++) {
                  videoResult.concurrentUsers = liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers
-                  console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
+                  console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers + " for i="+i);
                  videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
               }
             }
