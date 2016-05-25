@@ -635,7 +635,7 @@ function processYouTubeRequest(request) {
       //var resultArrayLength =  entryArr.length
       //var loopCounter = 0;
       var isFinishedWithLookup = false;
-      console.log("resultArrayLength is "+ resultArrayLength)
+      //console.log("resultArrayLength is "+ resultArrayLength)
       entryArr.forEach(function(listItem, index){
           var videoResult = new Object();
           videoResult.title = listItem.snippet.title;
