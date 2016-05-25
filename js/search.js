@@ -635,7 +635,7 @@ function processYouTubeRequest(request) {
       entryArr.forEach(function(listItem, index){
           var videoResult = new Object();
           videoResult.title = listItem.snippet.title;
-          videoResult.videoId = listItem.id.videoId;
+          videoResult.videoID = listItem.id.videoId;
           console.log("44444 about to create request.  videoResult.videoID is "+videoResult.videoID)
           try {
             var requestLiveStream = gapi.client.youtube.search.list({
