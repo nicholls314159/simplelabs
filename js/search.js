@@ -677,7 +677,7 @@ function processYouTubeRequest(request) {
               //doCallback()
               //resultsArr.push(videoResult);
               console.log("4444 pushing videoResult")
-              return true;
+
             }, doSomething); 
             //console.log('4444 end liveStreamDetails retrieve ')
           //} //end while 
@@ -879,10 +879,12 @@ function processYouTubeRequest(request) {
 }
 
 function doSomething(){
+  console.log("44444 DOING SOMETHING")
   resultsArr.push(videoResult);
 }
 
 function doOtherStuff(){
+        console.log("44444 DOING OTHER STUFF")
         //remove trailing comma from the string of video ids
           var videoIDStringFinal = videoIDString.substring(0, videoIDString.length - 1);
 
