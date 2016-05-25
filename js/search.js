@@ -631,6 +631,40 @@ function processYouTubeRequest(request) {
     } else {
       console.log("No Yo Yo:  got search response");
       var entryArr = response.result.items;
+///// TEST /////      
+      entryArr.forEach(function(listItem, index){
+          videoResult.title = listItem.snippet.title;
+          videoResult.videoId = listItem.id.videoId;
+          console.log("44444 about to create request.  videoResult.videoID is "+videoResult.videoID)
+          try {
+            var requestLiveStream = gapi.client.youtube.search.list({
+              id: videoResult.videoID,
+              type: 'video',
+              part: "liveStreamingDetails",
+              maxResults: '1',
+              key: API_ACCESS_KEY
+            });
+          } catch (err) {
+            //cannot search via the YouTube API, update end-user with error message
+            showConnectivityError();
+          }          
+          console.log('44444 request created')
+          requestLiveStream.execute(function(responseLiveStream) {
+            if ('error' in responseLiveStream || !responseLiveStream) {
+              console.log('error retrieving data for responseLiveStream');
+            }else{
+              console.log('4444 got liveStreamDetails')
+              var liveStreamEntryArr = response.result.items;
+              console.log('4444 got liveStreamEntryArr.length is '+liveStreamEntryArr.length)
+              for (var i = 0; i < liveStreamEntryArr.length; i++) {
+                 videoResult.concurrentUsers = liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers
+                  console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers + " for i="+i);
+                 videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
+              }
+            }
+          });
+      });
+//// END TEST ////      
       for (var i = 0; i < entryArr.length; i++) {
         var videoResult = new Object();
         console.log("videoResult.title is "+videoResult.title);
@@ -658,7 +692,8 @@ function processYouTubeRequest(request) {
         //new to video results
         videoResult.defaultLanguage = entryArr[i].snippet.defaultLanguage
         console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
-
+        
+        //dosomething();
 //////////////////////////// NOW FOR EACH RESULT, retrieve liveStreamingDetails
 /*        console.log("about to create request.  videoResult.videoID is "+videoResult.videoID)
         try {
