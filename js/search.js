@@ -644,11 +644,9 @@ function processYouTubeRequest(request) {
           console.log("44444 about to create request.  videoResult.videoID is "+videoResult.videoID)
           //while(!isFinishedWithLookup){
             try {
-              var requestLiveStream = gapi.client.youtube.search.list({
+              var requestLiveStream = gapi.client.youtube.videos.list({
                 id: videoResult.videoID,
-                type: 'video',
-                part: "snippet,liveStreamingDetails",
-                maxResults: '10',
+                part: "liveStreamingDetails",
                 key: API_ACCESS_KEY
               });
             } catch (err) {
