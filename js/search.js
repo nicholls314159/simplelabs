@@ -662,14 +662,15 @@ function processYouTubeRequest(request) {
                 var liveStreamEntryArr = response.result.items;
                 console.log('4444 got liveStreamEntryArr.length is '+liveStreamEntryArr.length)
                 for (var i = 0; i < liveStreamEntryArr.length; i++) {
-                    if (liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers == undefined){
+                    console.log("liveStreamEntryArr[i].liveStreamingDetails is "+liveStreamEntryArr[i].liveStreamingDetails)
+                    if (typeof liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers == undefined){
                       videoResult.concurrentUsers = 'undefined'
                       console.log("huzzah!!! videoResult.concurrentUsers is undefined");
                     }else{ 
                       videoResult.concurrentUsers = liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers
                       console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers + " for i="+i);
                     }
-                    if (liveStreamEntryArr[i].liveStreamingDetails.actualStartTime == undefined){
+                    if (typeof liveStreamEntryArr[i].liveStreamingDetails.actualStartTime == undefined){
                       videoResult.liveStreamStartTime = 'undefined'
                     }else{ 
                       videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
