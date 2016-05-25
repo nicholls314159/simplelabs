@@ -653,11 +653,10 @@ function processYouTubeRequest(request) {
               });
             } catch (err) {
               //cannot search via the YouTube API, update end-user with error message
-              isFinishedWithLookup = true;
               showConnectivityError();
             }          
             console.log('44444 request created')
-            requestLiveStream.execute(function(responseLiveStream) {
+            requestLiveStream.execute(function(responseLiveStream, doSomething) {
               if ('error' in responseLiveStream || !responseLiveStream) {
                 isFinishedWithLookup = true;
                 console.log('44444 error retrieving data for responseLiveStream');
@@ -672,18 +671,23 @@ function processYouTubeRequest(request) {
                     videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
                 }
               }
-              resultsArr.push(videoResult);
+              console.log("4444 about to doSomething")
+              resultsArr = doSomething(resultsArr,videoResult)
+              console.log("4444 did doSomething")
+              //doCallback()
+              //resultsArr.push(videoResult);
               console.log("4444 pushing videoResult")
-              
+              return true;
             }); 
             //console.log('4444 end liveStreamDetails retrieve ')
           //} //end while 
           //isFinishedWithLookup = false;
+          //doCallBack(doneies, doOtherStuff())
           console.log("about to do other stuff")
           doOtherStuff(videoIDString,resultsArr);
           console.log("done with doOtherStuff")
           
-      });
+      },doOtherStuff);
       
 //// END TEST ////     
       console.log('4444 end of test')
@@ -872,6 +876,11 @@ function processYouTubeRequest(request) {
   //}
 **********  TESTO
 */  
+}
+
+function doSomething(resultsArr,videoResult){
+  resultsArr.push(videoResult);
+  return resultsArr
 }
 
 function doOtherStuff(videoIDString,resultsArr){
