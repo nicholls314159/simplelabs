@@ -680,7 +680,7 @@ function processYouTubeRequest(request) {
           //} //end while 
           //isFinishedWithLookup = false;
           console.log("about to do other stuff")
-          doOtherStuff(videoIDString,);
+          doOtherStuff(videoIDString,resultsArr);
           console.log("done with doOtherStuff")
           
       });
@@ -874,7 +874,7 @@ function processYouTubeRequest(request) {
 */  
 }
 
-function doOtherStuff(videoIDString,){
+function doOtherStuff(videoIDString,resultsArr){
         //remove trailing comma from the string of video ids
           var videoIDStringFinal = videoIDString.substring(0, videoIDString.length - 1);
 
