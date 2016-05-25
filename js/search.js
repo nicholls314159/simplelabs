@@ -633,6 +633,7 @@ function processYouTubeRequest(request) {
       var entryArr = response.result.items;
 ///// TEST /////      
       entryArr.forEach(function(listItem, index){
+          var videoResult = new Object();
           videoResult.title = listItem.snippet.title;
           videoResult.videoId = listItem.id.videoId;
           console.log("44444 about to create request.  videoResult.videoID is "+videoResult.videoID)
@@ -667,7 +668,7 @@ function processYouTubeRequest(request) {
 //// END TEST ////      
       for (var i = 0; i < entryArr.length; i++) {
         var videoResult = new Object();
-        console.log("videoResult.title is "+videoResult.title);
+        //console.log("videoResult.title is "+videoResult.title);
         videoResult.title = entryArr[i].snippet.title;
 
         //Pull the lattitude and longitude data per search result
