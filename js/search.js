@@ -652,7 +652,7 @@ function processYouTubeRequest(request) {
           console.log('44444 request created')
           requestLiveStream.execute(function(responseLiveStream) {
             if ('error' in responseLiveStream || !responseLiveStream) {
-              console.log('error retrieving data for responseLiveStream');
+              console.log('44444 error retrieving data for responseLiveStream');
             }else{
               console.log('4444 got liveStreamDetails')
               var liveStreamEntryArr = response.result.items;
@@ -663,9 +663,12 @@ function processYouTubeRequest(request) {
                  videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
               }
             }
+            resultsArr.push(videoResult);
           });
       });
-//// END TEST ////      
+//// END TEST ////     
+      console.log('4444 end of test')
+/*      
       for (var i = 0; i < entryArr.length; i++) {
         var videoResult = new Object();
         //console.log("videoResult.title is "+videoResult.title);
@@ -695,6 +698,7 @@ function processYouTubeRequest(request) {
         console.log("huzzah!!! defaultLanguage is "+ videoResult.defaultLanguage)
         
         //dosomething();
+*/
 //////////////////////////// NOW FOR EACH RESULT, retrieve liveStreamingDetails
 /*        console.log("about to create request.  videoResult.videoID is "+videoResult.videoID)
         try {
@@ -724,7 +728,8 @@ function processYouTubeRequest(request) {
             ///insert remain videoResult code here
             videoResult.geoLiveURL = "https://www.youtube.com/watch?v=" + videoResult.videoId;
             console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers)
-*/        
+*/ 
+/*
              videoResult.geoLiveURL = "https://www.youtube.com/watch?v=" + videoResult.videoId;
              videoResult.thumbNailURL = entryArr[i].snippet.thumbnails.default.url;
         
@@ -750,7 +755,7 @@ function processYouTubeRequest(request) {
 
            resultsArr.push(videoResult);
       }
-
+*/
       //Now we will use the string of video IDs from the search to do another API call to pull latitude
       //and longitude values for each search result
 
