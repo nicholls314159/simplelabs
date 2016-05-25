@@ -672,6 +672,7 @@ function processYouTubeRequest(request) {
                 }
               }
             }); 
+            console.log('4444 isFinishedWithLookup '+isFinishedWithLookup)
           } //end while 
           isFinishedWithLookup = false;
           resultsArr.push(videoResult);
