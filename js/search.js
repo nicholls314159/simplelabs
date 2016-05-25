@@ -631,40 +631,50 @@ function processYouTubeRequest(request) {
     } else {
       console.log("No Yo Yo:  got search response");
       var entryArr = response.result.items;
-///// TEST /////      
+///// TEST /////  
+      //var resultArrayLength =  entryArr.length
+      //var loopCounter = 0;
+      var isFinishedWithLookup = false;
+      console.log("resultArrayLength is "+ resultArrayLength)
       entryArr.forEach(function(listItem, index){
           var videoResult = new Object();
           videoResult.title = listItem.snippet.title;
           videoResult.videoID = listItem.id.videoId;
           console.log("44444 about to create request.  videoResult.videoID is "+videoResult.videoID)
-          try {
-            var requestLiveStream = gapi.client.youtube.search.list({
-              id: videoResult.videoID,
-              type: 'video',
-              part: "liveStreamingDetails",
-              maxResults: '1',
-              key: API_ACCESS_KEY
-            });
-          } catch (err) {
-            //cannot search via the YouTube API, update end-user with error message
-            showConnectivityError();
-          }          
-          console.log('44444 request created')
-          requestLiveStream.execute(function(responseLiveStream) {
-            if ('error' in responseLiveStream || !responseLiveStream) {
-              console.log('44444 error retrieving data for responseLiveStream');
-            }else{
-              console.log('4444 got liveStreamDetails')
-              var liveStreamEntryArr = response.result.items;
-              console.log('4444 got liveStreamEntryArr.length is '+liveStreamEntryArr.length)
-              for (var i = 0; i < liveStreamEntryArr.length; i++) {
-                 videoResult.concurrentUsers = liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers
-                  console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers + " for i="+i);
-                 videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
+          while(!isFinishedWithLookup){
+            try {
+              var requestLiveStream = gapi.client.youtube.search.list({
+                id: videoResult.videoID,
+                type: 'video',
+                part: "liveStreamingDetails",
+                maxResults: '1',
+                key: API_ACCESS_KEY
+              });
+            } catch (err) {
+              //cannot search via the YouTube API, update end-user with error message
+              isFinishedWithLookup = true;
+              showConnectivityError();
+            }          
+            console.log('44444 request created')
+            requestLiveStream.execute(function(responseLiveStream) {
+              if ('error' in responseLiveStream || !responseLiveStream) {
+                isFinishedWithLookup = true;
+                console.log('44444 error retrieving data for responseLiveStream');
+              }else{
+                console.log('4444 got liveStreamDetails')
+                isFinishedWithLookup = true;
+                var liveStreamEntryArr = response.result.items;
+                console.log('4444 got liveStreamEntryArr.length is '+liveStreamEntryArr.length)
+                for (var i = 0; i < liveStreamEntryArr.length; i++) {
+                    videoResult.concurrentUsers = liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers
+                    console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers + " for i="+i);
+                    videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
+                }
               }
-            }
-            resultsArr.push(videoResult);
-          });
+            }); 
+          } //end while 
+          isFinishedWithLookup = false;
+          resultsArr.push(videoResult);
       });
 //// END TEST ////     
       console.log('4444 end of test')
