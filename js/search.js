@@ -579,7 +579,7 @@ function generateURLwithQueryParameters() {
   return newURL;
 }
 
-function 
+ 
 
 
 
