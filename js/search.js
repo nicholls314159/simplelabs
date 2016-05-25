@@ -640,6 +640,7 @@ function processYouTubeRequest(request) {
           var videoResult = new Object();
           videoResult.title = listItem.snippet.title;
           videoResult.videoID = listItem.id.videoId;
+          videoIDString = videoIDString + videoResult.videoId + ",";
           console.log("44444 about to create request.  videoResult.videoID is "+videoResult.videoID)
           //while(!isFinishedWithLookup){
             try {
@@ -672,14 +673,18 @@ function processYouTubeRequest(request) {
                 }
               }
               resultsArr.push(videoResult);
-              doOtherStuff();
+              console.log("4444 pushing videoResult")
+              
             }); 
-            console.log('4444 end ')
-          } //end while 
+            //console.log('4444 end liveStreamDetails retrieve ')
+          //} //end while 
           //isFinishedWithLookup = false;
-          
+          console.log("about to do other stuff")
+          doOtherStuff(videoIDString,);
+          console.log("done with doOtherStuff")
           
       });
+      
 //// END TEST ////     
       console.log('4444 end of test')
 /*      
@@ -869,7 +874,7 @@ function processYouTubeRequest(request) {
 */  
 }
 
-function doSomething(){
+function doOtherStuff(videoIDString,){
         //remove trailing comma from the string of video ids
           var videoIDStringFinal = videoIDString.substring(0, videoIDString.length - 1);
 
