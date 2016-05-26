@@ -677,23 +677,15 @@ function processYouTubeRequest(request) {
                     }
                 }
               }
-              console.log("4444 about to doSomething")
-              //resultsArr = doSomething(resultsArr,videoResult)
-              console.log("4444 did doSomething")
-              //doCallback()
-              //resultsArr.push(videoResult);
-              console.log("4444 pushing videoResult")
-
-            }, doSomething); 
-            //console.log('4444 end liveStreamDetails retrieve ')
-          //} //end while 
-          //isFinishedWithLookup = false;
-          //doCallBack(doneies, doOtherStuff())
-          console.log("about to do other stuff")
-          //doOtherStuff(videoIDString,resultsArr);
-          console.log("done with doOtherStuff")
-          
-      },doOtherStuff);
+              doSomething(videoResult, function(){
+                resultsArr.push(videoResult);
+              });
+            }); 
+        doOtherStuff(videoIDString, resultsArr, function(){
+            console.log("Get dis SHIT done")
+        });
+        
+      });
       
 //// END TEST ////     
       console.log('4444 end of test')
@@ -884,12 +876,13 @@ function processYouTubeRequest(request) {
 */  
 }
 
-function doSomething(){
-  console.log("44444 DOING SOMETHING")
-  resultsArr.push(videoResult);
+function doSomething(videoResult, callback){
+  console.log("44444 DOING SOMETHING and video_id is "+videoResult.videoID)
+  console.log("44444 DOING SOMETHING and concurrentUsers is "+  videoResult.concurrentUsers);
+  callback();
 }
 
-function doOtherStuff(){
+function doOtherStuff(videoIDString, resultsArr, callback){
         console.log("44444 DOING OTHER STUFF")
         //remove trailing comma from the string of video ids
           var videoIDStringFinal = videoIDString.substring(0, videoIDString.length - 1);
@@ -982,7 +975,8 @@ function doOtherStuff(){
       });
    // });
   //}
-
+      console.log("44444 FINISHING OTHER STUFF")
+      callback();
 }
 
 
