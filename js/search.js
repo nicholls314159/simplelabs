@@ -659,7 +659,7 @@ function processYouTubeRequest(request) {
                 console.log('44444 error retrieving data for responseLiveStream');
               }else{
                 console.log('4444 got liveStreamDetails')
-                var liveStreamEntryArr = response.result.items;
+                var liveStreamEntryArr = responseLiveStream.result.items;
                 console.log('4444 got liveStreamEntryArr.length is '+liveStreamEntryArr.length)
                 for (var i = 0; i < liveStreamEntryArr.length; i++) {
                     console.log("liveStreamEntryArr[i].liveStreamingDetails is "+liveStreamEntryArr[i].liveStreamingDetails)
