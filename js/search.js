@@ -637,58 +637,58 @@ function processYouTubeRequest(request) {
       //var isFinishedWithLookup = false;
       //console.log("resultArrayLength is "+ resultArrayLength)
       entryArr.forEach(function(listItem, index){
-          var videoResult = new Object();
-          videoResult.title = listItem.snippet.title;
-          videoResult.videoID = listItem.id.videoId;
-          videoIDString = videoIDString + videoResult.videoId + ",";
-          console.log("44444 about to create request.  videoResult.videoID is "+videoResult.videoID)
-          //while(!isFinishedWithLookup){
-            try {
-              var requestLiveStream = gapi.client.youtube.videos.list({
-                id: videoResult.videoID,
-                part: "liveStreamingDetails",
-                key: API_ACCESS_KEY
-              });
-            } catch (err) {
-              //cannot search via the YouTube API, update end-user with error message
-              showConnectivityError();
-            }          
-            console.log('44444 request created')
-            requestLiveStream.execute(function(responseLiveStream) {
-              if ('error' in responseLiveStream || !responseLiveStream) {
-                console.log('44444 error retrieving data for responseLiveStream');
-              }else{
-                console.log('4444 got liveStreamDetails')
-                var liveStreamEntryArr = responseLiveStream.result.items;
-                console.log('4444 got liveStreamEntryArr.length is '+liveStreamEntryArr.length)
-                for (var i = 0; i < liveStreamEntryArr.length; i++) {
-                    console.log("liveStreamEntryArr[i].liveStreamingDetails is "+liveStreamEntryArr[i].liveStreamingDetails)
-                    if (typeof liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers == undefined){
-                      videoResult.concurrentUsers = 'undefined'
-                      console.log("huzzah!!! videoResult.concurrentUsers is undefined");
-                    }else{ 
-                      videoResult.concurrentUsers = liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers
-                      console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers + " for i="+i);
-                    }
-                    if (typeof liveStreamEntryArr[i].liveStreamingDetails.actualStartTime == undefined){
-                      videoResult.liveStreamStartTime = 'undefined'
-                    }else{ 
-                      videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
-                    }
-                }
+        var videoResult = new Object();
+        videoResult.title = listItem.snippet.title;
+        videoResult.videoID = listItem.id.videoId;
+        videoIDString = videoIDString + videoResult.videoId + ",";
+        console.log("44444 about to create request.  videoResult.videoID is "+videoResult.videoID)
+        try {
+          var requestLiveStream = gapi.client.youtube.videos.list({
+            id: videoResult.videoID,
+            part: "liveStreamingDetails",
+            key: API_ACCESS_KEY
+          });
+        } catch (err) {
+          //cannot search via the YouTube API, update end-user with error message
+          showConnectivityError();
+        }          
+        console.log('44444 request created')
+        requestLiveStream.execute(function(responseLiveStream) {
+          if ('error' in responseLiveStream || !responseLiveStream) {
+            console.log('44444 error retrieving data for responseLiveStream');
+          }else{
+            console.log('4444 got liveStreamDetails')
+            var liveStreamEntryArr = responseLiveStream.result.items;
+            console.log('4444 got liveStreamEntryArr.length is '+liveStreamEntryArr.length)
+            for (var i = 0; i < liveStreamEntryArr.length; i++) {
+              console.log("liveStreamEntryArr[i].liveStreamingDetails is "+liveStreamEntryArr[i].liveStreamingDetails)
+              if (typeof liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers == undefined){
+                videoResult.concurrentUsers = 'undefined'
+                console.log("huzzah!!! videoResult.concurrentUsers is undefined");
+              }else{ 
+                videoResult.concurrentUsers = liveStreamEntryArr[i].liveStreamingDetails.concurrentViewers
+                console.log("huzzah!!! videoResult.concurrentUsers is "+ videoResult.concurrentUsers + " for i="+i);
               }
-              doSomething(videoResult, function(){
-                resultsArr.push(videoResult);
-              });
-            }); 
+              if (typeof liveStreamEntryArr[i].liveStreamingDetails.actualStartTime == undefined){
+                videoResult.liveStreamStartTime = 'undefined'
+              }else{ 
+                videoResult.liveStreamStartTime = liveStreamEntryArr[i].liveStreamingDetails.actualStartTime
+              }
+            }
+          }
+          doSomething(videoResult, function(){
+            resultsArr.push(videoResult);
+          });
+        }); 
         doOtherStuff(videoIDString, resultsArr, function(){
-            console.log("Get dis SHIT done")
+          console.log("Get dis SHIT done")
         });
-        
       });
-      
+    }
+  });
+}
 //// END TEST ////     
-      console.log('4444 end of test')
+      //console.log('4444 end of test')
 /*      
       for (var i = 0; i < entryArr.length; i++) {
         var videoResult = new Object();
@@ -874,109 +874,107 @@ function processYouTubeRequest(request) {
   //}
 **********  TESTO
 */  
-}
+//}
 
 function doSomething(videoResult, callback){
   console.log("44444 DOING SOMETHING and video_id is "+videoResult.videoID)
   console.log("44444 DOING SOMETHING and concurrentUsers is "+  videoResult.concurrentUsers);
-  callback();
 }
 
 function doOtherStuff(videoIDString, resultsArr, callback){
-        console.log("44444 DOING OTHER STUFF")
-        //remove trailing comma from the string of video ids
-          var videoIDStringFinal = videoIDString.substring(0, videoIDString.length - 1);
+  
+  console.log("44444 DOING OTHER STUFF")
+  //remove trailing comma from the string of video ids
+  var videoIDStringFinal = videoIDString.substring(0, videoIDString.length - 1);
 
-      //generate request object for video search
-          var videoIDRequest = gapi.client.youtube.videos.list({
-            id: videoIDStringFinal,
-            part: 'id,snippet,recordingDetails',
-            key: API_ACCESS_KEY
-          });
+  //generate request object for video search
+  var videoIDRequest = gapi.client.youtube.videos.list({
+    id: videoIDStringFinal,
+    part: 'id,snippet,recordingDetails',
+    key: API_ACCESS_KEY
+  });
 
-      //execute request and process the response object to pull in latitude and longitude
-          videoIDRequest.execute(function(response) {
-            if ('error' in response || !response) {
-              showConnectivityError();
-            } else {
-             //iterate through the response items and execute a callback function for each
-              $.each(response.items, function() {
-               var videoRequestVideoId = this.id;
+  //execute request and process the response object to pull in latitude and longitude
+  videoIDRequest.execute(function(response) {
+    if ('error' in response || !response) {
+      showConnectivityError();
+    } else {
+      //iterate through the response items and execute a callback function for each
+      $.each(response.items, function() {
+        var videoRequestVideoId = this.id;
 
-                //ensure recordingDetails and recordingDetails.location are not null or blank
-                if (this.recordingDetails && this.recordingDetails.location) {
-                  //for every search result in resultArr, pull in the latitude and longitude from the response
-                  for (var i = 0; i < resultsArr.length; i++) {
-                    if (resultsArr[i].videoId === videoRequestVideoId) {
-                      resultsArr[i].lat = this.recordingDetails.location.latitude;
-                      resultsArr[i].long = this.recordingDetails.location.longitude;
-                     break;
-                   }
-                 }
-               }
-             });
+        //ensure recordingDetails and recordingDetails.location are not null or blank
+        if (this.recordingDetails && this.recordingDetails.location) {
+          //for every search result in resultArr, pull in the latitude and longitude from the response
+          for (var i = 0; i < resultsArr.length; i++) {
+            if (resultsArr[i].videoId === videoRequestVideoId) {
+              resultsArr[i].lat = this.recordingDetails.location.latitude;
+              resultsArr[i].long = this.recordingDetails.location.longitude;
+              break;
             }
-
-            //remove duplicates from global results list
-            for (var i = 0; i < resultsArr.length; i++) {
-              var addResult = true;
-              for (var j = 0; j < finalResults.length; j++) {
-               if (resultsArr[i].url === finalResults[j].url) {
-                 //it is a duplicate, do not add to final results and break inner loop
-                 addResult = false;
-                 break;
-               }
-              }
-              if (addResult) {
-                finalResults.push(resultsArr[i]);
-             }
-            }
-
-            if (finalResults.length === 0) {
-             //No Search Results to Display
-             //remove results section as there is nothing to display
-             resetResultsSection();
-             $("div").remove(".tableOfVideoContentResults");
-            } else {
-              //show results section
-              showResultsSection();
-
-              //remove any old results
-             $("div").remove(".tableOfVideoContentResults");
-
-             //generate result list and map of videos
-             generateResultList();
-              initializeMap(inputObject.inputLat, inputObject.inputLong);
-            }
-         });
+          }
         }
-        //Update the URL bar with the search parameters from the search
-        window.history.pushState("updatingURLwithParams", "YT Geo Search Tool", generateURLwithQueryParameters());
-
-
-        //reset startURL with the latest
-       startURL = window.location.href;
-        var requestShortener = gapi.client.urlshortener.url.insert({
-          'resource': {
-              'longUrl': startURL
-         }
-       });
-        requestShortener.execute(function(response2) 
-        {
-           if(response2.id != null)
-           {
-             shortURL = response2.id;
-             //console.log('22 shortURL is'+shortURL);
-           }else{
-             //console.log("error: creating short url");
-            }
-       });
-       console.log('end processYouTubeRequest()')
       });
+    }
+
+    //remove duplicates from global results list
+    for (var i = 0; i < resultsArr.length; i++) {
+      var addResult = true;
+      for (var j = 0; j < finalResults.length; j++) {
+        if (resultsArr[i].url === finalResults[j].url) {
+          //it is a duplicate, do not add to final results and break inner loop
+          addResult = false;
+          break;
+        }
+      }
+      if (addResult) {
+        finalResults.push(resultsArr[i]);
+      }
+    }
+
+    if (finalResults.length === 0) {
+      //No Search Results to Display
+      //remove results section as there is nothing to display
+      resetResultsSection();
+      $("div").remove(".tableOfVideoContentResults");
+    } else {
+      //show results section
+      showResultsSection();
+
+      //remove any old results
+      $("div").remove(".tableOfVideoContentResults");
+
+      //generate result list and map of videos
+      generateResultList();
+      initializeMap(inputObject.inputLat, inputObject.inputLong);
+    }
+  });
+        //}
+  //Update the URL bar with the search parameters from the search
+  window.history.pushState("updatingURLwithParams", "YT Geo Search Tool", generateURLwithQueryParameters());
+
+
+  //reset startURL with the latest
+  startURL = window.location.href;
+  var requestShortener = gapi.client.urlshortener.url.insert({
+    'resource': {
+      'longUrl': startURL
+    }
+  });
+  requestShortener.execute(function(response2) {
+    if(response2.id != null){
+      shortURL = response2.id;
+      //console.log('22 shortURL is'+shortURL);
+    }else{
+      //console.log("error: creating short url");
+    }
+  });
+  console.log('end processYouTubeRequest()')
+      //});
    // });
   //}
-      console.log("44444 FINISHING OTHER STUFF")
-      callback();
+  console.log("44444 FINISHING OTHER STUFF")
+  //callback();
 }
 
 
