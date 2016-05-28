@@ -691,7 +691,7 @@ function processYouTubeRequest(request) {
               for (var i = 0; i < resultsArr.length; i++) {
                 if (resultsArr[i].videoId === videoRequestVideoId) {
                   resultsArr[i].concurrentViewers = this.liveStreamingDetails.concurrentViewers;
-                  resultsArr[i].scheduledStartTime = thisliveStreamingDetails.scheduledStartTime;
+                  resultsArr[i].scheduledStartTime = this.liveStreamingDetails.scheduledStartTime;
                   break;
                 }
               }
