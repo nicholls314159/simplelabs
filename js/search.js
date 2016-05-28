@@ -194,6 +194,7 @@ function searchYouTube() {
               type: 'video',
               part: 'snippet',
               maxResults: '50',
+              eventType: 'live',
               videoLiscense: inputObject.videoLiscense,
               videoEmbeddable: inputObject.videoEmbeddable,
               channelId: inputObject.currentChannel,
@@ -243,6 +244,7 @@ function searchYouTube() {
             type: 'video',
             part: 'snippet',
             maxResults: '50',
+            eventType: 'live',
             videoLiscense: inputObject.videoLiscense,
             videoEmbeddable: inputObject.videoEmbeddable,
             publishedAfter: inputObject.publishAfterTime,
@@ -684,7 +686,7 @@ function processYouTubeRequest(request) {
               }
             }
             console.log("test if liveStreamingDetails is available ")
-            if(this.liveStreamingDetails && liveStreamingDetails.concurrentViewers){
+            if(this.liveStreamingDetails && this.liveStreamingDetails.concurrentViewers){
               console.log("liveStreamingDetails is available ")
               for (var i = 0; i < resultsArr.length; i++) {
                 if (resultsArr[i].videoId === videoRequestVideoId) {
@@ -826,12 +828,16 @@ function generateResultList() {
     var videoString = "<attr title='Description: " + finalResults2[i].description + "'><a href='" + videoURLString + "'>" + finalResults2[i].title + "</a></attr><br>";
     var uploadDate = "Uploaded on: " + finalResults2[i].displayTimeStamp + "<br>";
     var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + channelID + "' target='_blank'>" + channel + "</a></attr><br>";
-    var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + finalResults2[i].thumbNailURL + "' target='_blank'>reverse image search</a></attr><br>";
-
+    //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + finalResults2[i].thumbNailURL + "' target='_blank'>reverse image search</a></attr><br>";
+    var concurrentUsersString = "Concurrent Viewers:  " + finalResults2[i].concurrentViewers + "<br>";
+    var scheduledStartTimeString = "Start Time:  " + finalResults2[i].scheduledStartTime + "<br>";
+    
     metaDataCell.append(videoString);
     metaDataCell.append(uploadDate);
     metaDataCell.append(channelString);
-    metaDataCell.append(reverseImageString);
+    //metaDataCell.append(reverseImageString);
+    metaDataCell.append(concurrentUsersString);
+    metaDataCell.append(scheduledStartTimeString);
     //Put all the sections of the row together
     resultRow.append(imageCell);
     resultRow.append(metaDataCell);
