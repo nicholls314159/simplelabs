@@ -696,9 +696,13 @@ function processYouTubeRequest(request) {
                 }
               }
             }else{
-              console.log("liveStreamingDetails is NOT available ")
-              resultsArr[i].concurrentViewers = 'NA'
-              resultsArr[i].scheduledStartTime = 'NA'
+              console.log("liveStreamingDetails is NOT available ");
+              for (var i = 0; i < resultsArr.length; i++) {
+                if (resultsArr[i].videoId === videoRequestVideoId) {
+                  resultsArr[i].concurrentViewers = 'NA';
+                  resultsArr[i].scheduledStartTime = 'NA';
+                }
+              }
             }
             console.log("concurrentViewers for this stream is...." + resultsArr[i].concurrentViewers)
           });
