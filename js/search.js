@@ -659,7 +659,7 @@ function processYouTubeRequest(request) {
       //generate request object for video search
       var videoIDRequest = gapi.client.youtube.videos.list({
         id: videoIDStringFinal,
-        part: 'id,snippet,recordingDetails',
+        part: 'id,snippet,recordingDetails,liveStreamingDetails',
         key: API_ACCESS_KEY
       });
 
@@ -683,6 +683,22 @@ function processYouTubeRequest(request) {
                 }
               }
             }
+            console.log("test if liveStreamingDetails is available ")
+            if(this.liveStreamingDetails && liveStreamingDetails.concurrentViewers){
+              console.log("liveStreamingDetails is available ")
+              for (var i = 0; i < resultsArr.length; i++) {
+                if (resultsArr[i].videoId === videoRequestVideoId) {
+                  resultsArr[i].concurrentViewers = this.liveStreamingDetails.concurrentViewers;
+                  resultsArr[i].scheduledStartTime = thisliveStreamingDetails.scheduledStartTime;
+                  break;
+                }
+              }
+            }else{
+              console.log("liveStreamingDetails is NOT available ")
+              resultsArr[i].concurrentViewers = 'NA'
+              resultsArr[i].scheduledStartTime = 'NA'
+            }
+            console.log("concurrentViewers for this stream is...." + resultsArr[i].concurrentViewers)
           });
         }
 
@@ -702,7 +718,7 @@ function processYouTubeRequest(request) {
         }
 
         //get Live Stream Details from VIDEO snippet
-        getLiveStreamDetails();
+        //getLiveStreamDetails();
 
         if (finalResults.length === 0) {
           //No Search Results to Display
@@ -750,7 +766,18 @@ function processYouTubeRequest(request) {
 
 function getLiveStreamDetails(){
   finalResults.forEach(function(videoResult, index){
-    console.log("22 videoResult.url is"+ videoResult.url)
+    console.log("BINGO videoResult.url is"+ videoResult.url)
+    try {
+      var request = gapi.client.youtube.videos.list({
+        id: videoResult.videoID,
+        part: "id,snippet,liveStreamingDetails",
+        key: API_ACCESS_KEY
+      });
+    } catch (err) {
+      //cannot search via the YouTube API, update end-user with error message
+      showConnectivityError();
+    }
+    
   });
 }
 
