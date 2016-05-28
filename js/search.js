@@ -168,7 +168,7 @@ function searchYouTube() {
           try {
             var request = gapi.client.youtube.search.list({
               q: inputObject.inputQuery,
-              order: "date",
+              order: "viewCount",
               type: 'video',
               part: 'snippet',
               maxResults: '50',
@@ -190,7 +190,7 @@ function searchYouTube() {
           try {
             var request = gapi.client.youtube.search.list({
               q: inputObject.inputQuery,
-              order: "date",
+              order: "viewCount",
               type: 'video',
               part: 'snippet',
               maxResults: '50',
@@ -218,7 +218,7 @@ function searchYouTube() {
         try {
           var request = gapi.client.youtube.search.list({
             q: inputObject.inputQuery,
-            order: "date",
+            order: "viewCount",
             type: 'video',
             part: 'snippet',
             maxResults: '50',
@@ -240,7 +240,7 @@ function searchYouTube() {
         try {
           var request = gapi.client.youtube.search.list({
             q: inputObject.inputQuery,
-            order: "date",
+            order: "viewCount",
             type: 'video',
             part: 'snippet',
             maxResults: '50',
@@ -981,7 +981,7 @@ function getLocationSearchResults() {
             try {
               var request = gapi.client.youtube.search.list({
                 q: inputObject.inputQuery,
-                order: "date",
+                order: "viewCount",
                 type: 'video',
                 part: 'snippet',
                 maxResults: '50',
@@ -1005,7 +1005,7 @@ function getLocationSearchResults() {
             try {
               var request = gapi.client.youtube.search.list({
                 q: inputObject.inputQuery,
-                order: "date",
+                order: "viewCount",
                 type: 'video',
                 part: 'snippet',
                 maxResults: '50',
@@ -1035,7 +1035,7 @@ function getLocationSearchResults() {
           try {
             var request = gapi.client.youtube.search.list({
               q: inputObject.inputQuery,
-              order: "date",
+              order: "viewCount",
               type: "video",
               part: "id,snippet",
               maxResults: "50",
@@ -1058,7 +1058,7 @@ function getLocationSearchResults() {
           try {
             var request = gapi.client.youtube.search.list({
               q: inputObject.inputQuery,
-              order: "date",
+              order: "viewCount",
               type: "video",
               part: "id,snippet",
               location: inputObject.inputLat + "," + inputObject.inputLong,
