@@ -706,7 +706,7 @@ function processYouTubeRequest(request) {
                 }
               }
             }
-            console.log("concurrentViewers for this stream is...." + resultsArr[i].concurrentViewers)
+            //console.log("concurrentViewers for this stream is...." + resultsArr[i].concurrentViewers)
           });
         }
 
