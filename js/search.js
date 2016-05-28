@@ -702,7 +702,7 @@ function processYouTubeRequest(request) {
         }
 
         //get Live Stream Details from VIDEO snippet
-        getLiveStreamDetails(finalResults);
+        getLiveStreamDetails();
 
         if (finalResults.length === 0) {
           //No Search Results to Display
@@ -748,11 +748,10 @@ function processYouTubeRequest(request) {
 }
 
 
-function getLiveStreamDetails(finalResults){
-  finalResults.foreach(function(videoResult, index){
+function getLiveStreamDetails(){
+  finalResults.forEach(function(videoResult, index){
     console.log("22 videoResult.url is"+ videoResult.url)
-    
-  })
+  });
 }
 
 /** This function generates the UI of the results section after the search has been processed
