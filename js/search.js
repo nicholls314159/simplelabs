@@ -48,7 +48,7 @@ var queryFromClickSearchNotURL = false;
 /** INITIAL_ZOOM_LEVEL is the zoom level that is set as default when our map is created
  *  @const {string}
  */
-var INITIAL_ZOOM_LEVEL = 11;
+var INITIAL_ZOOM_LEVEL = 5;
 var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var API_ACCESS_KEY = 'AIzaSyDJTIlvEzU-B2152hKEyUzBoAJmflJzcjU';
 
@@ -765,23 +765,6 @@ function processYouTubeRequest(request) {
   });
 }
 
-
-function getLiveStreamDetails(){
-  finalResults.forEach(function(videoResult, index){
-    console.log("BINGO videoResult.url is"+ videoResult.url)
-    try {
-      var request = gapi.client.youtube.videos.list({
-        id: videoResult.videoID,
-        part: "id,snippet,liveStreamingDetails",
-        key: API_ACCESS_KEY
-      });
-    } catch (err) {
-      //cannot search via the YouTube API, update end-user with error message
-      showConnectivityError();
-    }
-    
-  });
-}
 
 /** This function generates the UI of the results section after the search has been processed
  */
