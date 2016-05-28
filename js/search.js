@@ -692,6 +692,7 @@ function processYouTubeRequest(request) {
                 if (resultsArr[i].videoId === videoRequestVideoId) {
                   resultsArr[i].concurrentViewers = this.liveStreamingDetails.concurrentViewers;
                   resultsArr[i].scheduledStartTime = this.liveStreamingDetails.scheduledStartTime;
+                  resultsArr[i].actualStartTime = this.liveStreamingDetails.actualStartTime;
                   break;
                 }
               }
@@ -701,6 +702,7 @@ function processYouTubeRequest(request) {
                 if (resultsArr[i].videoId === videoRequestVideoId) {
                   resultsArr[i].concurrentViewers = 'NA';
                   resultsArr[i].scheduledStartTime = 'NA';
+                  resultsArr[i].actualStartTime = 'NA'
                 }
               }
             }
@@ -813,18 +815,21 @@ function generateResultList() {
     var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
 
     var videoString = "<attr title='Description: " + finalResults2[i].description + "'><a href='" + videoURLString + "'>" + finalResults2[i].title + "</a></attr><br>";
-    var uploadDate = "Uploaded on: " + finalResults2[i].displayTimeStamp + "<br>";
+    //var uploadDate = "Uploaded on: " + finalResults2[i].displayTimeStamp + "<br>";
     var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + channelID + "' target='_blank'>" + channel + "</a></attr><br>";
     //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + finalResults2[i].thumbNailURL + "' target='_blank'>reverse image search</a></attr><br>";
     var concurrentUsersString = "Concurrent Viewers:  " + finalResults2[i].concurrentViewers + "<br>";
-    var scheduledStartTimeString = "Start Time:  " + finalResults2[i].scheduledStartTime + "<br>";
+    var scheduledStartTimeString = "Scheduled Start Time:  " + finalResults2[i].scheduledStartTime + "<br>";
+    var actualStartTimeString = "Actual Start Time:  " + finalResults2[i].actualStartTime + "<br>";
+    
     
     metaDataCell.append(videoString);
-    metaDataCell.append(uploadDate);
+    //metaDataCell.append(uploadDate);
     metaDataCell.append(channelString);
     //metaDataCell.append(reverseImageString);
     metaDataCell.append(concurrentUsersString);
     metaDataCell.append(scheduledStartTimeString);
+    metaDataCell.append(actualStartTimeString);
     //Put all the sections of the row together
     resultRow.append(imageCell);
     resultRow.append(metaDataCell);
