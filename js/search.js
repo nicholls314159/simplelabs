@@ -701,6 +701,9 @@ function processYouTubeRequest(request) {
           }
         }
 
+        //get Live Stream Details from VIDEO snippet
+        getLiveStreamDetails(finalResults);
+
         if (finalResults.length === 0) {
           //No Search Results to Display
           //remove results section as there is nothing to display
@@ -744,6 +747,13 @@ function processYouTubeRequest(request) {
   });
 }
 
+
+function getLiveStreamDetails(finalResults){
+  finalResults.foreach(function(videoResult, index){
+    console.log("22 videoResult.url is"+ videoResult.url)
+    
+  })
+}
 
 /** This function generates the UI of the results section after the search has been processed
  */
@@ -984,6 +994,7 @@ function getLocationSearchResults() {
                 type: 'video',
                 part: 'snippet',
                 maxResults: '50',
+                eventType: 'live',
                 videoLiscense: inputObject.videoLiscense,
                 videoEmbeddable: inputObject.videoEmbeddable,
                 channelId: inputObject.currentChannel,
@@ -1038,6 +1049,7 @@ function getLocationSearchResults() {
               location: inputObject.inputLat + "," + inputObject.inputLong,
               locationRadius: inputObject.inputLocationRadius,
               maxResults: "50",
+               eventType: 'live',
               videoLiscense: inputObject.videoLiscense,
               videoEmbeddable: inputObject.videoEmbeddable,
               publishedAfter: inputObject.publishAfterTime,
