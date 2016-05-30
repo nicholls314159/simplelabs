@@ -938,14 +938,19 @@ function initializeMap(inputLat, inputLong) {
     
     infoBubble = new InfoBubble({
       maxWidth: 330,
-      arrowSize: 0, //no arrows below infoBubble
+      position: latLong,
+      arrowSize: 15, //no arrows below infoBubble
       shadowStyle: 1,
+      backgroundColor: 'transparent',
       disableAutoPan: true,
       backgroundClassName: 'infoBubbleContent',
-      padding: 0
+      padding: 5
     })
 
     infoBubble.addTab("Tabbsy McTabson", infoBubbleContentString)
+    
+    
+    
     // Mousing over the marker will show a snippet of info
     /*
     google.maps.event.addListener(searchResultMarker, 'mouseover', function(){
