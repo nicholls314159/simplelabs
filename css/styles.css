@@ -261,3 +261,14 @@ a {
   padding: 25px;
   color: #eee;
 }
+
+#infoBubbleContent {
+  height: 100%;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  color: white;
+  background-image: url("jt_background.png");
+  font-family: Arial, sans-serif;
+}
+
