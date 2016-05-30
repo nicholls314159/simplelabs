@@ -932,12 +932,17 @@ function initializeMap(inputLat, inputLong) {
     "Zipibity bipity hot dog.  WOOOOOOOOOOOOO.   Doing.   WAZZUP!!"+
     "<p>"+
     "<a href='http://www.cnn.com/'> BINGO!!!</a>"+
+    "<p>"+
+    '<iframe width="300" height="168" src="https://www.youtube.com/embed/WmNBayHRPxs" frameborder="0" allowfullscreen></iframe>'+
     "</div>"
     
     infoBubble = new InfoBubble({
-      maxWidth: 200,
+      maxWidth: 330,
       arrowSize: 0, //no arrows below infoBubble
-      ShadowStyle: 1,
+      shadowStyle: 1,
+      disableAutoPan: true,
+      backgroundClassName: 'infoBubbleContent',
+      padding: 0
     })
 
     infoBubble.addTab("Tabbsy McTabson", infoBubbleContentString)
