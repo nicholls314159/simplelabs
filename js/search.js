@@ -86,6 +86,7 @@ function handleMapsLoad() {
   geocoder = new google.maps.Geocoder();
   $('#search-button').attr('disabled', false);
   loadParamsFromURL();
+  $.getScript('https://googlemaps.github.io/js-info-bubble/src/infobubble-compiled.js')
 }
 
 /**
@@ -894,7 +895,9 @@ function initializeMap(inputLat, inputLong) {
     center: new google.maps.LatLng(inputLat, inputLong),
     zoom: parseInt(INITIAL_ZOOM_LEVEL)
   };
-
+  //information bubble object definition
+  var infoBubble, infoBubbleContentString; 
+  //define the map object
   var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
   //iterate through all the search results and create map markers for each
@@ -922,9 +925,32 @@ function initializeMap(inputLat, inputLong) {
       key: API_ACCESS_KEY
     });
 
+
+    infoBubbleContentString = "<div id='infoBubbleContent'>"+
+    "<h1>"+"Title Goes Here"+ "</h1>"+
+    "<p><p>"+
+    "Zipibity bipity hot dog.  WOOOOOOOOOOOOO.   Doing.   WAZZUP!!"+
+    "<p>"+
+    "<a href='http://www.cnn.com/'> BINGO!!!</a>"+
+    "</div>"
+    
+    infoBubble = new InfoBubble({
+      maxWidth: 300
+    })
+
+    infoBubble.addTab("Tabbsy McTabson", infoBubbleContentString)
+    // Mousing over the marker will show a snippet of info
+    /*
+    google.maps.event.addListener(searchResultMarker, 'mouseover', function(){
+      console.log('mouse over on map.... coool')
+      //infoBubble.open();
+    })
+    */
     //Clicking on the marker will open the video in a new window
     google.maps.event.addListener(searchResultMarker, 'click', function() {
-      window.open(this.url);
+      
+      infoBubble.open(map,searchResultMarker);
+      //window.open(this.url);
     });
   }
 }
