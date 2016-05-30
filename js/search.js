@@ -935,7 +935,9 @@ function initializeMap(inputLat, inputLong) {
     "</div>"
     
     infoBubble = new InfoBubble({
-      maxWidth: 300
+      maxWidth: 200,
+      arrowSize: 0, //no arrows below infoBubble
+      ShadowStyle: 1,
     })
 
     infoBubble.addTab("Tabbsy McTabson", infoBubbleContentString)
