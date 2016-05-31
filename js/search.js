@@ -925,7 +925,13 @@ function initializeMap(inputLat, inputLong) {
       key: API_ACCESS_KEY
     });
 
+  var infowindow = new google.maps.InfoWindow({
+    content:"Hello World!"
+  });
 
+  
+
+/*
     infoBubbleContentString = "<div id='infoBubbleContent'>"+
     "<h1>"+"Title Goes Here"+ "</h1>"+
     "<p><p>"+
@@ -941,14 +947,14 @@ function initializeMap(inputLat, inputLong) {
       position: latLong,
       arrowSize: 15, //no arrows below infoBubble
       shadowStyle: 1,
-      backgroundColor: 'transparent',
+      //backgroundColor: 'transparent',
       disableAutoPan: true,
       backgroundClassName: 'infoBubbleContent',
       padding: 5
     })
 
     infoBubble.addTab("Tabbsy McTabson", infoBubbleContentString)
-    
+    */
     
     
     // Mousing over the marker will show a snippet of info
@@ -961,7 +967,9 @@ function initializeMap(inputLat, inputLong) {
     //Clicking on the marker will open the video in a new window
     google.maps.event.addListener(searchResultMarker, 'click', function() {
       
-      infoBubble.open(map,searchResultMarker);
+      //infoBubble.open(map,searchResultMarker);
+      
+      infowindow.open(map,searchResultMarker);
       //window.open(this.url);
     });
   }
