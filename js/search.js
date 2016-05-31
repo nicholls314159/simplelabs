@@ -996,7 +996,7 @@ function initializeMap(inputLat, inputLong) {
     });
     */
     /////NEW
-    google.maps.event.addListener(marker, 'click', function(){
+    google.maps.event.addListener(searchResultMarker, 'click', function(){
       
       var contentString = '<div class="map-info-window>'+
         '<div class="map-info-close">x</div>'+
@@ -1011,7 +1011,7 @@ function initializeMap(inputLat, inputLong) {
 
       
       this.infoWindow.setContent(contentString);
-      this.infoWindow.open(map, marker);
+      this.infoWindow.open(map, searchResultMarker);
     }.bind(this));
   }
 }
