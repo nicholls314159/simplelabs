@@ -86,7 +86,11 @@ function handleMapsLoad() {
   geocoder = new google.maps.Geocoder();
   $('#search-button').attr('disabled', false);
   loadParamsFromURL();
-  $.getScript('https://googlemaps.github.io/js-info-bubble/src/infobubble-compiled.js')
+  //$.getScript('https://googlemaps.github.io/js-info-bubble/src/infobubble-compiled.js')
+  //$.getScript('mapOverlay.js')
+  $.getScript("mapOverlay.js", function(){
+    alert("Script loaded but not necessarily executed.");
+  });
 }
 
 /**
@@ -993,7 +997,20 @@ function initializeMap(inputLat, inputLong) {
     */
     /////NEW
     google.maps.event.addListener(marker, 'click', function(){
-      this.infoWindow.setContent('your html content');
+      
+      var contentString = '<div class="map-info-window>'+
+        '<div class="map-info-close">x</div>'+
+        "<h1>"+"Title Goes Here"+ "</h1>"+
+        "<p><p>"+
+        "Zipibity bipity hot dog.  WOOOOOOOOOOOOO.   Doing.   WAZZUP!!"+
+        "<p>"+
+        "<a href='http://www.cnn.com/'> BINGO!!!</a>"+
+       "<p>"+
+        '<iframe width="300" height="168" src="https://www.youtube.com/embed/WmNBayHRPxs" frameborder="0" allowfullscreen></iframe>'+
+        "</div>" 
+
+      
+      this.infoWindow.setContent(contentString);
       this.infoWindow.open(map, marker);
     }.bind(this));
   }
