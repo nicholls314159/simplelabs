@@ -925,9 +925,7 @@ function initializeMap(inputLat, inputLong) {
       key: API_ACCESS_KEY
     });
 
-  var infowindow = new google.maps.InfoWindow({
-    content:"Hello World!"
-  });
+  
 
   
 
@@ -967,8 +965,19 @@ function initializeMap(inputLat, inputLong) {
     //Clicking on the marker will open the video in a new window
     google.maps.event.addListener(searchResultMarker, 'click', function() {
       
-      //infoBubble.open(map,searchResultMarker);
-      
+      var contentString = "<div id='infoBubbleContent'>"+
+        "<h1>"+"Title Goes Here"+ "</h1>"+
+        "<p><p>"+
+        "Zipibity bipity hot dog.  WOOOOOOOOOOOOO.   Doing.   WAZZUP!!"+
+        "<p>"+
+        "<a href='http://www.cnn.com/'> BINGO!!!</a>"+
+       "<p>"+
+        '<iframe width="300" height="168" src="https://www.youtube.com/embed/WmNBayHRPxs" frameborder="0" allowfullscreen></iframe>'+
+        "</div>" 
+        //infoBubble.open(map,searchResultMarker);
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString 
+        });
       infowindow.open(map,searchResultMarker);
       //window.open(this.url);
     });
