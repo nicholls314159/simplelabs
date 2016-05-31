@@ -87,10 +87,8 @@ function handleMapsLoad() {
   $('#search-button').attr('disabled', false);
   loadParamsFromURL();
   //$.getScript('https://googlemaps.github.io/js-info-bubble/src/infobubble-compiled.js')
-  //$.getScript('mapOverlay.js')
-  $.getScript("../js/mapOverlay.js", function(){
-    alert("Script loaded but not necessarily executed.");
-  });
+ 
+  $.getScript("../js/mapOverlay.js");
 }
 
 /**
@@ -996,9 +994,11 @@ function initializeMap(inputLat, inputLong) {
     });
     */
     /////NEW
+    var contentString = 'emptiness';
+    
     google.maps.event.addListener(searchResultMarker, 'click', function(){
       
-      var contentString = '<div class="map-info-window>'+
+      contentString = '<div class="map-info-window>'+
         '<div class="map-info-close">x</div>'+
         "<h1>"+"Title Goes Here"+ "</h1>"+
         "<p><p>"+
@@ -1009,6 +1009,8 @@ function initializeMap(inputLat, inputLong) {
         '<iframe width="300" height="168" src="https://www.youtube.com/embed/WmNBayHRPxs" frameborder="0" allowfullscreen></iframe>'+
         "</div>" 
 
+
+    console.log('contentString is'+contentString);
       
       this.infoWindow.setContent(contentString);
       this.infoWindow.open(map, searchResultMarker);
