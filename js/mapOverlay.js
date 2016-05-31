@@ -1,41 +1,15 @@
-function GMaps(){
-   // Set properties
-   this.mapReady = false;
-}
- 
 /**
-* Note you'll need to have an object of type GMaps sitting in the global context ready to receive the init callback
-* which you would append to the script as object.init
-*/
-GMaps.prototype.init = function(){
-   this.mapReady = true;
-}
- 
-// OR
- 
-/*
-* This function is 'static', and could be passed to the callback param as GMaps.init
-*/
-GMaps.init = function(){
-   // No access to 'this' here - just perform whatever startup tasks you think are necessary
-}
-
-
-//GMaps.CustomWindow = (function(){
-
-/**
- * Create a custom overlay for our window marker display, extending google.maps.OverlayView.
- * This is somewhat complicated by needing to async load the google.maps api first - thus, we
- * wrap CustomWindow into a closure, and when instantiating CustomNativeWindow, we first execute the closure
- * (to create our CustomNativeWindow function, now properly extending the newly loaded google.maps.OverlayView),
- * and then instantiate said function.
- * @type {Function}
- * @see _mapView.onRender
- */
-GMaps.CustomWindow = (function(){
+     * Create a custom overlay for our window marker display, extending google.maps.OverlayView.
+     * This is somewhat complicated by needing to async load the google.maps api first - thus, we
+     * wrap CustomWindow into a closure, and when instantiating CustomWindow, we first execute the closure (to create
+     * our CustomWindow function, now properly extending the newly loaded google.maps.OverlayView), and then
+     * instantiate said function.
+     * Note that this version uses jQuery.
+     * @type {Function}
+     */
+(function(){
     var CustomWindow = function(){
-        this.container = document.createElement('div');
-        this.container.classList.add('map-info-window');
+        this.container = $('<div class="map-info-window"></div>');
         this.layer = null;
         this.marker = null;
         this.position = null;
@@ -51,12 +25,12 @@ GMaps.CustomWindow = (function(){
      * @see CustomWindow.open
      */
     CustomWindow.prototype.onAdd = function(){
-        this.layer = this.getPanes().floatPane;
-        this.layer.appendChild(this.container);
-        this.container.getElementsByClassName('map-info-close')[0].addEventListener('click', function(){
+        this.layer = $(this.getPanes().floatPane);
+        this.layer.append(this.container);
+        this.container.find('.map-info-close').on('click', _.bind(function(){
             // Close info window on click
             this.close();
-        }.bind(this), false);
+        }, this));
     };
     /**
      * Called after onAdd, and every time the map is moved, zoomed, or anything else that
@@ -64,26 +38,27 @@ GMaps.CustomWindow = (function(){
      */
     CustomWindow.prototype.draw = function(){
         var markerIcon = this.marker.getIcon(),
-            cBounds = this.container.getBoundingClientRect(),
-            cHeight = cBounds.height + markerIcon.scaledSize.height + 10,
-            cWidth = cBounds.width / 2;
+            cHeight = this.container.outerHeight() + markerIcon.scaledSize.height + 10,
+            cWidth = this.container.width() / 2 + markerIcon.scaledSize.width / 2;
         this.position = this.getProjection().fromLatLngToDivPixel(this.marker.getPosition());
-        this.container.style.top = this.position.y - cHeight+'px';
-        this.container.style.left = this.position.x - cWidth+'px';
+        this.container.css({
+            'top':this.position.y - cHeight,
+            'left':this.position.x - cWidth
+        });
     };
     /**
      * Called when this overlay has its map set to null.
      * @see CustomWindow.close
      */
     CustomWindow.prototype.onRemove = function(){
-        this.layer.removeChild(this.container);
+        this.container.remove();
     };
     /**
      * Sets the contents of this overlay.
      * @param {string} html
      */
     CustomWindow.prototype.setContent = function(html){
-        this.container.innerHTML = html;
+        this.container.html(html);
     };
     /**
      * Sets the map and relevant marker for this overlay.
@@ -102,3 +77,5 @@ GMaps.CustomWindow = (function(){
     };
     return CustomWindow;
 });
+           
+Write 
