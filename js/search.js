@@ -901,6 +901,13 @@ function initializeMap(inputLat, inputLong) {
   var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
   //iterate through all the search results and create map markers for each
+  
+  /////NEW
+  GMaps.prototype.init = function(){
+    this.mapReady = true;
+    this.infoWindow = (GMaps.CustomWindow())();
+  }
+  
   for (var i = 0; i < finalResults2.length; i++) {
     var imageNumber = i + 1
 
@@ -963,6 +970,7 @@ function initializeMap(inputLat, inputLong) {
     })
     */
     //Clicking on the marker will open the video in a new window
+    /*
     google.maps.event.addListener(searchResultMarker, 'click', function() {
       
       var contentString = "<div id='infoBubbleContent'>"+
@@ -982,6 +990,12 @@ function initializeMap(inputLat, inputLong) {
       infowindow.open(map,searchResultMarker);
       //window.open(this.url);
     });
+    */
+    /////NEW
+    google.maps.event.addListener(marker, 'click', function(){
+      this.infoWindow.setContent('your html content');
+      this.infoWindow.open(map, marker);
+    }.bind(this));
   }
 }
 
