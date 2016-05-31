@@ -88,7 +88,7 @@ function handleMapsLoad() {
   loadParamsFromURL();
   //$.getScript('https://googlemaps.github.io/js-info-bubble/src/infobubble-compiled.js')
   //$.getScript('mapOverlay.js')
-  $.getScript("../mapOverlay.js", function(){
+  $.getScript("../js/mapOverlay.js", function(){
     alert("Script loaded but not necessarily executed.");
   });
 }
