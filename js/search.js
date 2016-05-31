@@ -976,7 +976,8 @@ function initializeMap(inputLat, inputLong) {
         "</div>" 
         //infoBubble.open(map,searchResultMarker);
         var infowindow = new google.maps.InfoWindow({
-          content: contentString 
+          content: contentString,
+          position: latLong
         });
       infowindow.open(map,searchResultMarker);
       //window.open(this.url);
