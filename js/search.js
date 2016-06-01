@@ -887,12 +887,7 @@ function showErrorSection() {
   $("#showErrors").show();
 }
 
-/*
-function GMaps(){
-    this.mapReady = false;
-    this.init();
-}
-*/
+
 
 /**  Initializes the Map Interface, centers on input longitude and latitude, and plots all the search results with markers
  *  @param inputLat {string} - input latitude
@@ -975,71 +970,57 @@ function addListenerStuff(searchResultMarker, contentString){
 function generatePopupBoxHTML(videoResult){
   
   console.log('generatePopupBoxHTML() start')
-  var div = $('<div>');
-  div.addClass('map-info-close');
 
-  //var tableOfVideoContent_div = $('<div>');
-  //div.addClass('tableOfVideoContentResults');
-
-  var tableDefinition = $('<table>');
-  tableDefinition.attr('width', '500');
-  tableDefinition.attr('cellpadding', '5');
-
-  //for (var i = 0; i < finalResults2.length; i++) {
-    var channel = videoResult.channel;
-    var channelID = videoResult.channelID;
-    if (!videoResult) {
-      channel = channelID;
-    }
-
-    //each result, will be listed in a row with an image, meta-data and rank sections
-    var resultRow = $('<tr>');
-    var imageCell = $('<td width=100>');
-    var metaDataCell = $('<td width=350 valign=top>');
-    //var rankCell = $('<td>');
-
-    //format image section
-    var imageString = "<img src='" + videoResult.thumbNailURL + "' height='100' width='100'/>";
-    imageCell.append(imageString);
-
+  var channel = videoResult.channel;
+  var channelID = videoResult.channelID;
+  var videoURLString = "/view.html?v="+videoResult.videoID;
+  var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
     
-    //Generate new URL string
-    var videoURLString = "/view.html?v="+videoResult.videoID;
-    var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
+  if (!videoResult) {
+    channel = channelID;
+  }
 
-    var videoString = "<attr title='Description: " + videoResult.description + "'><a href='" + videoURLString + "'>" + videoResult.title + "</a></attr><br>";
-    //var uploadDate = "Uploaded on: " + finalResults2[i].displayTimeStamp + "<br>";
-    var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + channelID + "' target='_blank'>" + channel + "</a></attr><br>";
-    //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + finalResults2[i].thumbNailURL + "' target='_blank'>reverse image search</a></attr><br>";
-    var concurrentUsersString = "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>";
-    var scheduledStartTimeString = "Scheduled Start Time:  " + videoResult.scheduledStartTime + "<br>";
-    var actualStartTimeString = "Actual Start Time:  " + videoResult.actualStartTime + "<br>";
-    
-    
-    metaDataCell.append(videoString);
-    //metaDataCell.append(uploadDate);
-    metaDataCell.append(channelString);
-    //metaDataCell.append(reverseImageString);
-    metaDataCell.append(concurrentUsersString);
-    metaDataCell.append(scheduledStartTimeString);
-    metaDataCell.append(actualStartTimeString);
-    //Put all the sections of the row together
-    resultRow.append(imageCell);
-    resultRow.append(metaDataCell);
-    tableDefinition.append(resultRow);
-  //}
+  var PopupBoxHTML = '<div class="map-info-close">x</div>'+
+  '<table width=500 cellpadding=5>'+
+  '<tr><td width=100>'+
+  "<img src='" + videoResult.thumbNailURL + "' height='100' width='100'/>" +
+  "</td>"+
+  "<td width=350 valign=top>"+
+  "<attr title='Description: " + videoResult.description + "'><a href='" + videoURLString + "'>" + 
+  videoResult.title + "</a></attr><br>"+
+  "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + 
+  channelID + "' target='_blank'>" + channel + "</a></attr><br>"+
+  "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>"+
+  "Scheduled Start Time:  " + getDisplayTimeFromTimeStamp(videoResult.scheduledStartTime) + "<br>"+
+  "Actual Start Time:  " + getDisplayTimeFromTimeStamp(videoResult.actualStartTime) + "<br>"+
+  "</td>"+
+  "</tr>"+
+  "</table>"
   
-  //show results in a table on UI
-  //tableOfVideoContent_div.append(tableDefinition);
-  //$('#tableOfVideoContentResults').append(tableOfVideoContent_div);
-
-  //ensure table is nested in 'video-container' div for proper formatting
-  div.append(tableDefinition);
-  //$('#video-container').append(div);
-  
-  //loadSocialLinks();
   console.log('generatePopupBoxHTML() end')
+  return PopupBoxHTML;
+}
 
+function getDisplayTimeFromTimeStamp(timeStamp){
+    var displayTime = "";
+    var year = timeStamp.publishedAt.substr(0, 4);
+    var monthNumeric = timeStamp.publishedAt.substr(5, 2);
+    var monthInt = 0;
+
+    if (monthNumeric.indexOf("0") === 0) {
+      monthInt = monthNumeric.substr(1, 1);
+    } else {
+      monthInt = monthNumeric;
+    }
+    var day = timeStamp.publishedAt.substr(8, 2);
+    var time = timeStamp.publishedAt.substr(11, 8);
+
+    var monthString = MONTH_NAMES[monthInt - 1];
+
+    displayTime = monthString + " " + day + ", " + year + " - " + time + " UTC";
+    return displayTime;
+
+  
 }
 
 /**  Show the Custom Date Range Sections
