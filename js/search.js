@@ -1031,7 +1031,7 @@ function initializeMap(inputLat, inputLong) {
     console.log('contentString is'+contentString);
     
     //infoWindow = this.infoWindow;
-    addListenerStuff(searchResultMarker);
+    addListenerStuff(searchResultMarker, contentString);
 
     
     
@@ -1078,9 +1078,10 @@ function initializeMap(inputLat, inputLong) {
   */
 }
 
-function addListenerStuff(searchResultMarker){
+function addListenerStuff(searchResultMarker, contentString){
     console.log("stuffy stuff")
     var infoWindow = new (GenCustomWindow())();
+    infoWindow.setContent(contentString);
     searchResultMarker.addListener('click', function() {
       console.log("22 searchResultMarker, 'click', function() -- searchResultMarker.position "+ searchResultMarker.position)
       infoWindow.open(searchResultMarker.get('map'), searchResultMarker);
