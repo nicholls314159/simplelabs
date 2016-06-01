@@ -42,6 +42,7 @@ function GenCustomWindow(){
         var markerIcon = this.marker.getIcon(),
             cHeight = this.container.offsetHeight + markerIcon.scaledSize.height + 10,
             cWidth = this.container.offsetWidth / 2;
+        console.log("markerIcon " + markerIcon.position);
         this.position = this.getProjection().fromLatLngToDivPixel(this.marker.getPosition());
         this.container.style.top = this.position.y - cHeight+'px';
         this.container.style.left = this.position.x - cWidth+'px';
