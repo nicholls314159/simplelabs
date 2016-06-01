@@ -957,7 +957,7 @@ function initializeMap(inputLat, inputLong) {
       position: latLong,
       map: map,
       icon:{
-        url:http://maps.google.com/mapfiles/ms/icons/red-dot.png,
+        url:'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
         size:new google.maps.Size(32, 32),
         scaledSize:new google.maps.Size(32, 32)
       };
