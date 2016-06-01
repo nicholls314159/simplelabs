@@ -1006,7 +1006,7 @@ function initializeMap(inputLat, inputLong) {
     //var contentString = 'emptiness';
 
       var contentString = 
-       <div class="map-info-close">x</div>
+       '<div class="map-info-close">x</div>'+
       "<div id='infoBubbleContent'>"+
         "<h1>"+"Title Goes Here"+ "</h1>"+
         "<p><p>"+
