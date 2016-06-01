@@ -1078,8 +1078,14 @@ function initializeMap(inputLat, inputLong) {
   */
 }
 
-function addListenerStuff(){
+function addListenerStuff(searchResultMarker){
     console.log("stuffy stuff")
+    var infoWindow = new (GenCustomWindow())();
+    searchResultMarker.addListener('click', function() {
+      console.log("searchResultMarker, 'click', function() -- searchResultMarker.position "+ searchResultMarker.position)
+      infowindow.open(searchResultMarker.get('map'), searchResultMarker);
+    });
+  
     /*
     google.maps.event.addListener(searchResultMarker, 'click', function(){
       //infoWindow.setContent(document.getElementById('infoContent').innerHTML);
