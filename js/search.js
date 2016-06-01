@@ -910,6 +910,14 @@ function initializeMap(inputLat, inputLong) {
     this.infoWindow = (GMaps.CustomWindow())();
   }
   
+    GMaps.prototype.init = function(){
+        this.mapReady = true;
+        this.infoWindow = new (GenCustomWindow())();
+        //this.markers = [];
+        this.map = map;
+    };
+
+  
   for (var i = 0; i < finalResults2.length; i++) {
     var imageNumber = i + 1
 
@@ -995,6 +1003,20 @@ function initializeMap(inputLat, inputLong) {
     */
     /////NEW
     var contentString = 'emptiness';
+    console.log('contentString is'+contentString);
+    
+    infoWindow = this.infoWindow;
+
+    google.maps.event.addListener(marker, 'click', function(){
+      //infoWindow.setContent(document.getElementById('infoContent').innerHTML);
+      infoWindow.setContent(contentString);
+      infoWindow.open(map, marker);
+    });
+    
+    
+    
+    
+    /*
     
     google.maps.event.addListener(searchResultMarker, 'click', function(){
       
@@ -1015,6 +1037,7 @@ function initializeMap(inputLat, inputLong) {
       this.infoWindow.setContent(contentString);
       this.infoWindow.open(map, searchResultMarker);
     }.bind(this));
+    */
   }
 }
 
