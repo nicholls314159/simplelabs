@@ -1082,8 +1082,8 @@ function addListenerStuff(searchResultMarker){
     console.log("stuffy stuff")
     var infoWindow = new (GenCustomWindow())();
     searchResultMarker.addListener('click', function() {
-      console.log("searchResultMarker, 'click', function() -- searchResultMarker.position "+ searchResultMarker.position)
-      infowindow.open(searchResultMarker.get('map'), searchResultMarker);
+      console.log("22 searchResultMarker, 'click', function() -- searchResultMarker.position "+ searchResultMarker.position)
+      infoWindow.open(searchResultMarker.get('map'), searchResultMarker);
     });
   
     /*
