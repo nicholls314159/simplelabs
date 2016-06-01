@@ -89,6 +89,7 @@ function handleMapsLoad() {
   //$.getScript('https://googlemaps.github.io/js-info-bubble/src/infobubble-compiled.js')
  
   $.getScript("../js/mapOverlay.js");
+  
 }
 
 /**
@@ -888,6 +889,12 @@ function showErrorSection() {
   $("#showErrors").show();
 }
 
+
+function GMaps(){
+    this.mapReady = false;
+    this.init();
+}
+
 /**  Initializes the Map Interface, centers on input longitude and latitude, and plots all the search results with markers
  *  @param inputLat {string} - input latitude
  *  @param inputLong {string} - input longitude
@@ -902,21 +909,24 @@ function initializeMap(inputLat, inputLong) {
   //define the map object
   var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
+
+  //GMaps gMap = new GMaps();
   //iterate through all the search results and create map markers for each
   
   /////NEW
-  GMaps.prototype.init = function(){
-    this.mapReady = true;
-    this.infoWindow = (GMaps.CustomWindow())();
-  }
-  
+  //GMaps.prototype.init = function(){
+  //  this.mapReady = true;
+  //  this.infoWindow = (GMaps.CustomWindow())();
+  //}
+  /*
     GMaps.prototype.init = function(){
         this.mapReady = true;
         this.infoWindow = new (GenCustomWindow())();
         //this.markers = [];
         this.map = map;
     };
-
+  */
+  infoWindow = new (GenCustomWindow())();
   
   for (var i = 0; i < finalResults2.length; i++) {
     var imageNumber = i + 1
@@ -1005,7 +1015,7 @@ function initializeMap(inputLat, inputLong) {
     var contentString = 'emptiness';
     console.log('contentString is'+contentString);
     
-    infoWindow = this.infoWindow;
+    //infoWindow = this.infoWindow;
 
     google.maps.event.addListener(marker, 'click', function(){
       //infoWindow.setContent(document.getElementById('infoContent').innerHTML);
@@ -1039,6 +1049,22 @@ function initializeMap(inputLat, inputLong) {
     }.bind(this));
     */
   }
+  /*
+  (function(){
+    document.addEventListener('DOMContentLoaded', function(){
+      var mapEl = document.getElementById('mapContainer');
+
+      gMaps = new GMaps({
+        el:mapEl,
+        apiKey:'',
+        sensor:false,
+        markerCount:10
+      });
+    });
+    })();
+
+  var gMaps;
+  */
 }
 
 /**  Show the Custom Date Range Sections
