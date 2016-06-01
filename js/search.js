@@ -954,7 +954,7 @@ function initializeMap(inputLat, inputLong) {
       key: API_ACCESS_KEY
     });
 */
-  var searchResultMarker = new google.maps.Marker({
+    var searchResultMarker = new google.maps.Marker({
       position: latLong,
       map: map,
       icon:{
@@ -962,7 +962,7 @@ function initializeMap(inputLat, inputLong) {
         size:new google.maps.Size(32, 32),
         scaledSize:new google.maps.Size(32, 32)
       }
-  });
+    });
  
 
   
@@ -1031,14 +1031,8 @@ function initializeMap(inputLat, inputLong) {
     console.log('contentString is'+contentString);
     
     //infoWindow = this.infoWindow;
+    addListenerStuff(searchResultMarker);
 
-    google.maps.event.addListener(searchResultMarker, 'click', function(){
-      //infoWindow.setContent(document.getElementById('infoContent').innerHTML);
-      infoWindow = new (GenCustomWindow())();
-      console.log("searchResultMarker, 'click', function() -- searchResultMarker.position "+ searchResultMarker.position)
-      infoWindow.setContent(contentString);
-      infoWindow.open(map, searchResultMarker);
-    });
     
     
     
@@ -1083,6 +1077,20 @@ function initializeMap(inputLat, inputLong) {
   var gMaps;
   */
 }
+
+function addListenerStuff(){
+    console.log("stuffy stuff")
+    /*
+    google.maps.event.addListener(searchResultMarker, 'click', function(){
+      //infoWindow.setContent(document.getElementById('infoContent').innerHTML);
+      infoWindow = new (GenCustomWindow())();
+      console.log("searchResultMarker, 'click', function() -- searchResultMarker.position "+ searchResultMarker.position)
+      infoWindow.setContent(contentString);
+      infoWindow.open(map, searchResultMarker);
+    });
+    */
+}
+
 
 /**  Show the Custom Date Range Sections
  */
