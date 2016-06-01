@@ -86,10 +86,9 @@ function handleMapsLoad() {
   geocoder = new google.maps.Geocoder();
   $('#search-button').attr('disabled', false);
   loadParamsFromURL();
-  //$.getScript('https://googlemaps.github.io/js-info-bubble/src/infobubble-compiled.js')
- 
-  $.getScript("../js/mapOverlay.js");
   
+  //include map overlay code
+  $.getScript("../js/mapOverlay.js");
 }
 
 /**
@@ -459,7 +458,6 @@ function completeInputObject() {
     validationErrors = true;
   }
 
-
   //define regular expressions for validating input values
   var dateRegEx = new RegExp("[0-1][0-9][-][0-3][0-9][-][2][0][0-1][0-9]");
   var numberRegEx = new RegExp("^[0-9]+")
@@ -756,7 +754,7 @@ function processYouTubeRequest(request) {
 
     //reset startURL with the latest
     startURL = window.location.href;
-    console.log('22 startURL is'+startURL)
+    
     var requestShortener = gapi.client.urlshortener.url.insert({
       'resource': {
       'longUrl': startURL
@@ -889,11 +887,12 @@ function showErrorSection() {
   $("#showErrors").show();
 }
 
-
+/*
 function GMaps(){
     this.mapReady = false;
     this.init();
 }
+*/
 
 /**  Initializes the Map Interface, centers on input longitude and latitude, and plots all the search results with markers
  *  @param inputLat {string} - input latitude
@@ -904,34 +903,13 @@ function initializeMap(inputLat, inputLong) {
     center: new google.maps.LatLng(inputLat, inputLong),
     zoom: parseInt(INITIAL_ZOOM_LEVEL)
   };
-  //information bubble object definition
-  var infoBubble, infoBubbleContentString; 
+  
   //define the map object
   var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
-
-  //GMaps gMap = new GMaps();
-  //iterate through all the search results and create map markers for each
-  
-  /////NEW
-  //GMaps.prototype.init = function(){
-  //  this.mapReady = true;
-  //  this.infoWindow = (GMaps.CustomWindow())();
-  //}
-  /*
-    GMaps.prototype.init = function(){
-        this.mapReady = true;
-        this.infoWindow = new (GenCustomWindow())();
-        //this.markers = [];
-        this.map = map;
-    };
-  */
-  
-  
   for (var i = 0; i < finalResults2.length; i++) {
     var imageNumber = i + 1
     
-
     //use canned images from image folder for markers
     var image = { url: 'images/redMarker_' + imageNumber + '.png',size: new google.maps.Size(75, 62), scaledSize:new google.maps.Size(75, 62),origin: new google.maps.Point(0, 0) };
 
@@ -964,58 +942,6 @@ function initializeMap(inputLat, inputLong) {
       }
     });
  
-
-  
-
-/*
-    infoBubbleContentString = "<div id='infoBubbleContent'>"+
-    "<h1>"+"Title Goes Here"+ "</h1>"+
-    "<p><p>"+
-    "Zipibity bipity hot dog.  WOOOOOOOOOOOOO.   Doing.   WAZZUP!!"+
-    "<p>"+
-    "<a href='http://www.cnn.com/'> BINGO!!!</a>"+
-    "<p>"+
-    '<iframe width="300" height="168" src="https://www.youtube.com/embed/WmNBayHRPxs" frameborder="0" allowfullscreen></iframe>'+
-    "</div>"
-    
-    infoBubble = new InfoBubble({
-      maxWidth: 330,
-      position: latLong,
-      arrowSize: 15, //no arrows below infoBubble
-      shadowStyle: 1,
-      //backgroundColor: 'transparent',
-      disableAutoPan: true,
-      backgroundClassName: 'infoBubbleContent',
-      padding: 5
-    })
-
-    infoBubble.addTab("Tabbsy McTabson", infoBubbleContentString)
-    */
-    
-    
-    // Mousing over the marker will show a snippet of info
-    /*
-    google.maps.event.addListener(searchResultMarker, 'mouseover', function(){
-      console.log('mouse over on map.... coool')
-      //infoBubble.open();
-    })
-    */
-    //Clicking on the marker will open the video in a new window
-    /*
-    google.maps.event.addListener(searchResultMarker, 'click', function() {
-      
-        //infoBubble.open(map,searchResultMarker);
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString,
-          position: latLong
-        });
-      infowindow.open(map,searchResultMarker);
-      //window.open(this.url);
-    });
-    */
-    /////NEW
-    //var contentString = 'emptiness';
-
       var contentString = 
        '<div class="map-info-close">x</div>'+
       "<div id='infoBubbleContent'>"+
@@ -1029,53 +955,11 @@ function initializeMap(inputLat, inputLong) {
         "</div>" 
 
     console.log('contentString is'+contentString);
-    
+    contentString = generatePopupBoxHTML(finalResults2[i]);
+    console.log('contentString is'+contentString);
     //infoWindow = this.infoWindow;
     addListenerStuff(searchResultMarker, contentString);
-
-    
-    
-    
-    
-    /*
-    
-    google.maps.event.addListener(searchResultMarker, 'click', function(){
-      
-      contentString = '<div class="map-info-window>'+
-        '<div class="map-info-close">x</div>'+
-        "<h1>"+"Title Goes Here"+ "</h1>"+
-        "<p><p>"+
-        "Zipibity bipity hot dog.  WOOOOOOOOOOOOO.   Doing.   WAZZUP!!"+
-        "<p>"+
-        "<a href='http://www.cnn.com/'> BINGO!!!</a>"+
-       "<p>"+
-        '<iframe width="300" height="168" src="https://www.youtube.com/embed/WmNBayHRPxs" frameborder="0" allowfullscreen></iframe>'+
-        "</div>" 
-
-
-    console.log('contentString is'+contentString);
-      
-      this.infoWindow.setContent(contentString);
-      this.infoWindow.open(map, searchResultMarker);
-    }.bind(this));
-    */
   }
-  /*
-  (function(){
-    document.addEventListener('DOMContentLoaded', function(){
-      var mapEl = document.getElementById('mapContainer');
-
-      gMaps = new GMaps({
-        el:mapEl,
-        apiKey:'',
-        sensor:false,
-        markerCount:10
-      });
-    });
-    })();
-
-  var gMaps;
-  */
 }
 
 function addListenerStuff(searchResultMarker, contentString){
@@ -1086,18 +970,77 @@ function addListenerStuff(searchResultMarker, contentString){
       console.log("22 searchResultMarker, 'click', function() -- searchResultMarker.position "+ searchResultMarker.position)
       infoWindow.open(searchResultMarker.get('map'), searchResultMarker);
     });
-  
-    /*
-    google.maps.event.addListener(searchResultMarker, 'click', function(){
-      //infoWindow.setContent(document.getElementById('infoContent').innerHTML);
-      infoWindow = new (GenCustomWindow())();
-      console.log("searchResultMarker, 'click', function() -- searchResultMarker.position "+ searchResultMarker.position)
-      infoWindow.setContent(contentString);
-      infoWindow.open(map, searchResultMarker);
-    });
-    */
 }
 
+function generatePopupBoxHTML(videoResult){
+  
+  console.log('generatePopupBoxHTML() start')
+  var div = $('<div>');
+  div.addClass('map-info-close');
+
+  //var tableOfVideoContent_div = $('<div>');
+  //div.addClass('tableOfVideoContentResults');
+
+  var tableDefinition = $('<table>');
+  tableDefinition.attr('width', '500');
+  tableDefinition.attr('cellpadding', '5');
+
+  //for (var i = 0; i < finalResults2.length; i++) {
+    var channel = videoResult.channel;
+    var channelID = videoResult.channelID;
+    if (!videoResult) {
+      channel = channelID;
+    }
+
+    //each result, will be listed in a row with an image, meta-data and rank sections
+    var resultRow = $('<tr>');
+    var imageCell = $('<td width=100>');
+    var metaDataCell = $('<td width=350 valign=top>');
+    //var rankCell = $('<td>');
+
+    //format image section
+    var imageString = "<img src='" + videoResult.thumbNailURL + "' height='100' width='100'/>";
+    imageCell.append(imageString);
+
+    
+    //Generate new URL string
+    var videoURLString = "/view.html?v="+videoResult.videoID;
+    var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
+
+    var videoString = "<attr title='Description: " + videoResult.description + "'><a href='" + videoURLString + "'>" + videoResult.title + "</a></attr><br>";
+    //var uploadDate = "Uploaded on: " + finalResults2[i].displayTimeStamp + "<br>";
+    var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + channelID + "' target='_blank'>" + channel + "</a></attr><br>";
+    //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + finalResults2[i].thumbNailURL + "' target='_blank'>reverse image search</a></attr><br>";
+    var concurrentUsersString = "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>";
+    var scheduledStartTimeString = "Scheduled Start Time:  " + videoResult.scheduledStartTime + "<br>";
+    var actualStartTimeString = "Actual Start Time:  " + videoResult.actualStartTime + "<br>";
+    
+    
+    metaDataCell.append(videoString);
+    //metaDataCell.append(uploadDate);
+    metaDataCell.append(channelString);
+    //metaDataCell.append(reverseImageString);
+    metaDataCell.append(concurrentUsersString);
+    metaDataCell.append(scheduledStartTimeString);
+    metaDataCell.append(actualStartTimeString);
+    //Put all the sections of the row together
+    resultRow.append(imageCell);
+    resultRow.append(metaDataCell);
+    tableDefinition.append(resultRow);
+  //}
+  
+  //show results in a table on UI
+  //tableOfVideoContent_div.append(tableDefinition);
+  //$('#tableOfVideoContentResults').append(tableOfVideoContent_div);
+
+  //ensure table is nested in 'video-container' div for proper formatting
+  div.append(tableDefinition);
+  //$('#video-container').append(div);
+  
+  //loadSocialLinks();
+  console.log('generatePopupBoxHTML() end')
+
+}
 
 /**  Show the Custom Date Range Sections
  */
