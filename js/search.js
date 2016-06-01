@@ -926,10 +926,11 @@ function initializeMap(inputLat, inputLong) {
         this.map = map;
     };
   */
-  infoWindow = new (GenCustomWindow())();
+  
   
   for (var i = 0; i < finalResults2.length; i++) {
     var imageNumber = i + 1
+    infoWindow = new (GenCustomWindow())();
 
     //use canned images from image folder for markers
     var image = { url: 'images/redMarker_' + imageNumber + '.png',size: new google.maps.Size(75, 62), scaledSize:new google.maps.Size(75, 62),origin: new google.maps.Point(0, 0) };
