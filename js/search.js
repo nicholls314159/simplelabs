@@ -1020,7 +1020,7 @@ function initializeMap(inputLat, inputLong) {
     google.maps.event.addListener(marker, 'click', function(){
       //infoWindow.setContent(document.getElementById('infoContent').innerHTML);
       infoWindow.setContent(contentString);
-      infoWindow.open(map, marker);
+      infoWindow.open(map, searchResultMarker);
     });
     
     
