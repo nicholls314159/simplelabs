@@ -930,7 +930,7 @@ function initializeMap(inputLat, inputLong) {
   
   for (var i = 0; i < finalResults2.length; i++) {
     var imageNumber = i + 1
-    infoWindow = new (GenCustomWindow())();
+    
 
     //use canned images from image folder for markers
     var image = { url: 'images/redMarker_' + imageNumber + '.png',size: new google.maps.Size(75, 62), scaledSize:new google.maps.Size(75, 62),origin: new google.maps.Point(0, 0) };
@@ -1034,6 +1034,8 @@ function initializeMap(inputLat, inputLong) {
 
     google.maps.event.addListener(searchResultMarker, 'click', function(){
       //infoWindow.setContent(document.getElementById('infoContent').innerHTML);
+      infoWindow = new (GenCustomWindow())();
+      console.log("searchResultMarker, 'click', function() -- searchResultMarker.position "+ searchResultMarker.position)
       infoWindow.setContent(contentString);
       infoWindow.open(map, searchResultMarker);
     });
