@@ -127,7 +127,8 @@ function GenCustomWindow(){
      */
     CustomWindow.prototype.open = function(map, marker){
         this.marker = marker;
-        console.log("marker.something is" + marker.)
+        console.log("CustomWindow.prototype.open -- marker.position "+ marker.position)
+
         this.setMap(map);
     };
     /**
