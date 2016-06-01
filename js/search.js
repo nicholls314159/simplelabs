@@ -932,7 +932,7 @@ function initializeMap(inputLat, inputLong) {
     var imageNumber = i + 1
 
     //use canned images from image folder for markers
-    var image = { url: 'images/redMarker_' + imageNumber + '.png', size: new google.maps.Size(75, 62), origin: new google.maps.Point(0, 0)};
+    var image = { url: 'images/redMarker_' + imageNumber + '.png',size: new google.maps.Size(75, 62), scaledSize:new google.maps.Size(75, 62),origin: new google.maps.Point(0, 0) };
 
     var latLong = new google.maps.LatLng(finalResults2[i].lat, finalResults2[i].long);
 
@@ -951,8 +951,15 @@ function initializeMap(inputLat, inputLong) {
       zIndex: imageNumber,
       key: API_ACCESS_KEY
     });
-
-  
+/*
+  var marker = new google.maps.Marker({
+      icon:{
+        url:http://maps.google.com/mapfiles/ms/icons/red-dot.png,
+        size:new google.maps.Size(32, 32),
+        scaledSize:new google.maps.Size(32, 32)
+    };
+  });
+ */ 
 
   
 
