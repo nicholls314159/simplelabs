@@ -937,6 +937,7 @@ function initializeMap(inputLat, inputLong) {
     var latLong = new google.maps.LatLng(finalResults2[i].lat, finalResults2[i].long);
 
     //create the marker on the map object
+/*
     var searchResultMarker = new google.maps.Marker({
       position: latLong,
       map: map,
@@ -951,15 +952,17 @@ function initializeMap(inputLat, inputLong) {
       zIndex: imageNumber,
       key: API_ACCESS_KEY
     });
-/*
-  var marker = new google.maps.Marker({
+*/
+  var searchResultMarker = new google.maps.Marker({
+      position: latLong,
+      map: map,
       icon:{
         url:http://maps.google.com/mapfiles/ms/icons/red-dot.png,
         size:new google.maps.Size(32, 32),
         scaledSize:new google.maps.Size(32, 32)
-    };
+      };
   });
- */ 
+ 
 
   
 
