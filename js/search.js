@@ -993,15 +993,6 @@ function initializeMap(inputLat, inputLong) {
     /*
     google.maps.event.addListener(searchResultMarker, 'click', function() {
       
-      var contentString = "<div id='infoBubbleContent'>"+
-        "<h1>"+"Title Goes Here"+ "</h1>"+
-        "<p><p>"+
-        "Zipibity bipity hot dog.  WOOOOOOOOOOOOO.   Doing.   WAZZUP!!"+
-        "<p>"+
-        "<a href='http://www.cnn.com/'> BINGO!!!</a>"+
-       "<p>"+
-        '<iframe width="300" height="168" src="https://www.youtube.com/embed/WmNBayHRPxs" frameborder="0" allowfullscreen></iframe>'+
-        "</div>" 
         //infoBubble.open(map,searchResultMarker);
         var infowindow = new google.maps.InfoWindow({
           content: contentString,
@@ -1012,7 +1003,20 @@ function initializeMap(inputLat, inputLong) {
     });
     */
     /////NEW
-    var contentString = 'emptiness';
+    //var contentString = 'emptiness';
+
+      var contentString = 
+       <div class="map-info-close">x</div>
+      "<div id='infoBubbleContent'>"+
+        "<h1>"+"Title Goes Here"+ "</h1>"+
+        "<p><p>"+
+        "Zipibity bipity hot dog.  WOOOOOOOOOOOOO.   Doing.   WAZZUP!!"+
+        "<p>"+
+        "<a href='http://www.cnn.com/'> BINGO!!!</a>"+
+       "<p>"+
+        '<iframe width="300" height="168" src="https://www.youtube.com/embed/WmNBayHRPxs" frameborder="0" allowfullscreen></iframe>'+
+        "</div>" 
+
     console.log('contentString is'+contentString);
     
     //infoWindow = this.infoWindow;
