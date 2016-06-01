@@ -45,14 +45,18 @@ function GenCustomWindow(){
         this.position = this.getProjection().fromLatLngToDivPixel(this.marker.getPosition());
         this.container.style.top = this.position.y - cHeight+'px';
         this.container.style.left = this.position.x - cWidth+'px';
+        console.log("CustomWindow.prototype.draw -- this.position.y " + this.position.y);
+        console.log("CustomWindow.prototype.draw -- this.position.x " + this.position.x);
     };
     /**
      * If the custom window is not already entirely within the map view, pan the map the minimum amount
      * necessary to bring the custom info window fully into view.
      */
     CustomWindow.prototype.panToView = function(){
+        console.log("CustomWindow.prototype.panToView - latlng" + this.marker.getPosition())
         var position = this.position,
             latlng = this.marker.getPosition(),
+            
             top = parseInt(this.container.style.top, 10),
             cHeight = position.y - top,
             cWidth = this.container.offsetWidth / 2,
@@ -96,6 +100,9 @@ function GenCustomWindow(){
 
         if (newCenter){
             map.panTo(newCenter);
+            console.log("yes newCenter is" +newCenter)
+        }else{
+            console.log("no newCenter")
         }
     };
     /**
