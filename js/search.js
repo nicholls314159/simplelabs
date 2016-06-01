@@ -1017,7 +1017,7 @@ function initializeMap(inputLat, inputLong) {
     
     //infoWindow = this.infoWindow;
 
-    google.maps.event.addListener(marker, 'click', function(){
+    google.maps.event.addListener(searchResultMarker, 'click', function(){
       //infoWindow.setContent(document.getElementById('infoContent').innerHTML);
       infoWindow.setContent(contentString);
       infoWindow.open(map, searchResultMarker);
