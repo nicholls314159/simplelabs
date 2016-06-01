@@ -960,7 +960,7 @@ function initializeMap(inputLat, inputLong) {
         url:'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
         size:new google.maps.Size(32, 32),
         scaledSize:new google.maps.Size(32, 32)
-      };
+      }
   });
  
 
