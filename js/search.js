@@ -1002,9 +1002,10 @@ function generatePopupBoxHTML(videoResult){
 }
 
 function getDisplayTimeFromTimeStamp(timeStamp){
+    console.log("getDisplayTimeFromTimeStamp with "+timeStamp)
     var displayTime = "";
-    var year = timeStamp.publishedAt.substr(0, 4);
-    var monthNumeric = timeStamp.publishedAt.substr(5, 2);
+    var year = timeStamp.substr(0, 4);
+    var monthNumeric = timeStamp.substr(5, 2);
     var monthInt = 0;
 
     if (monthNumeric.indexOf("0") === 0) {
@@ -1012,15 +1013,13 @@ function getDisplayTimeFromTimeStamp(timeStamp){
     } else {
       monthInt = monthNumeric;
     }
-    var day = timeStamp.publishedAt.substr(8, 2);
-    var time = timeStamp.publishedAt.substr(11, 8);
+    var day = timeStamp.substr(8, 2);
+    var time = timeStamp.substr(11, 8);
 
     var monthString = MONTH_NAMES[monthInt - 1];
 
     displayTime = monthString + " " + day + ", " + year + " - " + time + " UTC";
     return displayTime;
-
-  
 }
 
 /**  Show the Custom Date Range Sections
