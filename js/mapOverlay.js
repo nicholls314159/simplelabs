@@ -27,7 +27,7 @@ function GenCustomWindow(){
     CustomWindow.prototype.onAdd = function(){
         this.layer = this.getPanes().floatPane;
         this.layer.appendChild(this.container);
-        this.container.getElementsByClassName('mapWindowClose')[0].addEventListener('click', function(){
+        this.container.getElementsByClassName('mapOverlayClose')[0].addEventListener('click', function(){
             // Close info window on click
             this.close();
         }.bind(this), false);
