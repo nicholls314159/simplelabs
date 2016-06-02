@@ -802,10 +802,10 @@ function generateResultList() {
 
   var schedStartTime = 'NA';
   var actualStartTime = 'NA';
-  if(videoResult.scheduledStartTime){
+  if(finalResults2[i].scheduledStartTime){
     schedStartTime = getDisplayTimeFromTimeStamp(finalResults2[i].scheduledStartTime)
   }
-  if(videoResult.actualStartTime){
+  if(finalResults2[i].actualStartTime){
     actualStartTime = getDisplayTimeFromTimeStamp(finalResults2[i].actualStartTime)
   }
 
