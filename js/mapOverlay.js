@@ -9,7 +9,7 @@
 function GenCustomWindow(){
     var CustomWindow = function(){
         this.container = document.createElement('div');
-        this.container.classList.add('map-info-window');
+        this.container.classList.add('mapOverlayWindow');
         this.layer = null;
         this.marker = null;
         this.position = null;
@@ -27,7 +27,7 @@ function GenCustomWindow(){
     CustomWindow.prototype.onAdd = function(){
         this.layer = this.getPanes().floatPane;
         this.layer.appendChild(this.container);
-        this.container.getElementsByClassName('map-info-close')[0].addEventListener('click', function(){
+        this.container.getElementsByClassName('mapWindowClose')[0].addEventListener('click', function(){
             // Close info window on click
             this.close();
         }.bind(this), false);
