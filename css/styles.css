@@ -262,41 +262,23 @@ a {
   color: #eee;
 }
 
-#infoBubbleContent {
-  height: 100%;
-  font-size: 12px;
-  margin: 0;
-  padding: 0;
-  color: white;
-  background-image: url("jt_background.png");
-  font-family: Arial, sans-serif;
-}
-
-.map-info-window{
-   
+.mapOverlayWindow{
    border-radius:4px;
    box-shadow:8px 8px 16px #222;
-   
    background-image: url("jt_background.png");
-   max-width:400px;
+   max-width:300px;
    max-height:400px;
-   text-align:center;
+   text-align:left;
    padding:5px 20px 10px;
    overflow:hidden;
    position:absolute;
-   text-transform:uppercase;
 }
-.map-info-window .map-info-close{
+.mapOverlayWindow .mapOverlayClose{
    float:right;
    cursor:pointer;
    margin-right:-5px;
    margin-left:5px;
 }
  
-.map-info-window h5{
-   font-weight:bold;
-}
-.map-info-window p{
-   color:#939393;
-}
+
 
