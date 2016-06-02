@@ -920,22 +920,6 @@ function initializeMap(inputLat, inputLong) {
     var latLong = new google.maps.LatLng(finalResults2[i].lat, finalResults2[i].long);
 
     //create the marker on the map object
-/*
-    var searchResultMarker = new google.maps.Marker({
-      position: latLong,
-      map: map,
-      icon: image,
-      animation: google.maps.Animation.DROP,
-      labelContent: imageNumber,
-      labelAnchor: new google.maps.Point(100, 100),
-      labelClass: "labels",
-      labelInBackground: false,
-      url: finalResults2[i].url,
-      title: finalResults2[i].title,
-      zIndex: imageNumber,
-      key: API_ACCESS_KEY
-    });
-*/
     var searchResultMarker = new google.maps.Marker({
       position: latLong,
       map: map,
@@ -985,15 +969,20 @@ function generatePopupBoxHTML(videoResult){
   var PopupBoxHTML = '<div class="mapOverlayClose">x</div>'+
   '<table width=300 cellpadding=5>'+
   '<tr>'+
-  '<td width=300>'+
+  '<td width=160>'+
+  "<a href='" + videoURLString + "'>" +
+  "<img src='" + videoResult.thumbNailURL + "' height='150' width='150'/>" +
+  "</a><br>"+
+  "</td>"+
+  "</tr>"+
+  '<tr>'+
+  '<td width=160>'+
   "<a href='" + videoURLString + "'>" + videoResult.title + "</a></attr><br>"+
   "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>"+
   "</td>"+
   "</tr>"+
-  '<tr>'+
-  '<td width=300>'+
-  "<img src='" + videoResult.thumbNailURL + "' height='290' width='290'/>" +
-  "</td>"+
+  "</table>"
+  
   /*
   "<td width=350 valign=top>"+
   "<attr title='Description: " + videoResult.description + "'>
@@ -1004,8 +993,6 @@ function generatePopupBoxHTML(videoResult){
   "Actual Start Time:  " + actualStartTime + "<br>"+
   "</td>"+
   */
-  "</tr>"+
-  "</table>"
   
   console.log('generatePopupBoxHTML() end')
   return PopupBoxHTML;
