@@ -976,7 +976,8 @@ function generatePopupBoxHTML(videoResult){
   var videoURLString = "/view.html?v="+videoResult.videoID;
   console.log("videoURLString "+ videoURLString)
   var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
-  var schedStartTime, actualStartTime
+  var schedStartTime = '';
+  var actualStartTime = '';
   if(videoResult.scheduledStartTime){
     schedStartTime = getDisplayTimeFromTimeStamp(videoResult.scheduledStartTime)
   }
@@ -1000,8 +1001,8 @@ function generatePopupBoxHTML(videoResult){
   "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + 
   channelID + "' target='_blank'>" + channel + "</a></attr><br>"+
   "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>"+
-  "Scheduled Start Time:  " + getDisplayTimeFromTimeStamp(videoResult.scheduledStartTime) + "<br>"+
-  "Actual Start Time:  " + getDisplayTimeFromTimeStamp(videoResult.actualStartTime) + "<br>"+
+  "Scheduled Start Time:  " + schedStartTime + "<br>"+
+  "Actual Start Time:  " + actualStartTime + "<br>"+
   "</td>"+
   "</tr>"+
   "</table>"
