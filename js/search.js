@@ -836,7 +836,7 @@ function generateResultList() {
     
     metaDataCell.append(videoString);
     //metaDataCell.append(uploadDate);
-    metaDataCell.append(channelString);
+    //metaDataCell.append(channelString);
     //metaDataCell.append(reverseImageString);
     metaDataCell.append(concurrentUsersString);
     metaDataCell.append(scheduledStartTimeString);
