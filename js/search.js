@@ -974,7 +974,16 @@ function generatePopupBoxHTML(videoResult){
   var channel = videoResult.channel;
   var channelID = videoResult.channelID;
   var videoURLString = "/view.html?v="+videoResult.videoID;
+  console.log("videoURLString "+ videoURLString)
   var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
+  var schedStartTime, actualStartTime
+  if(videoResult.scheduledStartTime){
+    schedStartTime = getDisplayTimeFromTimeStamp(videoResult.scheduledStartTime)
+  }
+  if(videoResult.actualStartTime){
+    actualStartTime = getDisplayTimeFromTimeStamp(videoResult.actualStartTime)
+  }
+  console.log("schedStartTime, actualStartTime is" +schedStartTime+ ", "+ actualStartTime)  
     
   if (!videoResult) {
     channel = channelID;
