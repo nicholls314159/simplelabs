@@ -273,12 +273,13 @@ a {
 }
 
 .map-info-window{
-   background:#333;
+   
    border-radius:4px;
    box-shadow:8px 8px 16px #222;
-   color:#fff;
-   max-width:200px;
-   max-height:300px;
+   
+   background-image: url("jt_background.png");
+   max-width:400px;
+   max-height:400px;
    text-align:center;
    padding:5px 20px 10px;
    overflow:hidden;
