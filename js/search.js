@@ -629,8 +629,7 @@ function processYouTubeRequest(request) {
         videoResult.channel = entryArr[i].snippet.channelTitle;
         videoResult.liveBroadcastContent = entryArr[i].snippet.liveBroadcastContent;
         videoResult.thumbNailURL = entryArr[i].snippet.thumbnails.default.url;
-        
-        
+
         videoResult.description = entryArr[i].snippet.description;
 
         var year = entryArr[i].snippet.publishedAt.substr(0, 4);
@@ -801,6 +800,16 @@ function generateResultList() {
       channel = channelID;
     }
 
+  var schedStartTime = 'NA';
+  var actualStartTime = 'NA';
+  if(videoResult.scheduledStartTime){
+    schedStartTime = getDisplayTimeFromTimeStamp(finalResults2[i].scheduledStartTime)
+  }
+  if(videoResult.actualStartTime){
+    actualStartTime = getDisplayTimeFromTimeStamp(finalResults2[i].actualStartTime)
+  }
+
+
     //each result, will be listed in a row with an image, meta-data and rank sections
     var resultRow = $('<tr>');
     var imageCell = $('<td width=100>');
@@ -818,11 +827,11 @@ function generateResultList() {
 
     var videoString = "<attr title='Description: " + finalResults2[i].description + "'><a href='" + videoURLString + "'>" + finalResults2[i].title + "</a></attr><br>";
     //var uploadDate = "Uploaded on: " + finalResults2[i].displayTimeStamp + "<br>";
-    var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + channelID + "' target='_blank'>" + channel + "</a></attr><br>";
+    //var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + channelID + "' target='_blank'>" + channel + "</a></attr><br>";
     //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + finalResults2[i].thumbNailURL + "' target='_blank'>reverse image search</a></attr><br>";
     var concurrentUsersString = "Concurrent Viewers:  " + finalResults2[i].concurrentViewers + "<br>";
-    var scheduledStartTimeString = "Scheduled Start Time:  " + finalResults2[i].scheduledStartTime + "<br>";
-    var actualStartTimeString = "Actual Start Time:  " + finalResults2[i].actualStartTime + "<br>";
+    var scheduledStartTimeString = "Scheduled Start Time:  " + schedStartTime + "<br>";
+    var actualStartTimeString = "Actual Start Time:  " + actualStartTime + "<br>";
     
     
     metaDataCell.append(videoString);
@@ -936,33 +945,17 @@ function initializeMap(inputLat, inputLong) {
         scaledSize:new google.maps.Size(32, 32)
       }
     });
- 
-      var contentString = 
-       '<div class="map-info-close">x</div>'+
-      "<div id='infoBubbleContent'>"+
-        "<h1>"+"Title Goes Here"+ "</h1>"+
-        "<p><p>"+
-        "Zipibity bipity hot dog.  WOOOOOOOOOOOOO.   Doing.   WAZZUP!!"+
-        "<p>"+
-        "<a href='http://www.cnn.com/'> BINGO!!!</a>"+
-       "<p>"+
-        '<iframe width="300" height="168" src="https://www.youtube.com/embed/WmNBayHRPxs" frameborder="0" allowfullscreen></iframe>'+
-        "</div>" 
 
-    console.log('contentString is'+contentString);
     contentString = generatePopupBoxHTML(finalResults2[i]);
     console.log('contentString is'+contentString);
-    //infoWindow = this.infoWindow;
     addListenerStuff(searchResultMarker, contentString);
   }
 }
 
 function addListenerStuff(searchResultMarker, contentString){
-    console.log("stuffy stuff")
     var infoWindow = new (GenCustomWindow())();
     infoWindow.setContent(contentString);
     searchResultMarker.addListener('click', function() {
-      console.log("22 searchResultMarker, 'click', function() -- searchResultMarker.position "+ searchResultMarker.position)
       infoWindow.open(searchResultMarker.get('map'), searchResultMarker);
     });
 }
@@ -974,10 +967,9 @@ function generatePopupBoxHTML(videoResult){
   var channel = videoResult.channel;
   var channelID = videoResult.channelID;
   var videoURLString = "/view.html?v="+videoResult.videoID;
-  console.log("videoURLString "+ videoURLString)
   var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
-  var schedStartTime = '';
-  var actualStartTime = '';
+  var schedStartTime = 'NA';
+  var actualStartTime = 'NA';
   if(videoResult.scheduledStartTime){
     schedStartTime = getDisplayTimeFromTimeStamp(videoResult.scheduledStartTime)
   }
@@ -991,19 +983,27 @@ function generatePopupBoxHTML(videoResult){
   }
 
   var PopupBoxHTML = '<div class="map-info-close">x</div>'+
-  '<table width=500 cellpadding=5>'+
-  '<tr><td width=100>'+
-  "<img src='" + videoResult.thumbNailURL + "' height='100' width='100'/>" +
+  '<table width=300 cellpadding=5>'+
+  '<tr>'+
+  '<td width=300>'+
+  <a href='" + videoURLString + "'>" + videoResult.title + "</a></attr><br>"+
+  "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>"+
   "</td>"+
+  "</tr>"+
+  '<tr>'+
+  '<td width=300>'+
+  "<img src='" + videoResult.thumbNailURL + "' height='300' width='300'/>" +
+  "</td>"+
+  /*
   "<td width=350 valign=top>"+
-  "<attr title='Description: " + videoResult.description + "'><a href='" + videoURLString + "'>" + 
-  videoResult.title + "</a></attr><br>"+
+  "<attr title='Description: " + videoResult.description + "'>
   "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + 
   channelID + "' target='_blank'>" + channel + "</a></attr><br>"+
   "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>"+
   "Scheduled Start Time:  " + schedStartTime + "<br>"+
   "Actual Start Time:  " + actualStartTime + "<br>"+
   "</td>"+
+  */
   "</tr>"+
   "</table>"
   
