@@ -992,7 +992,7 @@ function generatePopupBoxHTML(videoResult){
   "</tr>"+
   '<tr>'+
   '<td width=300>'+
-  "<img src='" + videoResult.thumbNailURL + "' height='300' width='300'/>" +
+  "<img src='" + videoResult.thumbNailURL + "' height='290' width='290'/>" +
   "</td>"+
   /*
   "<td width=350 valign=top>"+
