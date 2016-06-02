@@ -982,11 +982,11 @@ function generatePopupBoxHTML(videoResult){
     channel = channelID;
   }
 
-  var PopupBoxHTML = '<div class="map-info-close">x</div>'+
+  var PopupBoxHTML = '<div class="mapOverlayClose">x</div>'+
   '<table width=300 cellpadding=5>'+
   '<tr>'+
   '<td width=300>'+
-  <a href='" + videoURLString + "'>" + videoResult.title + "</a></attr><br>"+
+  "<a href='" + videoURLString + "'>" + videoResult.title + "</a></attr><br>"+
   "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>"+
   "</td>"+
   "</tr>"+
