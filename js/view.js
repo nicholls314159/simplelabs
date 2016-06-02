@@ -188,7 +188,10 @@ function populateVideoMetaData(){
     //format meta-data section
     var videoString = $("<attr title='Description: " + viewObject.description + "'><a href=" + startURL + ">" + viewObject.title + "</a></attr><br>");
     
-    var truncatedVideoDescription = viewObject.description.substring(0,300);
+    var truncatedVideoDescription = ""
+    if(viewObject.description){
+      truncatedVideoDescription = viewObject.description.substring(0,300);
+    }
     
     var videoDesc = "Description: " + truncatedVideoDescription + "...<br>";
     var uploadDate = "Uploaded on: " + viewObject.displayTimeStamp + "<br>";
