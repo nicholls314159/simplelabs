@@ -269,7 +269,7 @@ a {
    max-width:160px;
    max-height:200px;
    text-align:left;
-   padding:5px 5px 5px 5px;
+   padding:5px 20px 5px 5px;
    overflow:hidden;
    position:absolute;
 }
