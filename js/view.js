@@ -140,26 +140,16 @@ function pullVideoMetaData(){
              console.log("test if liveStreamingDetails is available ")
              if(item.liveStreamingDetails && item.liveStreamingDetails.concurrentViewers){
                console.log("liveStreamingDetails is available ")
-               //for (var i = 0; i < resultsArr.length; i++) {
-               //if (viewObject.videoId === videoRequestVideoId) {
-                  viewObject.concurrentViewers = item.liveStreamingDetails.concurrentViewers;
-                  viewObject.scheduledStartTime = item.liveStreamingDetails.scheduledStartTime;
-                  viewObject.actualStartTime = item.liveStreamingDetails.actualStartTime;
-               //   break;
-               }
-             }
+               viewObject.concurrentViewers = item.liveStreamingDetails.concurrentViewers;
+               viewObject.scheduledStartTime = item.liveStreamingDetails.scheduledStartTime;
+               viewObject.actualStartTime = item.liveStreamingDetails.actualStartTime;
             }else{
               console.log("liveStreamingDetails is NOT available ");
-              //for (var i = 0; i < resultsArr.length; i++) {
-              if (resultsArr[i].videoId === videoRequestVideoId) {
-                  resultsArr[i].concurrentViewers = 'NA';
-                  resultsArr[i].scheduledStartTime = 'NA';
-                  resultsArr[i].actualStartTime = 'NA'
-                }
-              }
+               viewObject.concurrentViewers = 'NA';
+               viewObject.scheduledStartTime = 'NA';
+               viewObject.actualStartTime = 'NA'
             }
              ////end new
-             
           });
         }
         
@@ -212,7 +202,8 @@ function populateVideoMetaData(){
     imageCell.append(imageString);
 
     //format meta-data section
-    var videoString = $("<attr title='Description: " + viewObject.description + "'><a href=" + startURL + ">" + viewObject.title + "</a></attr><br>");
+    var videoString = $("<attr title='Description: " + viewObject.description + "'><a href=" + 
+    startURL + ">" + viewObject.title + "</a></attr><br>");
     
     var truncatedVideoDescription = ""
     if(viewObject.description){
@@ -220,10 +211,11 @@ function populateVideoMetaData(){
     }
     
     var videoDesc = "Description: " + truncatedVideoDescription + "...<br>";
-    var uploadDate = "Uploaded on: " + viewObject.displayTimeStamp + "<br>";
-    var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + viewObject.channelID + "' target='_blank'>" + viewObject.channel + "</a></attr><br>";
-    var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + viewObject.thumbnailURL + "' target='_blank'>reverse image search</a></attr><br>";
-
+    //var uploadDate = "Uploaded on: " + viewObject.displayTimeStamp + "<br>";
+    //var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + viewObject.channelID + "' target='_blank'>" + viewObject.channel + "</a></attr><br>";
+    //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + viewObject.thumbnailURL + "' target='_blank'>reverse image search</a></attr><br>";
+    var concurrentUsersString = "Concurrent Users: "+viewObject.concurrentViewers+"<br>"
+    var startTimeString = "Actual Start Time:  "+viewObject.actualStartTime+"<br>"
    
    //if its the first time the page has been loaded and short url is not available
    //then provided vanity URL for Facebook and Twitter links
@@ -250,8 +242,8 @@ function populateVideoMetaData(){
     metaDataCell.append(videoString);
     metaDataCell.append(videoDesc);
     metaDataCell.append(uploadDate);
-    metaDataCell.append(channelString);
-    metaDataCell.append(reverseImageString);
+    metaDataCell.append(concurrentUsersString);
+    metaDataCell.append(startTimeString);
     
     resultRow.append(imageCell);
     resultRow.append(metaDataCell);
