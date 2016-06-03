@@ -969,7 +969,7 @@ function generatePopupBoxHTML(videoResult){
   var PopupBoxHTML = '<div class="mapOverlayClose">x</div>'+
   '<table width=200 cellpadding=5>'+
   '<tr>'+
-  '<td width=200 align='center'>'+
+  '<td width=200 align="center">'+
   "<a href='" + videoURLString + "'>" +
   "<img src='" + videoResult.thumbNailURL + "' height='180' width='180'/>" +
   "</a><br>"+
