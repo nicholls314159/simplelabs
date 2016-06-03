@@ -983,18 +983,12 @@ function generatePopupBoxHTML(videoResult){
   "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>"+
   "</td>"+
   "</tr>"+
+  '<tr>'+
+  '<td width=200 style="word-wrap: break-word">'+
+  '&nbsp;&nbsp;'+
+   "</td>"+
+  "</tr>"+
   "</table>"
-  
-  /*
-  "<td width=350 valign=top>"+
-  "<attr title='Description: " + videoResult.description + "'>
-  "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + 
-  channelID + "' target='_blank'>" + channel + "</a></attr><br>"+
-  "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>"+
-  "Scheduled Start Time:  " + schedStartTime + "<br>"+
-  "Actual Start Time:  " + actualStartTime + "<br>"+
-  "</td>"+
-  */
   
   console.log('generatePopupBoxHTML() end')
   return PopupBoxHTML;
