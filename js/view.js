@@ -138,11 +138,11 @@ function pullVideoMetaData(){
             
              //new 
              console.log("test if liveStreamingDetails is available ")
-             if(item.liveStreamingDetails && item.liveStreamingDetails.concurrentViewers){
+             if(this.liveStreamingDetails && this.liveStreamingDetails.concurrentViewers){
                console.log("liveStreamingDetails is available ")
-               viewObject.concurrentViewers = item.liveStreamingDetails.concurrentViewers;
-               viewObject.scheduledStartTime = item.liveStreamingDetails.scheduledStartTime;
-               viewObject.actualStartTime = item.liveStreamingDetails.actualStartTime;
+               viewObject.concurrentViewers = this.liveStreamingDetails.concurrentViewers;
+               viewObject.scheduledStartTime = this.liveStreamingDetails.scheduledStartTime;
+               viewObject.actualStartTime = this.liveStreamingDetails.actualStartTime;
             }else{
               console.log("liveStreamingDetails is NOT available ");
                viewObject.concurrentViewers = 'NA';
@@ -241,7 +241,7 @@ function populateVideoMetaData(){
     socialCell.append(twitterFunction);
     metaDataCell.append(videoString);
     metaDataCell.append(videoDesc);
-    metaDataCell.append(uploadDate);
+    //metaDataCell.append(uploadDate);
     metaDataCell.append(concurrentUsersString);
     metaDataCell.append(startTimeString);
     
