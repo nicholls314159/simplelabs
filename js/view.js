@@ -98,7 +98,7 @@ function pullVideoMetaData(){
       //generate request object for video search
       var videoIDRequest = gapi.client.youtube.videos.list({
         id: viewObject.inputVideoID,
-        part: 'id,snippet',
+        part: 'id,snippet,liveStreamingDetails',
         key: API_ACCESS_KEY
       });
 
@@ -135,6 +135,31 @@ function pullVideoMetaData(){
              console.log('viewObject.displayTimeStamp is ' + viewObject.displayTimeStamp);
              viewObject.publishTimeStamp = item.snippet.publishedAt;
              console.log('viewObject.publishTimeStamp is ' + viewObject.publishTimeStamp);
+            
+             //new 
+             console.log("test if liveStreamingDetails is available ")
+             if(item.liveStreamingDetails && item.liveStreamingDetails.concurrentViewers){
+               console.log("liveStreamingDetails is available ")
+               //for (var i = 0; i < resultsArr.length; i++) {
+               //if (viewObject.videoId === videoRequestVideoId) {
+                  viewObject.concurrentViewers = item.liveStreamingDetails.concurrentViewers;
+                  viewObject.scheduledStartTime = item.liveStreamingDetails.scheduledStartTime;
+                  viewObject.actualStartTime = item.liveStreamingDetails.actualStartTime;
+               //   break;
+               }
+             }
+            }else{
+              console.log("liveStreamingDetails is NOT available ");
+              //for (var i = 0; i < resultsArr.length; i++) {
+              if (resultsArr[i].videoId === videoRequestVideoId) {
+                  resultsArr[i].concurrentViewers = 'NA';
+                  resultsArr[i].scheduledStartTime = 'NA';
+                  resultsArr[i].actualStartTime = 'NA'
+                }
+              }
+            }
+             ////end new
+             
           });
         }
         
