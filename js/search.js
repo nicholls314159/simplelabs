@@ -967,17 +967,19 @@ function generatePopupBoxHTML(videoResult){
   }
 
   var PopupBoxHTML = '<div class="mapOverlayClose">x</div>'+
-  '<table width=300 cellpadding=5>'+
+  '<table width=200 cellpadding=5>'+
   '<tr>'+
-  '<td width=160>'+
+  '<td width=200 align='center'>'+
   "<a href='" + videoURLString + "'>" +
-  "<img src='" + videoResult.thumbNailURL + "' height='150' width='150'/>" +
+  "<img src='" + videoResult.thumbNailURL + "' height='180' width='180'/>" +
   "</a><br>"+
   "</td>"+
   "</tr>"+
   '<tr>'+
-  '<td width=160>'+
-  "<a href='" + videoURLString + "'>" + videoResult.title + "</a></attr><br>"+
+  '<td width=200>'+
+  //"<a href='" + videoURLString + "'>" + 
+  videoResult.title + 
+  //"</a></attr><br>"+
   "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>"+
   "</td>"+
   "</tr>"+
