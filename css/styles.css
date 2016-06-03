@@ -272,14 +272,14 @@ a {
    padding:0px 10px 5px 5px;
    overflow:hidden;
    position:absolute;
-   font-size: 12px;
+   font-size: 14px;
 }
 .mapOverlayWindow .mapOverlayClose{
    float:right;
    cursor:pointer;
    margin-right:-5px;
    margin-left:5px;
-   font-size: 12px;
+   font-size: 14px;
 }
  
 
