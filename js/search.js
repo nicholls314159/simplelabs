@@ -976,7 +976,7 @@ function generatePopupBoxHTML(videoResult){
   "</td>"+
   "</tr>"+
   '<tr>'+
-  '<td width=200>'+
+  '<td width=200 style="word-wrap: break-word">'+
   //"<a href='" + videoURLString + "'>" + 
   videoResult.title + 
   //"</a></attr><br>"+
