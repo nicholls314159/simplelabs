@@ -98,7 +98,7 @@ function pullVideoMetaData(){
       //generate request object for video search
       var videoIDRequest = gapi.client.youtube.videos.list({
         id: viewObject.inputVideoID,
-        part: 'id,snippet,liveStreamingDetails',
+        part: 'id,snippet,recordingDetails,liveStreamingDetails',
         key: API_ACCESS_KEY
       });
 
@@ -138,11 +138,15 @@ function pullVideoMetaData(){
             
              //new 
              console.log("test if liveStreamingDetails is available ")
-             if(this.liveStreamingDetails && this.liveStreamingDetails.concurrentViewers){
+             if(item.liveStreamingDetails){ 
+              
+              console.log("got dets")
+             }
+             if(item.liveStreamingDetails && item.liveStreamingDetails.concurrentViewers){
                console.log("liveStreamingDetails is available ")
-               viewObject.concurrentViewers = this.liveStreamingDetails.concurrentViewers;
-               viewObject.scheduledStartTime = this.liveStreamingDetails.scheduledStartTime;
-               viewObject.actualStartTime = this.liveStreamingDetails.actualStartTime;
+               viewObject.concurrentViewers = item.liveStreamingDetails.concurrentViewers;
+               viewObject.scheduledStartTime = item.liveStreamingDetails.scheduledStartTime;
+               viewObject.actualStartTime = item.liveStreamingDetails.actualStartTime;
             }else{
               console.log("liveStreamingDetails is NOT available ");
                viewObject.concurrentViewers = 'NA';
