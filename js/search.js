@@ -824,8 +824,14 @@ function generateResultList() {
     //Generate new URL string
     var videoURLString = "/view.html?v="+finalResults2[i].videoID;
     var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
+    
+    var title = finalResults2[i].title
+    if(title && title.length > 50){
+      title = finalResults2[i].title.substring(0,50)
+    }
+      
 
-    var videoString = "<attr title='Description: " + finalResults2[i].description + "'><a href='" + videoURLString + "'>" + finalResults2[i].title + "</a></attr><br>";
+    var videoString = "<attr title='Description: " + finalResults2[i].description + "'><a href='" + videoURLString + "'>" + title + "</a></attr><br>";
     //var uploadDate = "Uploaded on: " + finalResults2[i].displayTimeStamp + "<br>";
     //var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + channelID + "' target='_blank'>" + channel + "</a></attr><br>";
     //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + finalResults2[i].thumbNailURL + "' target='_blank'>reverse image search</a></attr><br>";
