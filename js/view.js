@@ -24,6 +24,9 @@
 var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var API_ACCESS_KEY = 'AIzaSyDJTIlvEzU-B2152hKEyUzBoAJmflJzcjU';
 
+//Regex for URLs
+var URL_REGEX = /(?:https?|ftp):\/\/[\n\S]+/g;
+
 //inputObject contains all the inputs from the User
 var viewObject = {};
 
@@ -210,9 +213,11 @@ function populateVideoMetaData(){
     startURL + ">" + viewObject.title + "</a></attr><br>");
     
     var truncatedVideoDescription = ""
+    //if description is non null, truncate it and remove any hard coded URLs
     if(viewObject.description){
-      truncatedVideoDescription = viewObject.description.substring(0,300);
+      truncatedVideoDescription = replaceHardCodedURLs(viewObject.description.substring(0,300));
     }
+    
     
     var videoDesc = "Description: " + truncatedVideoDescription + "...<br>";
     //var uploadDate = "Uploaded on: " + viewObject.displayTimeStamp + "<br>";
@@ -283,6 +288,10 @@ function showConnectivityError() {
 
 function showErrorSection() {
   $("#showErrors").show();
+}
+
+function replaceHardCodedURLs(rawString){
+ return rawString.replace(URL_REGEX, '');
 }
 
 /** This method handle search button clicks.   It pulls data from the web
