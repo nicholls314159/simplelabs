@@ -960,12 +960,16 @@ function generatePopupBoxHTML(videoResult){
   if (!videoResult) {
     channel = channelID;
   }
+  var popupTitle = ""
+  if(popupTitle){
+    popupTitle = videoResult.title.substring(0,50)
+  }
 
   var PopupBoxHTML = 
   '<table width=220 cellpadding=5>'+
   '<tr><td><div class="mapOverlayClose">X</div></td></tr>'+
   '<tr>'+
-  '<td width=220 style="word-wrap: break-word">'+ videoResult.title + "<br>"+
+  '<td width=220 style="word-wrap: break-word">'+ popupTitle + "<br>"+  
   "</td>"+
   "</tr>"+
   '<tr>'+
