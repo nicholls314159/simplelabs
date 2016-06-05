@@ -217,14 +217,17 @@ function populateVideoMetaData(){
     if(viewObject.description){
       truncatedVideoDescription = replaceHardCodedURLs(viewObject.description.substring(0,300));
     }
-    
+    var actualStartTime = "";
+    if(actualStartTime){
+      actualStartTime = getDisplayTimeFromTimeStamp(viewObject.actualStartTime);
+    }
     
     var videoDesc = "Description: " + truncatedVideoDescription + "...<br>";
     //var uploadDate = "Uploaded on: " + viewObject.displayTimeStamp + "<br>";
     //var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + viewObject.channelID + "' target='_blank'>" + viewObject.channel + "</a></attr><br>";
     //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + viewObject.thumbnailURL + "' target='_blank'>reverse image search</a></attr><br>";
     var concurrentUsersString = "Concurrent Users: "+viewObject.concurrentViewers+"<br>"
-    var startTimeString = "Actual Start Time:  "+getDisplayTimeFromTimeStamp(viewObject.actualStartTime)+"<br>"
+    var startTimeString = "Actual Start Time:  "+ actualStartTime +"<br>"
    
    //if its the first time the page has been loaded and short url is not available
    //then provided vanity URL for Facebook and Twitter links
