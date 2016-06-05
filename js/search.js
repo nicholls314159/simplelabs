@@ -933,9 +933,9 @@ function initializeMap(inputLat, inputLong) {
       animation: google.maps.Animation.DROP,
       zIndex: imageNumber,
       icon:{
-        url:url: 'images/redMarker_' + imageNumber + '.png',
+        url: 'images/redMarker_' + imageNumber + '.png',
         size: new google.maps.Size(75, 62),
-        scaledSize: new google.maps.Size(75, 62),
+        scaledSize: new google.maps.Size(75, 62)
       }
     });
 
