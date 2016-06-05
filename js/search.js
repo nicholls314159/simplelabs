@@ -925,14 +925,17 @@ function initializeMap(inputLat, inputLong) {
 
     var latLong = new google.maps.LatLng(finalResults2[i].lat, finalResults2[i].long);
 
+
     //create the marker on the map object
     var searchResultMarker = new google.maps.Marker({
       position: latLong,
       map: map,
+      animation: google.maps.Animation.DROP,
+      zIndex: imageNumber,
       icon:{
-        url:'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-        size:new google.maps.Size(32, 32),
-        scaledSize:new google.maps.Size(32, 32)
+        url:url: 'images/redMarker_' + imageNumber + '.png',
+        size: new google.maps.Size(75, 62),
+        scaledSize: new google.maps.Size(75, 62),
       }
     });
 
