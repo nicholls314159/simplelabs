@@ -927,11 +927,11 @@ function initializeMap(inputLat, inputLong) {
 
     contentString = generatePopupBoxHTML(finalResults2[i]);
     console.log('contentString is'+contentString);
-    addListenerStuff(searchResultMarker, contentString);
+    generateMapOverlayWindowAndMarkerListener(searchResultMarker, contentString);
   }
 }
 
-function addListenerStuff(searchResultMarker, contentString){
+function generateMapOverlayWindowAndMarkerListener(searchResultMarker, contentString){
     var infoWindow = new (GenCustomWindow())();
     infoWindow.setContent(contentString);
     searchResultMarker.addListener('click', function() {
@@ -961,8 +961,11 @@ function generatePopupBoxHTML(videoResult){
     channel = channelID;
   }
 
-  var PopupBoxHTML = '<div class="mapOverlayClose">x</div>'+
+  var PopupBoxHTML = 
+  //'<div class="mapOverlayClose">X</div>'+
+  
   '<table width=200 cellpadding=5>'+
+  '<tr><td><div class="mapOverlayClose">X</div></td></tr>'+
   '<tr>'+
   '<td width=200 style="word-wrap: break-word">'+
   //"<a href='" + videoURLString + "'>" + 
@@ -981,11 +984,6 @@ function generatePopupBoxHTML(videoResult){
   '<td width=200 style="word-wrap: break-word">'+
   "Concurrent Viewers:  " + videoResult.concurrentViewers + "<br>"+
   "</td>"+
-  "</tr>"+
-  '<tr>'+
-  '<td width=200 style="word-wrap: break-word">'+
-  '&nbsp;&nbsp;'+
-   "</td>"+
   "</tr>"+
   "</table>"
   
@@ -1184,15 +1182,6 @@ function getLocationSearchResults() {
  */
 function filterIrrelevantResults() {
   finalResults2 = $.grep(finalResults, function(item) {
-    
-    console.log("item.title is "+ item.title);
-    console.log("Car Regex found:  "+CAR_REGEX.test(item.title));
-    console.log("MLS# found:  "+MLS_NUMB_REGEX.test(item.title));
-    console.log("Home for Sale found:  "+HOME_FOR_SALE_REGEX.test(item.title));
-    console.log("Real Estate found:  "+REAL_ESTATE_REGEX.test(item.title));
-    console.log("Realty found:  "+REALTY_REGEX.test(item.title));
-    
-    
     return !(CAR_REGEX.test(item.title) || REAL_ESTATE_REGEX.test(item.title) || MLS_NUMB_REGEX.test(item.title) || HOME_FOR_SALE_REGEX.test(item.title) || REALTY_REGEX.test(item.title));
   });
 }
