@@ -814,7 +814,7 @@ function generateResultList() {
     //truncate title to 40 chars for display
     var title = finalResults2[i].title
     if(title && title.length > 50){
-      title = finalResults2[i].title.substring(0,40)
+      title = finalResults2[i].title.substring(0,50) + "..."
     }
       
 
@@ -963,7 +963,7 @@ function generatePopupBoxHTML(videoResult){
   }
   var popupTitle = "";
   if(videoResult.title){
-    popupTitle = videoResult.title.substring(0,50)
+    popupTitle = videoResult.title.substring(0,25) + "..."
   }
 
   var PopupBoxHTML = 
