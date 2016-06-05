@@ -1,6 +1,4 @@
 /**
- * Copyright 2014 Google Inc. All rights reserved.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,13 +11,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- *  @fileoverview  This code is an example implementation of how to implement YouTube geo-search
- *  and search filters via established APIs.  The application itself is directed toward the use
- *  case of journalists trying to discover citizen journalism on YouTube.   It integrates with the Google Maps API to plot
- *  the upload location of geo-tagged video results.
- *  @author:  Stephen Nicholls, March 10, 2014
+ *  @fileoverview  This code is uses Google Maps, YouTube Data, and many other APIs to create an integrated live stream
+ *  discovery tool.   
+ *  @author:  Stephen Nicholls, June 5, 2016
  */
-
 
 //Define a Global variables
 
@@ -70,7 +65,6 @@ var shortURL = '';
 $(document).ready(function() {
   hideSearchFilters();
   resetResultsSection();
-  //displayCustomRangeSection();
   $.getScript('https://apis.google.com/js/client.js?onload=handleClientLoad');
 });
 
@@ -160,66 +154,29 @@ function searchYouTube() {
       var channelArray = inputObject.inputChannelList.split(",")
       for (var i = 0; i < channelArray.length; i++) {
         inputObject.currentChannel = channelArray[i].trim();
-/*
-        //for searches on just live videos only
-        if (inputObject.inputLiveOnly) {
-          //console.log("Searching:  No Location, Specific Channel(s), Live Only")
-*/
-          getPublishBeforeAndAfterTime();
-          try {
-            var request = gapi.client.youtube.search.list({
-              q: inputObject.inputQuery,
-              order: "viewCount",
-              type: 'video',
-              part: 'snippet',
-              maxResults: '50',
-              eventType: 'live',
-              videoLiscense: inputObject.videoLiscense,
-              videoEmbeddable: inputObject.videoEmbeddable,
-              channelId: inputObject.currentChannel,
-              //publishedAfter: inputObject.publishAfterTime,
-              //publishedBefore: inputObject.publishBeforeTime,
-              key: API_ACCESS_KEY
-            });
-          } catch (err) {
-            //cannot search via the YouTube API, update end-user with error message
-            showConnectivityError();
-          }
-/*
-        } else {
-          //console.log("Searching:  No Location, Specific Channel(s), Live and VOD")
-          getPublishBeforeAndAfterTime();
-          try {
-            var request = gapi.client.youtube.search.list({
-              q: inputObject.inputQuery,
-              order: "viewCount",
-              type: 'video',
-              part: 'snippet',
-              maxResults: '50',
-              eventType: 'live',
-              videoLiscense: inputObject.videoLiscense,
-              videoEmbeddable: inputObject.videoEmbeddable,
-              channelId: inputObject.currentChannel,
-              publishedAfter: inputObject.publishAfterTime,
-              publishedBefore: inputObject.publishBeforeTime,
-              key: API_ACCESS_KEY
-            });
-          } catch (err) {
-            //cannot search via the YouTube API, update end-user with error message
-            showConnectivityError();
-          }
+
+        getPublishBeforeAndAfterTime();
+        try {
+          var request = gapi.client.youtube.search.list({
+            q: inputObject.inputQuery,
+            order: "viewCount",
+            type: 'video',
+            part: 'snippet',
+            maxResults: '50',
+            eventType: 'live',
+            videoLiscense: inputObject.videoLiscense,
+            videoEmbeddable: inputObject.videoEmbeddable,
+            channelId: inputObject.currentChannel,
+            key: API_ACCESS_KEY
+          });
+        } catch (err) {
+          //cannot search via the YouTube API, update end-user with error message
+          showConnectivityError();
         }
-*/        
         //Call processYouTubeRequest to process the request object
         processYouTubeRequest(request);
       }
     } else {
-/*
-      //for searches on just live videos only
-      if (inputObject.inputLiveOnly) {
-        //console.log("Searching:  No Location, No Specific Channel, Live Only")
-        getPublishBeforeAndAfterTime();
-*/
         try {
           var request = gapi.client.youtube.search.list({
             q: inputObject.inputQuery,
@@ -230,40 +187,12 @@ function searchYouTube() {
             eventType: 'live',
             videoLiscense: inputObject.videoLiscense,
             videoEmbeddable: inputObject.videoEmbeddable,
-            //publishedAfter: inputObject.publishAfterTime,
-            //publishedBefore: inputObject.publishBeforeTime,
             key: API_ACCESS_KEY
           });
         } catch (err) {
           //cannot search via the YouTube API, update end-user with error message
           showConnectivityError();
         }
-/*
-      } else {
-        console.log("Searching:  No Location, No Specific Channel, Live and VOD")
-        printInputObject();
-        getPublishBeforeAndAfterTime();
-        try {
-          var request = gapi.client.youtube.search.list({
-            q: inputObject.inputQuery,
-            order: "viewCount",
-            type: 'video',
-            part: 'snippet',
-            maxResults: '50',
-            eventType: 'live',
-            videoLiscense: inputObject.videoLiscense,
-            videoEmbeddable: inputObject.videoEmbeddable,
-            publishedAfter: inputObject.publishAfterTime,
-            publishedBefore: inputObject.publishBeforeTime,
-            key: API_ACCESS_KEY
-          });
-        } catch (err) {
-          //cannot search via the YouTube API, update end-user with error message
-          showConnectivityError();
-        }
-      }
-      //Call processYouTubeRequest to process the request object
-*/
       processYouTubeRequest(request);
     }
   }
@@ -307,14 +236,9 @@ function loadParamsFromURL() {
     inputObject.inputLat = cleanStringOfHTMLEncodedSpaces(urlParams['la']);
     inputObject.inputLong = cleanStringOfHTMLEncodedSpaces(urlParams['lo']);
     inputObject.inputLocationRadius = cleanStringOfHTMLEncodedSpaces(urlParams['lr']);
-    //inputObject.inputTimeWindow = cleanStringOfHTMLEncodedSpaces(urlParams['tw']);
-    //inputObject.inputStartDate = cleanStringOfHTMLEncodedSpaces(urlParams['sd']);
-    //inputObject.inputEndDate = cleanStringOfHTMLEncodedSpaces(urlParams['ed']);
     inputObject.inputChannelList = cleanStringOfHTMLEncodedSpaces(urlParams['cl']);
     inputObject.inputSearchLocation = cleanStringOfHTMLEncodedSpaces(urlParams['sl']);
-    //inputObject.inputNewsChannelFilter = cleanStringOfHTMLEncodedSpaces(urlParams['ncf']);
     inputObject.inputZoomLevel = cleanStringOfHTMLEncodedSpaces(urlParams['zl']);
-    //inputObject.publishBeforeTime = cleanStringOfHTMLEncodedSpaces(urlParams['pbt']);
 
     inputObject.inputEmbedsOnly = urlParams['eo'];
     if (urlParams["eo"] === "true") {
@@ -322,14 +246,6 @@ function loadParamsFromURL() {
     } else {
       inputObject.inputEmbedsOnly = false;
     }
-    /*
-    inputObject.inputLiveOnly = urlParams["loo"];
-    if (urlParams["loo"] === "true") {
-      inputObject.inputLiveOnly = true;
-    } else {
-      inputObject.inputLiveOnly = false;
-    }
-    */
     inputObject.inputCreativeCommonsOnly = urlParams["cco"];
     if (urlParams["cco"] === "true") {
       inputObject.inputCreativeCommonsOnly = true;
@@ -358,40 +274,6 @@ function loadParamsFromURL() {
       $('#query').val(inputObject.inputQuery);
       showSearchFilters();
     }
-    /*
-    if(inputObject.inputStartDate){
-      $('#startDate').val(inputObject.inputStartDate);
-      $('#customRangeSection_1').show();
-      $('#customRangeSection_2').show();
-      $('#customRangeSection_3').show();
-      $('#customRangeSection_4').show();
-      $('#customRangeSection_5').show();
-      $('#customRangeSection_6').show();
-      $('#customRangeSection_7').show();
-      $('#customRangeSection_8').show();
-      $('#customRangeSection_9').show();
-      $('#customRangeSection_10').show();
-      $('#customRangeSection_11').show();
-      $('#customRangeSection_12').show();
-
-    }
-    if(inputObject.inputEndDate){
-      $('#endDate').val(inputObject.inputEndDate);
-      $('#customRangeSection_1').show();
-      $('#customRangeSection_2').show();
-      $('#customRangeSection_3').show();
-      $('#customRangeSection_4').show();
-      $('#customRangeSection_5').show();
-      $('#customRangeSection_6').show();
-      $('#customRangeSection_7').show();
-      $('#customRangeSection_8').show();
-      $('#customRangeSection_9').show();
-      $('#customRangeSection_10').show();
-      $('#customRangeSection_11').show();
-      $('#customRangeSection_12').show();
-
-    }
-    */
     if(inputObject.inputLocationRadius){
       $('#locRadius').val(inputObject.inputLocationRadius);
     }
@@ -414,16 +296,11 @@ function clickedSearchButton() {
   inputObject.inputLat = $('#lattitude').val();
   inputObject.inputLong = $('#longitude').val();
   inputObject.inputLocationRadius = $('#locRadius').val();
-  //inputObject.inputTimeWindow = $('#timeWindow').val();
-  //inputObject.inputStartDate = $('#startDate').val();
-  //inputObject.inputEndDate = $('#endDate').val();
   inputObject.inputChannelList = $('#channelList').val();
   inputObject.inputSearchLocation = $('#searchLocation').val();
   inputObject.inputEmbedsOnly = 'false';
-  //inputObject.inputLiveOnly = 'false';
   inputObject.inputCreativeCommonsOnly = 'false';
   inputObject.inputEmbedsOnly = $('#embedOnly').is(':checked');
-  //inputObject.inputLiveOnly = $('#liveOnly').is(':checked');
   inputObject.inputCreativeCommonsOnly = $('#creativeCommonsOnly').is(':checked');
   inputObject.inputZoomLevel = INITIAL_ZOOM_LEVEL;
 
@@ -443,14 +320,8 @@ function clickedSearchButton() {
  */
 function completeInputObject() {
   //define booleans for types of filters
-  /*
-  inputObject.hasTimeWindow = false;
-  inputObject.hasStartEndDate = false;
-  */
   inputObject.hasChannelList = false;
   inputObject.hasSearchLocation = false;
-  //inputObject.newsChannelsOnly = false;
-  //inputObject.removeNewsChannel = false;
 
   if (inputObject.inputSearchLocation && inputObject.inputLocationRadius) {
     inputObject.hasSearchLocation = true;
@@ -462,13 +333,6 @@ function completeInputObject() {
   //create array to store validation errors
   var validationErrorsArr = [];
 
-  //need to enter start and end date for custom range
-  /*
-  if (inputObject.inputTimeWindow === 'custom_range' && (!inputObject.inputStartDate || !inputObject.inputEndDate)) {
-    validationErrorsArr.push("You must enter a start date and end date for a custom range");
-    validationErrors = true;
-  }
-  */
   //define regular expressions for validating input values
   var dateRegEx = new RegExp("[0-1][0-9][-][0-3][0-9][-][2][0][0-1][0-9]");
   var numberRegEx = new RegExp("^[0-9]+")
@@ -478,20 +342,7 @@ function completeInputObject() {
     validationErrorsArr.push("You must have both a location and radius for a location search");
     validationErrors = true;
   }
-  /*
-  if (inputObject.inputTimeWindow === 'custom_range' && inputObject.inputStartDate && !dateRegEx.test(inputObject.inputStartDate)) {
-    //start date must be mm-dd-yyyy
-    validationErrorsArr.push("Start Date must be format of mm-dd-yyyy");
-    validationErrors = true;
-  }
-  */
-  /*
-  if (inputObject.inputTimeWindow === 'custom_range' && inputObject.inputEndDate && !dateRegEx.test(inputObject.inputEndDate)) {
-    //start date must be mm-dd-yyyy
-    validationErrorsArr.push("End Date must be format of mm-dd-yyyy");
-    validationErrors = true;
-  }
-  */
+
   //if errors exist, display them on interface and terminate execution there
   if (validationErrors) {
     var div = $('<div>');
@@ -509,14 +360,6 @@ function completeInputObject() {
     resetResultsSection();
     $('#searchResultCount').remove();
   } else {
-/*
-    if (inputObject.inputTimeWindow && inputObject.inputTimeWindow !== 'custom_range') {
-      inputObject.hasTimeWindow = true;
-    }
-    if (inputObject.inputTimeWindow && inputObject.inputTimeWindow === 'custom_range' && inputObject.inputStartDate && inputObject.inputEndDate) {
-      inputObject.hasStartEndDate = true;
-    }
-    */
     if (inputObject.inputChannelList && inputObject.inputChannelList) {
       inputObject.hasChannelList = true;
     }
@@ -542,31 +385,14 @@ function completeInputObject() {
 function generateURLwithQueryParameters() {
   parameterString = '';
 
-  //if a custom range was selected in the search include start and end dates in the URL
-  /*
-  if (inputObject.inputTimeWindow === "custom_range") {
-    parameterString =
-      "?q=" + inputObject.inputQuery + "&la=" + inputObject.inputLat +
-      "&lo=" + inputObject.inputLong + "&lr=" + inputObject.inputLocationRadius +
-     // "&tw=" + inputObject.inputTimeWindow + "&sd=" + inputObject.inputStartDate +
-     // "&ed=" + inputObject.inputEndDate + "&cl=" + inputObject.inputChannelList +
-      "&sl=" + inputObject.inputSearchLocation + "&eo=" + inputObject.inputEmbedsOnly +
-      "&loo=" + inputObject.inputLiveOnly + "&cco=" + inputObject.inputCreativeCommonsOnly +
-      "&zl=" + inputObject.inputZoomLevel + "&pbt=" + inputObject.publishBeforeTime;
-  } else {
-  */
-    parameterString =
-      "?q=" + inputObject.inputQuery + "&la=" + inputObject.inputLat +
-      "&lo=" + inputObject.inputLong + "&lr=" + inputObject.inputLocationRadius +
-      //"&tw=" + inputObject.inputTimeWindow +
-      "&cl=" + inputObject.inputChannelList +
-      "&sl=" + inputObject.inputSearchLocation + "&eo=" + inputObject.inputEmbedsOnly +
-      //"&loo=" + inputObject.inputLiveOnly + 
-      "&cco=" + inputObject.inputCreativeCommonsOnly +
-      "&zl=" + inputObject.inputZoomLevel;
-      //"&pbt=" + inputObject.publishBeforeTime;
-  //}
-
+  parameterString =
+    "?q=" + inputObject.inputQuery + "&la=" + inputObject.inputLat +
+    "&lo=" + inputObject.inputLong + "&lr=" + inputObject.inputLocationRadius +
+    "&cl=" + inputObject.inputChannelList +
+    "&sl=" + inputObject.inputSearchLocation + "&eo=" + inputObject.inputEmbedsOnly +
+    "&cco=" + inputObject.inputCreativeCommonsOnly +
+    "&zl=" + inputObject.inputZoomLevel;
+  
   //Retrieve the domain from the existing URL, to construct the new URL
   var currentURL = String(window.location);
   var newURLArray = [];
@@ -1003,41 +829,6 @@ function getDisplayTimeFromTimeStamp(timeStamp){
     return displayTime;
 }
 
-/**  Show the Custom Date Range Sections
-
-function displayCustomRangeSection() {
-  var optionSelected = $('#timeWindow').find('option:selected').attr('value');
-
-  if (optionSelected == 'custom_range') {
-    $('#customRangeSection_1').show();
-    $('#customRangeSection_2').show();
-    $('#customRangeSection_3').show();
-    $('#customRangeSection_4').show();
-    $('#customRangeSection_5').show();
-    $('#customRangeSection_6').show();
-    $('#customRangeSection_7').show();
-    $('#customRangeSection_8').show();
-    $('#customRangeSection_9').show();
-    $('#customRangeSection_10').show();
-    $('#customRangeSection_11').show();
-    $('#customRangeSection_12').show();
-  } else {
-    $('#customRangeSection_1').hide();
-    $('#customRangeSection_2').hide();
-    $('#customRangeSection_3').hide();
-    $('#customRangeSection_4').hide();
-    $('#customRangeSection_5').hide();
-    $('#customRangeSection_6').hide();
-    $('#customRangeSection_7').hide();
-    $('#customRangeSection_8').hide();
-    $('#customRangeSection_9').hide();
-    $('#customRangeSection_10').hide();
-    $('#customRangeSection_11').hide();
-    $('#customRangeSection_12').hide();
-  }
-}
-*/
-
 /**  This function uses Google Maps Geo Encoder, to convert search location to  Latitude and Longitude
  *   and then generate a search request object.   Request object is then passed to processYouTubeRequest for processing.
  */
@@ -1058,69 +849,29 @@ function getLocationSearchResults() {
 
         for (var i = 0; i < channelArray.length; i++) {
           inputObject.currentChannel = channelArray[i].trim();
-/*
-          if (inputObject.inputLiveOnly) {
-            //console.log("Searching:  Have Location, Specific Channel(s), Live Only")
-            getPublishBeforeAndAfterTime();
-*/
-            try {
-              var request = gapi.client.youtube.search.list({
-                q: inputObject.inputQuery,
-                order: "viewCount",
-                type: 'video',
-                part: 'snippet',
-                maxResults: '50',
-                eventType: 'live',
-                videoLiscense: inputObject.videoLiscense,
-                videoEmbeddable: inputObject.videoEmbeddable,
-                channelId: inputObject.currentChannel,
-                location: inputObject.inputLat + "," + inputObject.inputLong,
-                locationRadius: inputObject.inputLocationRadius,
-                //publishedAfter: inputObject.publishAfterTime,
-                //publishedBefore: inputObject.publishBeforeTime,
-                key: API_ACCESS_KEY,
-              });
-            } catch (err) {
-              //cannot search via the YouTube API
-              showConnectivityError();
-            }
-/*
-          } else {
-            //console.log("Searching:  Have Location, Specific Channel(s), Live and VOD")
-            getPublishBeforeAndAfterTime()
-            try {
-              var request = gapi.client.youtube.search.list({
-                q: inputObject.inputQuery,
-                order: "viewCount",
-                type: 'video',
-                part: 'snippet',
-                maxResults: '50',
-                eventType: 'live',
-                videoLiscense: inputObject.videoLiscense,
-                videoEmbeddable: inputObject.videoEmbeddable,
-                channelId: inputObject.currentChannel,
-                location: inputObject.inputLat + "," + inputObject.inputLong,
-                locationRadius: inputObject.inputLocationRadius,
-                //publishedAfter: inputObject.publishAfterTime,
-                //publishedBefore: inputObject.publishBeforeTime,
-                key: API_ACCESS_KEY,
-              });
-            } catch (err) {
-              //cannot search via the YouTube API
-              showConnectivityError();
-            }
+          try {
+            var request = gapi.client.youtube.search.list({
+              q: inputObject.inputQuery,
+              order: "viewCount",
+              type: 'video',
+              part: 'snippet',
+              maxResults: '50',
+              eventType: 'live',
+              videoLiscense: inputObject.videoLiscense,
+              videoEmbeddable: inputObject.videoEmbeddable,
+              channelId: inputObject.currentChannel,
+              location: inputObject.inputLat + "," + inputObject.inputLong,
+              locationRadius: inputObject.inputLocationRadius,
+              key: API_ACCESS_KEY,
+            });
+          } catch (err) {
+            //cannot search via the YouTube API
+            showConnectivityError();
           }
-  */        
           processYouTubeRequest(request);
         }
       //if the search is geo-based and only for a single channel
       } else {
-/*        
-        if (inputObject.inputLiveOnly) {
-          //console.log("Searching:  Have Location, No Specific Channel, Live Only")
-          printInputObject();
-          getPublishBeforeAndAfterTime();
-*/
           try {
             var request = gapi.client.youtube.search.list({
               q: inputObject.inputQuery,
@@ -1141,32 +892,6 @@ function getLocationSearchResults() {
             //cannot search via the YouTube API
             showConnectivityError();
           }
-/*
-        } else {
-          console.log("Searching:  Have Location, No Specific Channel, Live and VOD")
-          getPublishBeforeAndAfterTime();
-          try {
-            var request = gapi.client.youtube.search.list({
-              q: inputObject.inputQuery,
-              order: "viewCount",
-              type: "video",
-              part: "id,snippet",
-              location: inputObject.inputLat + "," + inputObject.inputLong,
-              locationRadius: inputObject.inputLocationRadius,
-              maxResults: "50",
-               eventType: 'live',
-              videoLiscense: inputObject.videoLiscense,
-              videoEmbeddable: inputObject.videoEmbeddable,
-              //publishedAfter: inputObject.publishAfterTime,
-              //publishedBefore: inputObject.publishBeforeTime,
-              key: API_ACCESS_KEY
-            });
-          } catch (err) {
-            //cannot search via the YouTube API
-            showConnectivityError();
-          }
-        }
-        */
         processYouTubeRequest(request);
       }
     } else {
@@ -1215,64 +940,6 @@ function formatAsTwoDigitNumber(numb) {
   }
 }
 
-/**  This function calculates the before and after timestamps needed for the API search and stores them in global variables
-
-function getPublishBeforeAndAfterTime() {
-  //If the input object has a custom range, then format the MM-DD-YYYY date into a UTC format
-  if (inputObject.inputTimeWindow && inputObject.inputTimeWindow === 'custom_range' && inputObject.inputStartDate.length !== 0 && inputObject.inputEndDate.length !== 0) {
-    var startDate = inputObject.inputStartDate;
-    var endDate = inputObject.inputEndDate;
-
-    inputObject.publishAfterTime = "" + startDate.substr(6, 4) + "-" + startDate.substr(0, 2) + "-" + startDate.substr(3, 2) + "T00:00:00Z";
-    inputObject.publishBeforeTime = "" + endDate.substr(6, 4) + "-" + endDate.substr(0, 2) + "-" + endDate.substr(3, 2) + "T00:00:00Z";
-  //If time comes from drop down option, convert to UTC format
-  } else {
-    var nowTime_TimeStamp = convertDateToTimeDateStamp(new Date());
-    var nowTimeMilliSecs = new Date().getTime();
-
-    //if publishBeforeTime is blank or the user clicked the search button then
-    //set publishBeforeTime to current time.  Otherwise we want to use the value
-    //from the URL parameter
-    //if (!inputObject.publishBeforeTime || queryFromClickSearchNotURL) {
-      inputObject.publishBeforeTime = nowTime_TimeStamp;
-    //}
-
-    //define the before time in milliseconds by subtracting time window from the time right now
-    var thresholdTime = 0;
-
-    numberMilliSecondsInHour = 1000 * 60 * 60;
-    if (inputObject.inputTimeWindow === 'hour') {
-      thresholdTime = nowTimeMilliSecs - numberMilliSecondsInHour;
-    } else if (inputObject.inputTimeWindow === '3hours') {
-      thresholdTime = nowTimeMilliSecs - (3 * numberMilliSecondsInHour);
-    } else if (inputObject.inputTimeWindow === '6hours') {
-      thresholdTime = nowTimeMilliSecs - (6 * numberMilliSecondsInHour);
-    } else if (inputObject.inputTimeWindow === '9hours') {
-      thresholdTime = nowTimeMilliSecs - (9 * numberMilliSecondsInHour);
-    } else if (inputObject.inputTimeWindow === '12hours') {
-      thresholdTime = nowTimeMilliSecs - (12 * numberMilliSecondsInHour);
-    } else if (inputObject.inputTimeWindow === '24hours') {
-      thresholdTime = nowTimeMilliSecs - (24 * numberMilliSecondsInHour);
-    } else if (inputObject.inputTimeWindow === 'week') {
-      thresholdTime = nowTimeMilliSecs - (24 * 7 * numberMilliSecondsInHour);
-    } else if (inputObject.inputTimeWindow === '30days') {
-      thresholdTime = nowTimeMilliSecs - (24 * 30 * numberMilliSecondsInHour);
-    } else if (inputObject.inputTimeWindow === 'year') {
-      thresholdTime = nowTimeMilliSecs - (24 * 365.25 * numberMilliSecondsInHour);
-    } else {
-      thresholdTime = 0
-    }
-
-    //if threshold time is 0 then set before to epoch
-    if (thresholdTime === 0) {
-      inputObject.publishAfterTime = '1970-01-01T00:00:00Z';
-    } else {
-      inputObject.publishAfterTime = convertDateToTimeDateStamp(new Date(thresholdTime));
-    }
-  }
-}
- */
- 
 /**  This function displays a connectivity error to the end user in the event
  *  that we lose connectivity to one or more of the Google APIs
  */
