@@ -631,7 +631,7 @@ function processYouTubeRequest(request) {
         videoResult.thumbNailURL = entryArr[i].snippet.thumbnails.default.url;
 
         videoResult.description = entryArr[i].snippet.description;
-
+/*
         var year = entryArr[i].snippet.publishedAt.substr(0, 4);
         var monthNumeric = entryArr[i].snippet.publishedAt.substr(5, 2);
         var monthInt = 0;
@@ -647,6 +647,9 @@ function processYouTubeRequest(request) {
         var monthString = MONTH_NAMES[monthInt - 1];
 
         videoResult.displayTimeStamp = monthString + " " + day + ", " + year + " - " + time + " UTC";
+        */
+        videoResult.displayTimeStamp = getDisplayTimeFromTimeStamp(entryArr[i].snippet.publishedAt)
+        
         videoResult.publishTimeStamp = entryArr[i].snippet.publishedAt;
 
         //add result to results
