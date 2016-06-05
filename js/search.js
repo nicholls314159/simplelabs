@@ -811,9 +811,10 @@ function generateResultList() {
     var videoURLString = "/view.html?v="+finalResults2[i].videoID;
     var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
     
+    //truncate title to 40 chars for display
     var title = finalResults2[i].title
     if(title && title.length > 50){
-      title = finalResults2[i].title.substring(0,50)
+      title = finalResults2[i].title.substring(0,40)
     }
       
 
