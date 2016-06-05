@@ -1,5 +1,4 @@
 <!-- 
-Copyright 2014 Google Inc. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,13 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
-
-This code is an example implementation of how to implement YouTube geo-search
-search and search filters via established APIs.  The application itself is directed toward the use
-case of journalists trying to discover citizen journalism on YouTube.   It integrates with the Google Maps API to plot 
-the upload location of geo-tagged video results.
-
-Author:  Stephen Nicholls, March 10, 2014
+Author:  Stephen Nicholls, June 5, 2016
 -->
 
 <!DOCTYPE html>
@@ -74,33 +67,11 @@ Author:  Stephen Nicholls, March 10, 2014
         <table id="searchDisplay">
           <tr>
             <td id="searchLocationLabel">Location</td>
-            <!--
-            <td>&nbsp;&nbsp;&nbsp;</td>
-            <td id="timeframeLabel">Time Frame</td>
-            -->
           </tr>
           <tr>
             <td colspan='3' width='600'>
               <input id="searchLocation" value='' type="text" placeholder='e.g. City, Intersection, Address'>
             </td>
-            <!--
-            <td>&nbsp;&nbsp;&nbsp;</td>
-            <td>
-              <select id='timeWindow' onChange='displayCustomRangeSection()'>
-                <option value="any" selected="selected">Any Time</option>
-                <option value="hour">Past Hour</option>
-                <option value="3hours">Past 3 Hours</option>
-                <option value="6hours">Past 6 Hours</option>
-                <option value="9hours">Past 9 Hours</option>
-                <option value="12hours">Past 12 Hours</option>
-                <option value="24hours">Past 24 Hours</option>
-                <option value="week">Past Week</option>
-                <option value="30days">Past 30 days</option>
-                <option value="year">Past Year</option>
-                <option value='custom_range'>Custom Range</option>
-              </select>
-            </td>
-            -->
             <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
             <td>
               <input id="search-button" type="submit" value="Search">
@@ -110,6 +81,7 @@ Author:  Stephen Nicholls, March 10, 2014
             <td>&nbsp;&nbsp;&nbsp;
             <td>
           </tr>
+<!--
           <tr>
             <td id='customRangeSection_1' colspan='3'>
               <table>
@@ -152,6 +124,7 @@ Author:  Stephen Nicholls, March 10, 2014
               </table>
             </td>
           </tr>
+-->
           <tr><td>
                 <div id=socialCellContainer>
                     <div id="socialCell"></div>
@@ -177,12 +150,8 @@ Author:  Stephen Nicholls, March 10, 2014
             <td>Radius
             </td>
             <td>&nbsp;&nbsp;&nbsp;</td>
-            <!--
-            <td>&nbsp;&nbsp;&nbsp;</td>
-            -->
             <td>Channels to Search On
             </td>
-            
             <td>&nbsp;&nbsp;&nbsp;</td>
             <td>
             </td>
@@ -206,9 +175,6 @@ Author:  Stephen Nicholls, March 10, 2014
               </select>
             </td>
             <td>&nbsp;&nbsp;&nbsp;</td>
-            <!--
-            <td>&nbsp;&nbsp;&nbsp;</td>
-            -->
             <td>
               <input id='channelList' value='' type="text" width="100"
                      title='Enter comma separated list of channels to search exclusively on'>
@@ -223,27 +189,6 @@ Author:  Stephen Nicholls, March 10, 2014
           <tr>
             <td>&nbsp;&nbsp;&nbsp;</td>
           </tr>
-          <!--
-          <tr>
-            <td>&nbsp;&nbsp;&nbsp;</td>
-            <td>
-              <div id="creativeCommonsText">
-                <input type="checkbox" id="creativeCommonsOnly" value="true"
-                       title='Show only results that are under the Creative Commons liscense.'>
-                <abbr title='Show only results that are under the Creative Commons liscense.'>Creative Commons Only
-                  Results</abbr></div>
-            </td>
-            <td>&nbsp;&nbsp;&nbsp;</td>
-            <td>
-              <input type="checkbox" id="embedOnly" value="true"'Show only results that are embeddable in other sites'>
-              <abbr title='Show only results that are embeddable in other sites'>Embeddable Only Results</abbr></td>
-            <td>&nbsp;&nbsp;&nbsp;</td>
-            <td>
-              <input type="checkbox" id="liveOnly" value="true" title='Show only live stream results'>
-              <abbr title='Show only live stream results'>Live Only Results</abbr>
-             </td>
-          </tr>
-          -->
         </table>
       </div>
     </form>
@@ -282,7 +227,6 @@ Author:  Stephen Nicholls, March 10, 2014
           <div id="map-canvas"></div>
         </td>
       </tr>
-     
       <!--  MAP ONLY VIEW
       <tr>
           <td colspan='2' align='right'>
@@ -298,8 +242,6 @@ Author:  Stephen Nicholls, March 10, 2014
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
   ga('create', 'UA-77148760-1', 'auto');
   ga('send', 'pageview');
-
 </script>
