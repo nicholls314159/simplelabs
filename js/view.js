@@ -121,6 +121,7 @@ function pullVideoMetaData(){
              console.log('viewObject.thumbnailURL is ' + viewObject.thumbnailURL);
              viewObject.description = item.snippet.description;
              console.log('viewObject.description is ' + viewObject.description);
+             /*
              var year = item.snippet.publishedAt.substr(0, 4);
              var monthNumeric = item.snippet.publishedAt.substr(5, 2);
              var monthInt = 0;
@@ -133,8 +134,10 @@ function pullVideoMetaData(){
              var day = item.snippet.publishedAt.substr(8, 2);
              var time = item.snippet.publishedAt.substr(11, 8);
              var monthString = MONTH_NAMES[monthInt - 1];
+             */
+             //viewObject.displayTimeStamp = monthString + " " + day + ", " + year + " - " + time + " UTC";
              
-             viewObject.displayTimeStamp = monthString + " " + day + ", " + year + " - " + time + " UTC";
+             viewObject.displayTimeStamp = getDisplayTimeFromTimeStamp(item.snippet.publishedAt);
              console.log('viewObject.displayTimeStamp is ' + viewObject.displayTimeStamp);
              viewObject.publishTimeStamp = item.snippet.publishedAt;
              console.log('viewObject.publishTimeStamp is ' + viewObject.publishTimeStamp);
@@ -159,28 +162,26 @@ function pullVideoMetaData(){
              ////end new
           });
         }
-        
+
+        //reset startURL with the latest
+        startURL = window.location.href;
+        var requestShortener = gapi.client.urlshortener.url.insert({
+           'resource': {
+              'longUrl': startURL
+           }
+        });
+        requestShortener.execute(function(response2) 
+        {
+            if(response2.id != null)
+            {
+               shortURL = response2.id;
+               console.log('shortURL is'+shortURL);
+            }else{
+               console.log("error: creating short url");
+            }
+            populateVideoMetaData();
+        });
       });
-      
-      //reset startURL with the latest
-      startURL = window.location.href;
-      var requestShortener = gapi.client.urlshortener.url.insert({
-         'resource': {
-            'longUrl': startURL
-         }
-      });
-      requestShortener.execute(function(response2) 
-      {
-          if(response2.id != null)
-          {
-             shortURL = response2.id;
-             console.log('shortURL is'+shortURL);
-          }else{
-             console.log("error: creating short url");
-          }
-          populateVideoMetaData();
-      });
-      
 }
 
 function populateVideoMetaData(){
