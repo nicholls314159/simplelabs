@@ -224,7 +224,7 @@ function populateVideoMetaData(){
     //var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + viewObject.channelID + "' target='_blank'>" + viewObject.channel + "</a></attr><br>";
     //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + viewObject.thumbnailURL + "' target='_blank'>reverse image search</a></attr><br>";
     var concurrentUsersString = "Concurrent Users: "+viewObject.concurrentViewers+"<br>"
-    var startTimeString = "Actual Start Time:  "+viewObject.actualStartTime+"<br>"
+    var startTimeString = "Actual Start Time:  "+getDisplayTimeFromTimeStamp(viewObject.actualStartTime)+"<br>"
    
    //if its the first time the page has been loaded and short url is not available
    //then provided vanity URL for Facebook and Twitter links
@@ -288,6 +288,27 @@ function showConnectivityError() {
 
 function showErrorSection() {
   $("#showErrors").show();
+}
+
+function getDisplayTimeFromTimeStamp(timeStamp){
+    console.log("getDisplayTimeFromTimeStamp with "+timeStamp)
+    var displayTime = "";
+    var year = timeStamp.substr(0, 4);
+    var monthNumeric = timeStamp.substr(5, 2);
+    var monthInt = 0;
+
+    if (monthNumeric.indexOf("0") === 0) {
+      monthInt = monthNumeric.substr(1, 1);
+    } else {
+      monthInt = monthNumeric;
+    }
+    var day = timeStamp.substr(8, 2);
+    var time = timeStamp.substr(11, 8);
+
+    var monthString = MONTH_NAMES[monthInt - 1];
+
+    displayTime = monthString + " " + day + ", " + year + " - " + time + " UTC";
+    return displayTime;
 }
 
 function replaceHardCodedURLs(rawString){
