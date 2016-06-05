@@ -69,7 +69,7 @@ a {
 #searchLocation {
   float: left;
   height: 30px;
-  width: 400px;
+  width: 600px;
   border: 1px solid black;
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;
@@ -264,7 +264,6 @@ a {
 
 .mapOverlayWindow{
    border-radius:4px;
-   box-shadow:8px 8px 16px #222;
    background-image: url("jt_background.png");
    max-width:220px;
    max-height:280px;
