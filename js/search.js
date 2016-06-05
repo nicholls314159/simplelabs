@@ -960,8 +960,8 @@ function generatePopupBoxHTML(videoResult){
   if (!videoResult) {
     channel = channelID;
   }
-  var popupTitle = ""
-  if(popupTitle){
+  var popupTitle = "";
+  if(videoResult.title){
     popupTitle = videoResult.title.substring(0,50)
   }
 
