@@ -45,11 +45,11 @@ var geocoder;
 //queryFromClickSearchNotURL is a flag which indicates if the search originated from a clicked search button or from loading the parameters from the URL
 var queryFromClickSearchNotURL = false;
 
-/** INITIAL_ZOOM_LEVEL is the zoom level that is set as default when our map is created
- *  @const {string}
- */
+//INITIAL_ZOOM_LEVEL is the zoom level that is set as default when our map is created
 var INITIAL_ZOOM_LEVEL = 5;
 var MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+//API access key for this project
 var API_ACCESS_KEY = 'AIzaSyDJTIlvEzU-B2152hKEyUzBoAJmflJzcjU';
 
 // Pre-defined regular expressions to filter results by
@@ -65,7 +65,7 @@ var startURL = '';
 //URL generated from Google Shortener service, for use in tweets and FB posts
 var shortURL = '';
 
-/** Initialize portions of page on page load and create object with all News channels in it
+/** Initialize filters, reset the results section, initialize Data client
  */
 $(document).ready(function() {
   hideSearchFilters();
@@ -74,6 +74,8 @@ $(document).ready(function() {
   $.getScript('https://apis.google.com/js/client.js?onload=handleClientLoad');
 });
 
+/**  Initialize YouTube data client, initialize maps, set API access key, initialized url shortener
+ */
 function handleClientLoad() {
   gapi.client.load('youtube', 'v3', function() {
     $.getScript('https://maps.googleapis.com/maps/api/js?sensor=false&callback=handleMapsLoad&key=' + API_ACCESS_KEY);
@@ -82,11 +84,12 @@ function handleClientLoad() {
   });
 }
 
+/**  Initialize maps geo coder and load parameters from the URL, if present; include mapOverlay functions
+ */ 
 function handleMapsLoad() {
   geocoder = new google.maps.Geocoder();
   $('#search-button').attr('disabled', false);
   loadParamsFromURL();
-  
   //include map overlay code
   $.getScript("../js/mapOverlay.js");
 }
@@ -101,27 +104,22 @@ function loadSocialLinks(){
    //if its the first time the page has been loaded and short url is not available
    //then provided vanity URL for Facebook and Twitter links
    startURL = window.location.href;
-   if((startURL.includes('?authuser=0')) && (shortURL.length < 2))
-   {
-        shortURL = "http://www.geosearchtool.com"
+   if((startURL.includes('?authuser=0')) && (shortURL.length < 2)){
+        shortURL = "http://www.geosearchtool.com";
    }
 
    var social_div = '';
    social_div = $('<div>');
    social_div.addClass('socialCell');  
 
-  var socialTableDefinition = $('<table>');
-  var socialRow = $('<tr>');
-   
+   var socialTableDefinition = $('<table>');
+   var socialRow = $('<tr>');
    var socialCell = $('<td>');
    var facebookFunction = '<div id="fb-root"></div><script>(function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return; js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6"; fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>'
    var facebookLink = '<div class="fb-like" data-href="'+shortURL+'" data-layout="button" data-action="like" data-show-faces="true" data-share="true"></div>'
    var twitterLink = '<a href="https://twitter.com/share" class="twitter-share-button" data-url="'+shortURL+'" data-text="Check out this video!!!" data-hashtags="geosearchtool">Tweet</a>'
    var twitterFunction = "<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>"
-    
-  //console.log("facebookLink is "+facebookLink);
-  //console.log("twitterLink is "+twitterLink);
-  
+
    socialCell.append(facebookFunction);
    socialCell.append(facebookLink);
    socialCell.append('&nbsp;&nbsp;&nbsp;');
@@ -140,7 +138,7 @@ function loadSocialLinks(){
  *  passes the request to processYouTubeRequest()
  */
 function searchYouTube() {
-  console.log("searchYouTube() 1")
+  
   //Reset errors section, final results array and results section
   $(".showErrors").remove();
   resetResultsSection();
@@ -150,7 +148,6 @@ function searchYouTube() {
   //remove any old results
   $("div").remove(".tableOfVideoContentResults");
   
-
   //if this is a location search, route to getLocationSearchResults to conduct
   //geo-encoding and complete search
   if (inputObject.hasSearchLocation) {
@@ -163,10 +160,11 @@ function searchYouTube() {
       var channelArray = inputObject.inputChannelList.split(",")
       for (var i = 0; i < channelArray.length; i++) {
         inputObject.currentChannel = channelArray[i].trim();
-
+/*
         //for searches on just live videos only
         if (inputObject.inputLiveOnly) {
           //console.log("Searching:  No Location, Specific Channel(s), Live Only")
+*/
           getPublishBeforeAndAfterTime();
           try {
             var request = gapi.client.youtube.search.list({
@@ -179,14 +177,15 @@ function searchYouTube() {
               videoLiscense: inputObject.videoLiscense,
               videoEmbeddable: inputObject.videoEmbeddable,
               channelId: inputObject.currentChannel,
-              publishedAfter: inputObject.publishAfterTime,
-              publishedBefore: inputObject.publishBeforeTime,
+              //publishedAfter: inputObject.publishAfterTime,
+              //publishedBefore: inputObject.publishBeforeTime,
               key: API_ACCESS_KEY
             });
           } catch (err) {
             //cannot search via the YouTube API, update end-user with error message
             showConnectivityError();
           }
+/*
         } else {
           //console.log("Searching:  No Location, Specific Channel(s), Live and VOD")
           getPublishBeforeAndAfterTime();
@@ -210,14 +209,17 @@ function searchYouTube() {
             showConnectivityError();
           }
         }
+*/        
         //Call processYouTubeRequest to process the request object
         processYouTubeRequest(request);
       }
     } else {
+/*
       //for searches on just live videos only
       if (inputObject.inputLiveOnly) {
         //console.log("Searching:  No Location, No Specific Channel, Live Only")
         getPublishBeforeAndAfterTime();
+*/
         try {
           var request = gapi.client.youtube.search.list({
             q: inputObject.inputQuery,
@@ -228,14 +230,15 @@ function searchYouTube() {
             eventType: 'live',
             videoLiscense: inputObject.videoLiscense,
             videoEmbeddable: inputObject.videoEmbeddable,
-            publishedAfter: inputObject.publishAfterTime,
-            publishedBefore: inputObject.publishBeforeTime,
+            //publishedAfter: inputObject.publishAfterTime,
+            //publishedBefore: inputObject.publishBeforeTime,
             key: API_ACCESS_KEY
           });
         } catch (err) {
           //cannot search via the YouTube API, update end-user with error message
           showConnectivityError();
         }
+/*
       } else {
         console.log("Searching:  No Location, No Specific Channel, Live and VOD")
         printInputObject();
@@ -260,12 +263,14 @@ function searchYouTube() {
         }
       }
       //Call processYouTubeRequest to process the request object
+*/
       processYouTubeRequest(request);
     }
   }
 }
 
-//need to clean out hard coded spaces from url params e.g. "new%20york" should be "new york"
+/** This function removes hard coded spaces from url params e.g. "new%20york" is replaced by "new york"
+ */ 
 function cleanStringOfHTMLEncodedSpaces(raw_string){
   if (raw_string){
       return raw_string.split("%20").join(" ");
@@ -274,8 +279,7 @@ function cleanStringOfHTMLEncodedSpaces(raw_string){
   }
 }
 
-/**  This function loads parameters from a URL into the input object
- */
+// This function loads parameters from a URL into the input object
 function loadParamsFromURL() {
   startURL = window.location.href;
 
@@ -303,14 +307,14 @@ function loadParamsFromURL() {
     inputObject.inputLat = cleanStringOfHTMLEncodedSpaces(urlParams['la']);
     inputObject.inputLong = cleanStringOfHTMLEncodedSpaces(urlParams['lo']);
     inputObject.inputLocationRadius = cleanStringOfHTMLEncodedSpaces(urlParams['lr']);
-    inputObject.inputTimeWindow = cleanStringOfHTMLEncodedSpaces(urlParams['tw']);
-    inputObject.inputStartDate = cleanStringOfHTMLEncodedSpaces(urlParams['sd']);
-    inputObject.inputEndDate = cleanStringOfHTMLEncodedSpaces(urlParams['ed']);
+    //inputObject.inputTimeWindow = cleanStringOfHTMLEncodedSpaces(urlParams['tw']);
+    //inputObject.inputStartDate = cleanStringOfHTMLEncodedSpaces(urlParams['sd']);
+    //inputObject.inputEndDate = cleanStringOfHTMLEncodedSpaces(urlParams['ed']);
     inputObject.inputChannelList = cleanStringOfHTMLEncodedSpaces(urlParams['cl']);
     inputObject.inputSearchLocation = cleanStringOfHTMLEncodedSpaces(urlParams['sl']);
-    inputObject.inputNewsChannelFilter = cleanStringOfHTMLEncodedSpaces(urlParams['ncf']);
+    //inputObject.inputNewsChannelFilter = cleanStringOfHTMLEncodedSpaces(urlParams['ncf']);
     inputObject.inputZoomLevel = cleanStringOfHTMLEncodedSpaces(urlParams['zl']);
-    inputObject.publishBeforeTime = cleanStringOfHTMLEncodedSpaces(urlParams['pbt']);
+    //inputObject.publishBeforeTime = cleanStringOfHTMLEncodedSpaces(urlParams['pbt']);
 
     inputObject.inputEmbedsOnly = urlParams['eo'];
     if (urlParams["eo"] === "true") {
@@ -318,12 +322,14 @@ function loadParamsFromURL() {
     } else {
       inputObject.inputEmbedsOnly = false;
     }
+    /*
     inputObject.inputLiveOnly = urlParams["loo"];
     if (urlParams["loo"] === "true") {
       inputObject.inputLiveOnly = true;
     } else {
       inputObject.inputLiveOnly = false;
     }
+    */
     inputObject.inputCreativeCommonsOnly = urlParams["cco"];
     if (urlParams["cco"] === "true") {
       inputObject.inputCreativeCommonsOnly = true;
@@ -352,6 +358,7 @@ function loadParamsFromURL() {
       $('#query').val(inputObject.inputQuery);
       showSearchFilters();
     }
+    /*
     if(inputObject.inputStartDate){
       $('#startDate').val(inputObject.inputStartDate);
       $('#customRangeSection_1').show();
@@ -384,6 +391,7 @@ function loadParamsFromURL() {
       $('#customRangeSection_12').show();
 
     }
+    */
     if(inputObject.inputLocationRadius){
       $('#locRadius').val(inputObject.inputLocationRadius);
     }
@@ -406,16 +414,16 @@ function clickedSearchButton() {
   inputObject.inputLat = $('#lattitude').val();
   inputObject.inputLong = $('#longitude').val();
   inputObject.inputLocationRadius = $('#locRadius').val();
-  inputObject.inputTimeWindow = $('#timeWindow').val();
-  inputObject.inputStartDate = $('#startDate').val();
-  inputObject.inputEndDate = $('#endDate').val();
+  //inputObject.inputTimeWindow = $('#timeWindow').val();
+  //inputObject.inputStartDate = $('#startDate').val();
+  //inputObject.inputEndDate = $('#endDate').val();
   inputObject.inputChannelList = $('#channelList').val();
   inputObject.inputSearchLocation = $('#searchLocation').val();
   inputObject.inputEmbedsOnly = 'false';
-  inputObject.inputLiveOnly = 'false';
+  //inputObject.inputLiveOnly = 'false';
   inputObject.inputCreativeCommonsOnly = 'false';
   inputObject.inputEmbedsOnly = $('#embedOnly').is(':checked');
-  inputObject.inputLiveOnly = $('#liveOnly').is(':checked');
+  //inputObject.inputLiveOnly = $('#liveOnly').is(':checked');
   inputObject.inputCreativeCommonsOnly = $('#creativeCommonsOnly').is(':checked');
   inputObject.inputZoomLevel = INITIAL_ZOOM_LEVEL;
 
@@ -435,12 +443,14 @@ function clickedSearchButton() {
  */
 function completeInputObject() {
   //define booleans for types of filters
+  /*
   inputObject.hasTimeWindow = false;
   inputObject.hasStartEndDate = false;
+  */
   inputObject.hasChannelList = false;
   inputObject.hasSearchLocation = false;
-  inputObject.newsChannelsOnly = false;
-  inputObject.removeNewsChannel = false;
+  //inputObject.newsChannelsOnly = false;
+  //inputObject.removeNewsChannel = false;
 
   if (inputObject.inputSearchLocation && inputObject.inputLocationRadius) {
     inputObject.hasSearchLocation = true;
@@ -453,11 +463,12 @@ function completeInputObject() {
   var validationErrorsArr = [];
 
   //need to enter start and end date for custom range
+  /*
   if (inputObject.inputTimeWindow === 'custom_range' && (!inputObject.inputStartDate || !inputObject.inputEndDate)) {
     validationErrorsArr.push("You must enter a start date and end date for a custom range");
     validationErrors = true;
   }
-
+  */
   //define regular expressions for validating input values
   var dateRegEx = new RegExp("[0-1][0-9][-][0-3][0-9][-][2][0][0-1][0-9]");
   var numberRegEx = new RegExp("^[0-9]+")
@@ -467,19 +478,20 @@ function completeInputObject() {
     validationErrorsArr.push("You must have both a location and radius for a location search");
     validationErrors = true;
   }
-
+  /*
   if (inputObject.inputTimeWindow === 'custom_range' && inputObject.inputStartDate && !dateRegEx.test(inputObject.inputStartDate)) {
     //start date must be mm-dd-yyyy
     validationErrorsArr.push("Start Date must be format of mm-dd-yyyy");
     validationErrors = true;
   }
-
+  */
+  /*
   if (inputObject.inputTimeWindow === 'custom_range' && inputObject.inputEndDate && !dateRegEx.test(inputObject.inputEndDate)) {
     //start date must be mm-dd-yyyy
     validationErrorsArr.push("End Date must be format of mm-dd-yyyy");
     validationErrors = true;
   }
-
+  */
   //if errors exist, display them on interface and terminate execution there
   if (validationErrors) {
     var div = $('<div>');
@@ -497,13 +509,14 @@ function completeInputObject() {
     resetResultsSection();
     $('#searchResultCount').remove();
   } else {
-
+/*
     if (inputObject.inputTimeWindow && inputObject.inputTimeWindow !== 'custom_range') {
       inputObject.hasTimeWindow = true;
     }
     if (inputObject.inputTimeWindow && inputObject.inputTimeWindow === 'custom_range' && inputObject.inputStartDate && inputObject.inputEndDate) {
       inputObject.hasStartEndDate = true;
     }
+    */
     if (inputObject.inputChannelList && inputObject.inputChannelList) {
       inputObject.hasChannelList = true;
     }
@@ -530,29 +543,32 @@ function generateURLwithQueryParameters() {
   parameterString = '';
 
   //if a custom range was selected in the search include start and end dates in the URL
+  /*
   if (inputObject.inputTimeWindow === "custom_range") {
     parameterString =
       "?q=" + inputObject.inputQuery + "&la=" + inputObject.inputLat +
       "&lo=" + inputObject.inputLong + "&lr=" + inputObject.inputLocationRadius +
-      "&tw=" + inputObject.inputTimeWindow + "&sd=" + inputObject.inputStartDate +
-      "&ed=" + inputObject.inputEndDate + "&cl=" + inputObject.inputChannelList +
+     // "&tw=" + inputObject.inputTimeWindow + "&sd=" + inputObject.inputStartDate +
+     // "&ed=" + inputObject.inputEndDate + "&cl=" + inputObject.inputChannelList +
       "&sl=" + inputObject.inputSearchLocation + "&eo=" + inputObject.inputEmbedsOnly +
       "&loo=" + inputObject.inputLiveOnly + "&cco=" + inputObject.inputCreativeCommonsOnly +
       "&zl=" + inputObject.inputZoomLevel + "&pbt=" + inputObject.publishBeforeTime;
   } else {
+  */
     parameterString =
       "?q=" + inputObject.inputQuery + "&la=" + inputObject.inputLat +
       "&lo=" + inputObject.inputLong + "&lr=" + inputObject.inputLocationRadius +
-      "&tw=" + inputObject.inputTimeWindow +
+      //"&tw=" + inputObject.inputTimeWindow +
       "&cl=" + inputObject.inputChannelList +
       "&sl=" + inputObject.inputSearchLocation + "&eo=" + inputObject.inputEmbedsOnly +
-      "&loo=" + inputObject.inputLiveOnly + "&cco=" + inputObject.inputCreativeCommonsOnly +
-      "&zl=" + inputObject.inputZoomLevel + "&pbt=" + inputObject.publishBeforeTime;
-  }
+      //"&loo=" + inputObject.inputLiveOnly + 
+      "&cco=" + inputObject.inputCreativeCommonsOnly +
+      "&zl=" + inputObject.inputZoomLevel;
+      //"&pbt=" + inputObject.publishBeforeTime;
+  //}
 
   //Retrieve the domain from the existing URL, to construct the new URL
   var currentURL = String(window.location);
-
   var newURLArray = [];
   var newURL = '';
 
@@ -569,7 +585,6 @@ function generateURLwithQueryParameters() {
       newURL = newURLArray[0] + parameterString;
     }
   }
-
   return newURL;
 }
 
@@ -632,7 +647,6 @@ function processYouTubeRequest(request) {
 
         videoResult.description = entryArr[i].snippet.description;
         videoResult.displayTimeStamp = getDisplayTimeFromTimeStamp(entryArr[i].snippet.publishedAt)
-        
         videoResult.publishTimeStamp = entryArr[i].snippet.publishedAt;
 
         //add result to results
@@ -672,9 +686,7 @@ function processYouTubeRequest(request) {
                 }
               }
             }
-            console.log("test if liveStreamingDetails is available ")
             if(this.liveStreamingDetails && this.liveStreamingDetails.concurrentViewers){
-              console.log("liveStreamingDetails is available ")
               for (var i = 0; i < resultsArr.length; i++) {
                 if (resultsArr[i].videoId === videoRequestVideoId) {
                   resultsArr[i].concurrentViewers = this.liveStreamingDetails.concurrentViewers;
@@ -684,7 +696,6 @@ function processYouTubeRequest(request) {
                 }
               }
             }else{
-              console.log("liveStreamingDetails is NOT available ");
               for (var i = 0; i < resultsArr.length; i++) {
                 if (resultsArr[i].videoId === videoRequestVideoId) {
                   resultsArr[i].concurrentViewers = 'NA';
@@ -692,8 +703,7 @@ function processYouTubeRequest(request) {
                   resultsArr[i].actualStartTime = 'NA'
                 }
               }
-            }
-            //console.log("concurrentViewers for this stream is...." + resultsArr[i].concurrentViewers)
+            }            //console.log("concurrentViewers for this stream is...." + resultsArr[i].concurrentViewers)
           });
         }
 
@@ -712,12 +722,8 @@ function processYouTubeRequest(request) {
           }
         }
 
-        //get Live Stream Details from VIDEO snippet
-        //getLiveStreamDetails();
-
         if (finalResults.length === 0) {
-          //No Search Results to Display
-          //remove results section as there is nothing to display
+          //Remove results section as there is nothing to display
           resetResultsSection();
           $("div").remove(".tableOfVideoContentResults");
         } else {
@@ -745,15 +751,12 @@ function processYouTubeRequest(request) {
       'longUrl': startURL
       }
     });
-    requestShortener.execute(function(response2) 
+    requestShortener.execute(function(responseShortener) 
     {
-       if(response2.id != null)
+       if(responseShortener.id != null)
        {
-          shortURL = response2.id;
-          console.log('22 shortURL is'+shortURL);
-        }else{
-           console.log("error: creating short url");
-        }
+          shortURL = responseShortener.id;
+       }
     });
   });
 }
@@ -762,7 +765,6 @@ function processYouTubeRequest(request) {
 /** This function generates the UI of the results section after the search has been processed
  */
 function generateResultList() {
-  console.log('generateResultList() start')
   var div = $('<div>');
   div.addClass('video-content');
 
@@ -786,15 +788,14 @@ function generateResultList() {
       channel = channelID;
     }
 
-  var schedStartTime = 'NA';
-  var actualStartTime = 'NA';
-  if(finalResults2[i].scheduledStartTime){
-    schedStartTime = getDisplayTimeFromTimeStamp(finalResults2[i].scheduledStartTime)
-  }
-  if(finalResults2[i].actualStartTime){
-    actualStartTime = getDisplayTimeFromTimeStamp(finalResults2[i].actualStartTime)
-  }
-
+    var schedStartTime = 'NA';
+    var actualStartTime = 'NA';
+    if(finalResults2[i].scheduledStartTime){
+      schedStartTime = getDisplayTimeFromTimeStamp(finalResults2[i].scheduledStartTime)
+    }
+   if(finalResults2[i].actualStartTime){
+     actualStartTime = getDisplayTimeFromTimeStamp(finalResults2[i].actualStartTime)
+   }
 
     //each result, will be listed in a row with an image, meta-data and rank sections
     var resultRow = $('<tr>');
@@ -806,7 +807,6 @@ function generateResultList() {
     var imageString = "<img src='" + finalResults2[i].thumbNailURL + "' height='100' width='100'/>";
     imageCell.append(imageString);
 
-    
     //Generate new URL string
     var videoURLString = "/view.html?v="+finalResults2[i].videoID;
     var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
@@ -816,24 +816,19 @@ function generateResultList() {
     if(title && title.length > 50){
       title = finalResults2[i].title.substring(0,50) + "..."
     }
-      
 
     var videoString = "<attr title='Description: " + finalResults2[i].description + "'><a href='" + videoURLString + "'>" + title + "</a></attr><br>";
-    //var uploadDate = "Uploaded on: " + finalResults2[i].displayTimeStamp + "<br>";
     //var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + channelID + "' target='_blank'>" + channel + "</a></attr><br>";
-    //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + finalResults2[i].thumbNailURL + "' target='_blank'>reverse image search</a></attr><br>";
     var concurrentUsersString = "Concurrent Viewers:  " + finalResults2[i].concurrentViewers + "<br>";
     var scheduledStartTimeString = "Scheduled Start Time:  " + schedStartTime + "<br>";
     var actualStartTimeString = "Actual Start Time:  " + actualStartTime + "<br>";
     
-    
     metaDataCell.append(videoString);
-    //metaDataCell.append(uploadDate);
     //metaDataCell.append(channelString);
-    //metaDataCell.append(reverseImageString);
     metaDataCell.append(concurrentUsersString);
     metaDataCell.append(scheduledStartTimeString);
     metaDataCell.append(actualStartTimeString);
+
     //Put all the sections of the row together
     resultRow.append(imageCell);
     resultRow.append(metaDataCell);
@@ -849,7 +844,6 @@ function generateResultList() {
   $('#video-container').append(div);
   
   loadSocialLinks();
-  console.log('generateResultList() end')
 }
 
 
@@ -889,8 +883,6 @@ function showErrorSection() {
   $("#showErrors").show();
 }
 
-
-
 /**  Initializes the Map Interface, centers on input longitude and latitude, and plots all the search results with markers
  *  @param inputLat {string} - input latitude
  *  @param inputLong {string} - input longitude
@@ -906,12 +898,8 @@ function initializeMap(inputLat, inputLong) {
 
   for (var i = 0; i < finalResults2.length; i++) {
     var imageNumber = i + 1
-    
-    //use canned images from image folder for markers
-    var image = { url: 'images/redMarker_' + imageNumber + '.png',size: new google.maps.Size(75, 62), scaledSize:new google.maps.Size(75, 62),origin: new google.maps.Point(0, 0) };
 
     var latLong = new google.maps.LatLng(finalResults2[i].lat, finalResults2[i].long);
-
 
     //create the marker on the map object
     var searchResultMarker = new google.maps.Marker({
@@ -927,11 +915,13 @@ function initializeMap(inputLat, inputLong) {
     });
 
     contentString = generatePopupBoxHTML(finalResults2[i]);
-    console.log('contentString is'+contentString);
     generateMapOverlayWindowAndMarkerListener(searchResultMarker, contentString);
   }
 }
 
+/**  This function creates a Map Overlay object, sets its content; then adds listener to the submitted map
+ *   marker and within the listener opens the Map Overlay object.
+ */ 
 function generateMapOverlayWindowAndMarkerListener(searchResultMarker, contentString){
     var infoWindow = new (GenCustomWindow())();
     infoWindow.setContent(contentString);
@@ -940,14 +930,14 @@ function generateMapOverlayWindowAndMarkerListener(searchResultMarker, contentSt
     });
 }
 
+/** This function creates the HTML content of the popup which appears when a map marker icon is clicked.
+ */ 
 function generatePopupBoxHTML(videoResult){
-  
-  console.log('generatePopupBoxHTML() start')
 
   var channel = videoResult.channel;
   var channelID = videoResult.channelID;
   var videoURLString = "/view.html?v="+videoResult.videoID;
-  var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString
+  var videoURLStringLong = "http://www.geosearchtool.com"+videoURLString;
   var schedStartTime = 'NA';
   var actualStartTime = 'NA';
   if(videoResult.scheduledStartTime){
@@ -956,13 +946,13 @@ function generatePopupBoxHTML(videoResult){
   if(videoResult.actualStartTime){
     actualStartTime = getDisplayTimeFromTimeStamp(videoResult.actualStartTime)
   }
-  console.log("schedStartTime, actualStartTime is" +schedStartTime+ ", "+ actualStartTime)  
-    
+
   if (!videoResult) {
     channel = channelID;
   }
   var popupTitle = "";
   if(videoResult.title){
+    //Truncate title to fit popup
     popupTitle = videoResult.title.substring(0,25) + "..."
   }
 
@@ -986,11 +976,13 @@ function generatePopupBoxHTML(videoResult){
   "</td>"+
   "</tr>"+
   "</table>"
-  
-  console.log('generatePopupBoxHTML() end')
+
   return PopupBoxHTML;
 }
 
+/**  This function takes the time format from the response object and converts into a format
+ *  which is easier to read.
+ */ 
 function getDisplayTimeFromTimeStamp(timeStamp){
     console.log("getDisplayTimeFromTimeStamp with "+timeStamp)
     var displayTime = "";
@@ -1005,7 +997,6 @@ function getDisplayTimeFromTimeStamp(timeStamp){
     }
     var day = timeStamp.substr(8, 2);
     var time = timeStamp.substr(11, 8);
-
     var monthString = MONTH_NAMES[monthInt - 1];
 
     displayTime = monthString + " " + day + ", " + year + " - " + time + " UTC";
@@ -1013,7 +1004,7 @@ function getDisplayTimeFromTimeStamp(timeStamp){
 }
 
 /**  Show the Custom Date Range Sections
- */
+
 function displayCustomRangeSection() {
   var optionSelected = $('#timeWindow').find('option:selected').attr('value');
 
@@ -1045,6 +1036,7 @@ function displayCustomRangeSection() {
     $('#customRangeSection_12').hide();
   }
 }
+*/
 
 /**  This function uses Google Maps Geo Encoder, to convert search location to  Latitude and Longitude
  *   and then generate a search request object.   Request object is then passed to processYouTubeRequest for processing.
@@ -1066,10 +1058,11 @@ function getLocationSearchResults() {
 
         for (var i = 0; i < channelArray.length; i++) {
           inputObject.currentChannel = channelArray[i].trim();
-
+/*
           if (inputObject.inputLiveOnly) {
             //console.log("Searching:  Have Location, Specific Channel(s), Live Only")
             getPublishBeforeAndAfterTime();
+*/
             try {
               var request = gapi.client.youtube.search.list({
                 q: inputObject.inputQuery,
@@ -1083,14 +1076,15 @@ function getLocationSearchResults() {
                 channelId: inputObject.currentChannel,
                 location: inputObject.inputLat + "," + inputObject.inputLong,
                 locationRadius: inputObject.inputLocationRadius,
-                publishedAfter: inputObject.publishAfterTime,
-                publishedBefore: inputObject.publishBeforeTime,
+                //publishedAfter: inputObject.publishAfterTime,
+                //publishedBefore: inputObject.publishBeforeTime,
                 key: API_ACCESS_KEY,
               });
             } catch (err) {
               //cannot search via the YouTube API
               showConnectivityError();
             }
+/*
           } else {
             //console.log("Searching:  Have Location, Specific Channel(s), Live and VOD")
             getPublishBeforeAndAfterTime()
@@ -1107,8 +1101,8 @@ function getLocationSearchResults() {
                 channelId: inputObject.currentChannel,
                 location: inputObject.inputLat + "," + inputObject.inputLong,
                 locationRadius: inputObject.inputLocationRadius,
-                publishedAfter: inputObject.publishAfterTime,
-                publishedBefore: inputObject.publishBeforeTime,
+                //publishedAfter: inputObject.publishAfterTime,
+                //publishedBefore: inputObject.publishBeforeTime,
                 key: API_ACCESS_KEY,
               });
             } catch (err) {
@@ -1116,14 +1110,17 @@ function getLocationSearchResults() {
               showConnectivityError();
             }
           }
+  */        
           processYouTubeRequest(request);
         }
       //if the search is geo-based and only for a single channel
       } else {
+/*        
         if (inputObject.inputLiveOnly) {
           //console.log("Searching:  Have Location, No Specific Channel, Live Only")
           printInputObject();
           getPublishBeforeAndAfterTime();
+*/
           try {
             var request = gapi.client.youtube.search.list({
               q: inputObject.inputQuery,
@@ -1136,14 +1133,15 @@ function getLocationSearchResults() {
               videoEmbeddable: inputObject.videoEmbeddable,
               location: inputObject.inputLat + "," + inputObject.inputLong,
               locationRadius: inputObject.inputLocationRadius,
-              publishedAfter: inputObject.publishAfterTime,
-              publishedBefore: inputObject.publishBeforeTime,
+              //publishedAfter: inputObject.publishAfterTime,
+              //publishedBefore: inputObject.publishBeforeTime,
               key: API_ACCESS_KEY
             });
           } catch (err) {
             //cannot search via the YouTube API
             showConnectivityError();
           }
+/*
         } else {
           console.log("Searching:  Have Location, No Specific Channel, Live and VOD")
           getPublishBeforeAndAfterTime();
@@ -1159,8 +1157,8 @@ function getLocationSearchResults() {
                eventType: 'live',
               videoLiscense: inputObject.videoLiscense,
               videoEmbeddable: inputObject.videoEmbeddable,
-              publishedAfter: inputObject.publishAfterTime,
-              publishedBefore: inputObject.publishBeforeTime,
+              //publishedAfter: inputObject.publishAfterTime,
+              //publishedBefore: inputObject.publishBeforeTime,
               key: API_ACCESS_KEY
             });
           } catch (err) {
@@ -1168,14 +1166,13 @@ function getLocationSearchResults() {
             showConnectivityError();
           }
         }
+        */
         processYouTubeRequest(request);
       }
     } else {
       showConnectivityError();
     }
-    console.log('getLocationSearchResults() end');
   });
-  
 }
 
 /**  This function is used to filter results a News publisher is probably not interested in (e.g. car ads)
@@ -1219,7 +1216,7 @@ function formatAsTwoDigitNumber(numb) {
 }
 
 /**  This function calculates the before and after timestamps needed for the API search and stores them in global variables
- */
+
 function getPublishBeforeAndAfterTime() {
   //If the input object has a custom range, then format the MM-DD-YYYY date into a UTC format
   if (inputObject.inputTimeWindow && inputObject.inputTimeWindow === 'custom_range' && inputObject.inputStartDate.length !== 0 && inputObject.inputEndDate.length !== 0) {
@@ -1274,7 +1271,8 @@ function getPublishBeforeAndAfterTime() {
     }
   }
 }
-
+ */
+ 
 /**  This function displays a connectivity error to the end user in the event
  *  that we lose connectivity to one or more of the Google APIs
  */
