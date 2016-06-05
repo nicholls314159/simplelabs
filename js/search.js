@@ -70,7 +70,7 @@ var shortURL = '';
 $(document).ready(function() {
   hideSearchFilters();
   resetResultsSection();
-  displayCustomRangeSection();
+  //displayCustomRangeSection();
   $.getScript('https://apis.google.com/js/client.js?onload=handleClientLoad');
 });
 
