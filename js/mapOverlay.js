@@ -1,11 +1,21 @@
 /**
- * Create a custom overlay for our window marker display, extending google.maps.OverlayView.
- * This is somewhat complicated by needing to async load the google.maps api first - thus, we
- * wrap CustomWindow into a closure, and when instantiating CustomWindow, we first execute the closure
- * (to create our CustomWindow function, now properly extending the newly loaded google.maps.OverlayView),
- * and then instantiate said function.
- * @type {Function}
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
  */
+ 
+/** This function instantiates a new OverlayView object and then creates the appropriate "onAdd", "draw", "open", "onRemove"
+ * and "close" functions.   Also creates a panToView function to re-center the map to include the map overlay within the map.
+ */ 
 function GenCustomWindow(){
     var CustomWindow = function(){
         this.container = document.createElement('div');
@@ -19,10 +29,9 @@ function GenCustomWindow(){
      * @type {google.maps.OverlayView}
      */
     CustomWindow.prototype = new google.maps.OverlayView();
+    
     /**
-     * Called when this overlay is set to a map via this.setMap. Get the appropriate map pane
-     * to add the window to, append the container, bind to close element.
-     * @see CustomWindow.open
+     * Called when this overlay is set to a map via this.setMap. 
      */
     CustomWindow.prototype.onAdd = function(){
         this.layer = this.getPanes().floatPane;
@@ -34,27 +43,25 @@ function GenCustomWindow(){
         // Ensure newly opened window is fully in view
         setTimeout(this.panToView.bind(this), 200);
     };
+    
     /**
-     * Called after onAdd, and every time the map is moved, zoomed, or anything else that
-     * would effect positions, to redraw this overlay.
+     * Called after onAdd, and every time the map is moved, zoomed, ...
      */
     CustomWindow.prototype.draw = function(){
         var markerIcon = this.marker.getIcon(),
             cHeight = this.container.offsetHeight + markerIcon.scaledSize.height + 10,
             cWidth = (this.container.offsetWidth / 2);
-        console.log("this.marker.getPosition() " + this.marker.getPosition());
         this.position = this.getProjection().fromLatLngToDivPixel(this.marker.getPosition());
         this.container.style.top = this.position.y - cHeight+'px';
         this.container.style.left = this.position.x - cWidth+'px';
-        console.log("CustomWindow.prototype.draw -- this.position.y " + this.position.y);
-        console.log("CustomWindow.prototype.draw -- this.position.x " + this.position.x);
+        //console.log("CustomWindow.prototype.draw -- this.position.y " + this.position.y);
+        //console.log("CustomWindow.prototype.draw -- this.position.x " + this.position.x);
     };
     /**
-     * If the custom window is not already entirely within the map view, pan the map the minimum amount
-     * necessary to bring the custom info window fully into view.
+     * If the custom window is not entirely within the map view, pan the map
      */
     CustomWindow.prototype.panToView = function(){
-        console.log("CustomWindow.prototype.panToView - latlng" + this.marker.getPosition())
+
         var position = this.position,
             latlng = this.marker.getPosition(),
             
@@ -68,19 +75,17 @@ function GenCustomWindow(){
                 var degs = {},
                     div = map.getDiv(),
                     span = bounds.toSpan();
-
                 degs.x = span.lng() / div.offsetWidth;
                 degs.y = span.lat() / div.offsetHeight;
                 return degs;
             })(),
-            infoBounds = (function(){
-                var infoBounds = {};
-
-                infoBounds.north = latlng.lat() + cHeight * degPerPixel.y;
-                infoBounds.south = latlng.lat();
-                infoBounds.west = latlng.lng() - cWidth * degPerPixel.x;
-                infoBounds.east = latlng.lng() + cWidth * degPerPixel.x;
-                return infoBounds;
+            overlayBorder = (function(){
+                var overlayBorder = {};
+                overlayBorder.north = latlng.lat() + cHeight * degPerPixel.y;
+                overlayBorder.south = latlng.lat();
+                overlayBorder.west = latlng.lng() - cWidth * degPerPixel.x;
+                overlayBorder.east = latlng.lng() + cWidth * degPerPixel.x;
+                return overlayBorder;
             })(),
             newCenter = (function(){
                 var ne = bounds.getNorthEast(),
@@ -91,19 +96,16 @@ function GenCustomWindow(){
                     west = sw.lng(),
                     x = center.lng(),
                     y = center.lat(),
-                    shiftLng = ((infoBounds.west < west) ? west - infoBounds.west : 0) +
-                        ((infoBounds.east > east) ? east - infoBounds.east : 0),
-                    shiftLat = ((infoBounds.north > north) ? north - infoBounds.north : 0) +
-                        ((infoBounds.south < south) ? south - infoBounds.south : 0);
+                    shiftLng = ((overlayBorder.west < west) ? west - overlayBorder.west : 0) +
+                        ((overlayBorder.east > east) ? east - overlayBorder.east : 0),
+                    shiftLat = ((overlayBorder.north > north) ? north - overlayBorder.north : 0) +
+                        ((overlayBorder.south < south) ? south - overlayBorder.south : 0);
 
                 return (shiftLng || shiftLat) ? new google.maps.LatLng(y - shiftLat, x - shiftLng) : void 0;
             })();
 
         if (newCenter){
             map.panTo(newCenter);
-            console.log("yes newCenter is" +newCenter)
-        }else{
-            console.log("no newCenter")
         }
     };
     /**
@@ -127,8 +129,6 @@ function GenCustomWindow(){
      */
     CustomWindow.prototype.open = function(map, marker){
         this.marker = marker;
-        console.log("CustomWindow.prototype.open -- marker.position "+ marker.position)
-
         this.setMap(map);
     };
     /**
