@@ -1,6 +1,4 @@
 /**
- * Copyright 2014 Google Inc. All rights reserved.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,11 +11,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- *  @fileoverview  This code is an example implementation of how to implement YouTube geo-search
- *  and search filters via established APIs.  The application itself is directed toward the use
- *  case of journalists trying to discover citizen journalism on YouTube.   It integrates with the Google Maps API to plot
- *  the upload location of geo-tagged video results.
- *  @author:  Stephen Nicholls, May 9, 2016
+ *  @author:  Stephen Nicholls, June 5, 2016
  */
  
 //  Define Constants 
@@ -36,7 +30,7 @@ var startURL = '';
 //URL from Google Shortening service for Facebook and Tweeter
 var shortURL = '';
 
-/**   This function calls subsequent functions to load APIs for calls
+/**   This function initializes page and calls functions to load APIs
   */
 $(document).ready(function() {
   $.getScript('https://apis.google.com/js/client.js?onload=handleClientLoad');
@@ -59,7 +53,6 @@ function handleClientLoad() {
 function loadParamsFromURL() {
   //retrieve URL from browser window
   startURL = window.location.href;
-  console.log("StartURL:  " + startURL);
   
   //If the URL does not contain search parameters to parse skip to end of function
   if (startURL && startURL.indexOf('?v=') > 0) {
@@ -79,15 +72,12 @@ function loadParamsFromURL() {
       //store the URL parameter/value pairs into the urlParams array
       urlParams[individualParamCollection[0]] = individualParamCollection[1];
     }
-  }else{
-     console.log("no video id");
   }
   //start loading inputObject from the URL parameters
   viewObject.inputVideoID = urlParams['v'];
-  console.log("viewObject.inputVideoID:  " + viewObject.inputVideoID);
 }
 
-/**
+/**  This function generates the video viewer where the livestream will autoplay
  */ 
 function generateVideoViewer(){
     var div = $('<div>');
@@ -97,93 +87,60 @@ function generateVideoViewer(){
     $('#videoPlayer').append(embeddedVideoPlayer);
 }
 
+/**  This function pulls in the metadata about the video (Note this comes from an API pull using the
+ *   video ID (rather than being pulled from the URL of the previous page))
+ */ 
 function pullVideoMetaData(){
-      //generate request object for video search
-      var videoIDRequest = gapi.client.youtube.videos.list({
-        id: viewObject.inputVideoID,
-        part: 'id,snippet,recordingDetails,liveStreamingDetails',
-        key: API_ACCESS_KEY
-      });
+   //generate request object for video search
+   var videoIDRequest = gapi.client.youtube.videos.list({
+     id: viewObject.inputVideoID,
+     part: 'id,snippet,recordingDetails,liveStreamingDetails',
+     key: API_ACCESS_KEY
+   });
 
-      //execute request and process the response object to pull in latitude and longitude
-      videoIDRequest.execute(function(response) {
-        if ('error' in response || !response) {
-          showConnectivityError();
-        } else {
-          $.each(response.items, function(index, item) {
-             viewObject.title = item.snippet.title;
-             console.log('viewObject.title is ' + viewObject.title);
-             viewObject.channelID = item.snippet.channelId;
-             console.log('viewObject.channelID is ' + viewObject.channelID)
-             viewObject.channel = item.snippet.channelTitle;
-             console.log('viewObject.channel is ' + viewObject.channel);
-             viewObject.thumbnailURL = item.snippet.thumbnails.default.url;
-             console.log('viewObject.thumbnailURL is ' + viewObject.thumbnailURL);
-             viewObject.description = item.snippet.description;
-             console.log('viewObject.description is ' + viewObject.description);
-             /*
-             var year = item.snippet.publishedAt.substr(0, 4);
-             var monthNumeric = item.snippet.publishedAt.substr(5, 2);
-             var monthInt = 0;
-             
-             if (monthNumeric.indexOf("0") === 0) {
-                 monthInt = monthNumeric.substr(1, 1);
-             } else {
-                 monthInt = monthNumeric;
-             }
-             var day = item.snippet.publishedAt.substr(8, 2);
-             var time = item.snippet.publishedAt.substr(11, 8);
-             var monthString = MONTH_NAMES[monthInt - 1];
-             */
-             //viewObject.displayTimeStamp = monthString + " " + day + ", " + year + " - " + time + " UTC";
-             
-             viewObject.displayTimeStamp = getDisplayTimeFromTimeStamp(item.snippet.publishedAt);
-             console.log('viewObject.displayTimeStamp is ' + viewObject.displayTimeStamp);
-             viewObject.publishTimeStamp = item.snippet.publishedAt;
-             console.log('viewObject.publishTimeStamp is ' + viewObject.publishTimeStamp);
-            
-             //new 
-             console.log("test if liveStreamingDetails is available ")
-             if(item.liveStreamingDetails){ 
-              
-              console.log("got dets")
-             }
-             if(item.liveStreamingDetails && item.liveStreamingDetails.concurrentViewers){
-               console.log("liveStreamingDetails is available ")
-               viewObject.concurrentViewers = item.liveStreamingDetails.concurrentViewers;
-               viewObject.scheduledStartTime = item.liveStreamingDetails.scheduledStartTime;
-               viewObject.actualStartTime = item.liveStreamingDetails.actualStartTime;
-            }else{
-              console.log("liveStreamingDetails is NOT available ");
-               viewObject.concurrentViewers = 'NA';
-               viewObject.scheduledStartTime = 'NA';
-               viewObject.actualStartTime = 'NA'
-            }
-             ////end new
-          });
-        }
+   //execute request and process the response object to pull in latitude and longitude
+   videoIDRequest.execute(function(response) {
+    if ('error' in response || !response) {
+      showConnectivityError();
+    } else {
+     $.each(response.items, function(index, item) {
+      viewObject.title = item.snippet.title;
+      viewObject.channelID = item.snippet.channelId;
+      viewObject.channel = item.snippet.channelTitle;
+      viewObject.thumbnailURL = item.snippet.thumbnails.default.url;
+      viewObject.description = item.snippet.description;
 
-        //reset startURL with the latest
-        startURL = window.location.href;
-        var requestShortener = gapi.client.urlshortener.url.insert({
-           'resource': {
-              'longUrl': startURL
-           }
-        });
-        requestShortener.execute(function(response2) 
-        {
-            if(response2.id != null)
-            {
-               shortURL = response2.id;
-               console.log('shortURL is'+shortURL);
-            }else{
-               console.log("error: creating short url");
-            }
-            populateVideoMetaData();
-        });
-      });
+      viewObject.displayTimeStamp = getDisplayTimeFromTimeStamp(item.snippet.publishedAt);
+      viewObject.publishTimeStamp = item.snippet.publishedAt;
+
+      if(item.liveStreamingDetails && item.liveStreamingDetails.concurrentViewers){
+        viewObject.concurrentViewers = item.liveStreamingDetails.concurrentViewers;
+        viewObject.scheduledStartTime = item.liveStreamingDetails.scheduledStartTime;
+        viewObject.actualStartTime = item.liveStreamingDetails.actualStartTime;
+      }else{
+        viewObject.concurrentViewers = 'NA';
+        viewObject.scheduledStartTime = 'NA';
+        viewObject.actualStartTime = 'NA'
+      }
+     });
+    }
+    //reset startURL with the latest
+    startURL = window.location.href;
+    var requestShortener = gapi.client.urlshortener.url.insert({
+      'resource': {
+         'longUrl': startURL
+       }
+    });
+    requestShortener.execute(function(responseShortener){
+      if(responseShortener.id != null){
+        shortURL = responseShortener.id;
+      }            
+      populateVideoMetaData();
+    });
+  });
 }
-
+/**  This function create the HTML used to display the video meta data
+ */ 
 function populateVideoMetaData(){
     var div2 = $('<div>');
     div2.addClass('videoview-container');
@@ -213,7 +170,7 @@ function populateVideoMetaData(){
     var videoString = $("<attr title='Description: " + viewObject.description + "'><a href=" + 
     startURL + ">" + viewObject.title + "</a></attr><br>");
     
-    var truncatedVideoDescription = ""
+    var truncatedVideoDescription = "";
     //if description is non null, truncate it and remove any hard coded URLs
     if(viewObject.description){
       truncatedVideoDescription = replaceHardCodedURLs(viewObject.description.substring(0,300));
@@ -224,9 +181,7 @@ function populateVideoMetaData(){
     }
     
     var videoDesc = "Description: " + truncatedVideoDescription + "...<br>";
-    //var uploadDate = "Uploaded on: " + viewObject.displayTimeStamp + "<br>";
     //var channelString = "Channel:  <attr title='Click to go to uploader's Channel'><a href='https://www.youtube.com/channel/" + viewObject.channelID + "' target='_blank'>" + viewObject.channel + "</a></attr><br>";
-    //var reverseImageString = "<attr title='Use Google Image Search to find images that match the thumbnail image of the video.'><a href='https://www.google.com/searchbyimage?&image_url=" + viewObject.thumbnailURL + "' target='_blank'>reverse image search</a></attr><br>";
     var concurrentUsersString = "Concurrent Users: "+viewObject.concurrentViewers+"<br>"
     var startTimeString = "Actual Start Time:  "+ actualStartTime +"<br>"
    
@@ -236,15 +191,11 @@ function populateVideoMetaData(){
    {
         shortURL = "http://www.geosearchtool.com"
    }
-   console.log("1 shortURL " + shortURL);
 
     var facebookFunction = '<div id="fb-root"></div><script>(function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return; js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.6"; fjs.parentNode.insertBefore(js, fjs);}(document, "script", "facebook-jssdk"));</script>'
     var facebookLink = '<div class="fb-share-button" data-href="'+shortURL+'" data-layout="button" data-mobile-iframe="true"></div>'
     var twitterLink = '<a href="https://twitter.com/share" class="twitter-share-button" data-url="'+shortURL+'" data-text="Check out this video!!!" data-hashtags="geosearchtool">Tweet</a>'
     var twitterFunction = "<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>"
-
-    console.log('facebookLink is '+facebookLink);
-    console.log('twitterLink is '+twitterLink);
 
     socialCell.append('<br><br>');
     socialCell.append(facebookFunction);
@@ -254,7 +205,6 @@ function populateVideoMetaData(){
     socialCell.append(twitterFunction);
     metaDataCell.append(videoString);
     metaDataCell.append(videoDesc);
-    //metaDataCell.append(uploadDate);
     metaDataCell.append(concurrentUsersString);
     metaDataCell.append(startTimeString);
     
@@ -293,9 +243,9 @@ function showConnectivityError() {
 function showErrorSection() {
   $("#showErrors").show();
 }
-
+/** This function takes the time format from the response and changes it into a more readable format.
+ */ 
 function getDisplayTimeFromTimeStamp(timeStamp){
-    console.log("getDisplayTimeFromTimeStamp with "+timeStamp)
     var displayTime = "";
     var year = timeStamp.substr(0, 4);
     var monthNumeric = timeStamp.substr(5, 2);
@@ -308,13 +258,15 @@ function getDisplayTimeFromTimeStamp(timeStamp){
     }
     var day = timeStamp.substr(8, 2);
     var time = timeStamp.substr(11, 8);
-
     var monthString = MONTH_NAMES[monthInt - 1];
 
     displayTime = monthString + " " + day + ", " + year + " - " + time + " UTC";
     return displayTime;
 }
 
+/** This function removes hardcoded URLs from a string (e.g. this throws off the formatting if the description has a long
+ * URL in it).
+ */ 
 function replaceHardCodedURLs(rawString){
  return rawString.replace(URL_REGEX, '');
 }
@@ -324,11 +276,9 @@ function replaceHardCodedURLs(rawString){
  */
 function clickedSearchButton() {
    var dref = document.referrer
-   //console.log('dref is'+dref)
    if( dref.includes('/?q=') ){
       window.history.back();
    }else{
       window.location = "http://www.geosearchtool.com"
    }
-   
 }
