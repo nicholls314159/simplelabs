@@ -1,4 +1,4 @@
-geo-search-tool
+geo-live-tool
 ==================
 
 A web app that uses the YouTube Data API v3's search functionality to find livestreams tagged with geo-coordinates.
