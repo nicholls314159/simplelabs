@@ -1,4 +1,4 @@
-application: geolive-1316
+application: simplelabs-1345
 version: 1
 runtime: python27
 api_version: 1
@@ -6,8 +6,8 @@ threadsafe: true
 
 handlers:
 - url: /
-  static_files: search.html
-  upload: search.html
+  static_files: about.html
+  upload: about.html
   
 - url: /search.html
   static_files: search.html
