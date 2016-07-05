@@ -1,7 +1,7 @@
-geo-live-tool
+Simple Labs
 ==================
 
-A web app that uses the YouTube Data API v3's search functionality to find livestreams tagged with geo-coordinates.
+Simple Labs is an LLC focused on experimenting with new web technologies.
 
 ******   THIS IS NOT AN OFFICIAL GOOGLE OR YOUTUBE PRODUCT  *******
 
